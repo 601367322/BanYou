@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_second_bg"
+    android:orientation="vertical" >
+
+    <!--<include-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="@dimen/title_height"-->
+        <!--layout="@layout/custom_menu_actionbar" />-->
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:listSelector="#00000000" >
+    </ListView>
+
+</LinearLayout>

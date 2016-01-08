@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/custom_back_actionbar"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/title_height" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="28dp"
+                android:background="#eeeeee" />
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="12dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="top">
+
+                        <ImageView
+                            android:id="@+id/pb_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/publish_time_img_selector" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="38dp"
+                            android:background="@drawable/publish_no_border_bg"
+                            android:orientation="vertical"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="8dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="我想"
+                                android:textColor="@color/nav_press_txt"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/time_chose"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:background="@null"
+                                android:gravity="center_vertical"
+                                android:hint="请选择时间"
+                                android:singleLine="true"
+                                android:textColor="@color/manage_member_text"
+                                android:textSize="14sp" />
+
+                            <View
+                                android:layout_width="fill_parent"
+                                android:layout_height="1px"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/border_color" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top">
+
+                        <ImageView
+                            android:id="@+id/pb_place"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/publish_place_img_selector" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_place"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="38dp"
+                            android:background="@drawable/publish_no_border_bg"
+                            android:orientation="vertical"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="8dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="在"
+                                android:textColor="@color/nav_press_txt"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_address"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_marginTop="12dp"
+                                android:background="@null"
+                                android:gravity="center_vertical"
+                                android:hint="请选择城市"
+                                android:singleLine="true"
+                                android:textColor="@color/manage_member_text"
+                                android:textSize="14sp" />
+
+                            <View
+                                android:layout_width="fill_parent"
+                                android:layout_height="1px"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@color/border_color" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top">
+
+                        <ImageView
+                            android:id="@+id/pb_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/sex_select" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="46dp"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="约一个"
+                                android:textColor="@color/nav_press_txt"
+                                android:textSize="14sp" />
+
+                            <RadioGroup
+                                android:id="@+id/sex_btn"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/girl_date_boy"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/sex_bg"
+                                    android:button="@null"
+                                    android:checked="true"
+                                    android:gravity="center"
+                                    android:text="美女"
+                                    android:textColor="@color/sex_text_selector"
+                                    android:textSize="14sp" />
+
+                                <RadioButton
+                                    android:id="@+id/boy_date_girl"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginLeft="76dp"
+                                    android:background="@drawable/sex_bg"
+                                    android:button="@null"
+                                    android:gravity="center"
+                                    android:text="帅哥"
+                                    android:textColor="@color/sex_text_selector"
+                                    android:textSize="14sp" />
+
+                                <RadioButton
+                                    android:id="@+id/everyone"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginLeft="76dp"
+                                    android:background="@drawable/sex_bg"
+                                    android:button="@null"
+                                    android:gravity="center"
+                                    android:text="不限"
+                                    android:textColor="@color/sex_text_selector"
+                                    android:textSize="14sp" />
+
+                            </RadioGroup>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/pay_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="top">
+
+                        <ImageView
+                            android:id="@+id/pb_cash"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/publish_cash_img_selector" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/pay_ll"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="46dp"
+                                android:layout_marginTop="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="我可以提供"
+                                    android:textColor="@color/nav_press_txt"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/pay_chose"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginTop="12dp"
+                                    android:background="@null"
+                                    android:gravity="center_vertical"
+                                    android:hint="请选择薪酬"
+                                    android:singleLine="true"
+                                    android:textColor="@color/manage_member_text"
+                                    android:textSize="14sp" />
+
+                                <View
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="1px"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@color/border_color" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="top">
+
+                        <ImageView
+                            android:id="@+id/pb_remark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/remark_select" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RelativeLayout
+                                android:id="@+id/remark_ll"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="46dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/remark_bg"
+                                android:orientation="vertical"
+                                android:textCursorDrawable="@null">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="8dp"
+                                    android:textCursorDrawable="@null">
+
+                                    <com.quanliren.quan_one.custom.emoji.EmoticonsEditText xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/text"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@null"
+                                        android:minHeight="60dp"
+                                        android:text="年龄：\n身高：\n体重：\n语言能力：\n性格类型：\n其他要求："
+                                        android:textColor="@color/user_info_value"
+                                        android:textCursorDrawable="@null"
+                                        android:textSize="14sp"
+                                        app:maxlen="500" />
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp">
+
+                                        <TextView
+                                            android:id="@+id/del_remark"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentBottom="true"
+                                            android:layout_alignParentRight="true"
+                                            android:text="清空"
+                                            android:textColor="@color/tab_press_txt" />
+                                    </RelativeLayout>
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <fragment
+                        android:id="@+id/picFragment"
+                        android:name="com.quanliren.quan_one.fragment.custom.AddPicFragment_"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="38dp"
+                        android:layout_marginTop="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="46dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="30dp"
+                        android:background="@drawable/warning_bg"
+                        android:padding="8dp"
+                        android:text="请不要发布淫秽、色情、广告、违法等不良有害信息，一旦核实，账号将永久封禁"
+                        android:textColor="@color/signature"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+
+        <include
+            layout="@layout/emoji_pop"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/popbg"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+</RelativeLayout>

@@ -1,0 +1,1 @@
+include ':app', ':lib-umeng', ':lib-swipeback', ':lib-datetimepicker', ':lib-actionbar-navtab'

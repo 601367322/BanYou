@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/custom_back_actionbar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/ip"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="IP地址(不加http://)" />
+
+            <AutoCompleteTextView
+                android:id="@+id/port"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="端口" />
+
+            <AutoCompleteTextView
+                android:id="@+id/socket"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Socket聊天端口" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/log_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginRight="14dp"
+                android:text="日志开关　　"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

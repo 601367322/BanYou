@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_second_bg"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/custom_back_actionbar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <com.quanliren.quan_one.activity.date.DateEmoticonsKeyBoardBar_
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/keyboard"
+        android:background="@color/activity_bg"
+        android:orientation="vertical">
+
+        <com.quanliren.quan_one.pull.swipe.SwipeRefreshLayout
+            android:id="@+id/swipeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.quanliren.quan_one.pull.XListView
+                android:id="@+id/listview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:cacheColorHint="#00000000"
+                android:divider="#00000000"
+                android:dividerHeight="1dp"
+                android:footerDividersEnabled="true"
+                android:listSelector="#00000000"></com.quanliren.quan_one.pull.XListView>
+        </com.quanliren.quan_one.pull.swipe.SwipeRefreshLayout>
+    </com.quanliren.quan_one.activity.date.DateEmoticonsKeyBoardBar_>
+
+</LinearLayout>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_second_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_height"
+        layout="@layout/custom_back_actionbar" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:text="@string/app_name"
+            android:textSize="18sp"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="4dp"
+        android:padding="10dp"
+        android:text="　　伴游是一款基于地理位置的移动社交软件。无论你身处何地，需伴游的你，可以轻松找到陪你游玩的人。如果你是一名伴游，即可丰富你的生活，又能找到兴趣相投的小伙伴。偷偷看下身边的陌生人，查看她们的伴游信息，联系她并线下见面约会吧。成为伴游VIP会员，享受会员漫游功能等。加入伴游，马上进行一次神秘又浪漫的旅行吧。"
+        android:textColor="@color/title"
+        android:textSize="14sp" />
+<LinearLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="联系邮箱："
+        android:padding="10dp"
+        android:textColor="@color/title"
+        android:textSize="14sp" />
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="quanliren2014@163.com"
+        android:padding="10dp"
+        android:textColor="@color/title_press_txt"
+        android:textSize="14sp" />
+</LinearLayout>
+    <Button
+        android:id="@+id/updateBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/commit_btn_selector"
+        android:gravity="center"
+        android:onClick="updateBtn"
+        android:text="检查更新"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+<LinearLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="联系电话："
+        android:padding="10dp"
+        android:textColor="@color/title"
+        android:textSize="14sp" />
+    <TextView
+        android:id="@+id/phone1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="65307011"
+        android:padding="10dp"
+        android:textColor="@color/title_press_txt"
+        android:textSize="14sp" />
+    <TextView
+        android:id="@+id/phone2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="65305052"
+        android:padding="10dp"
+        android:textColor="@color/title_press_txt"
+        android:textSize="14sp" />
+</LinearLayout>
+</LinearLayout>

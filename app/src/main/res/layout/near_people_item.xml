@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="76dp"
+    android:background="@drawable/menu_btm_selector"
+    android:orientation="vertical">
+
+    <com.quanliren.quan_one.custom.CircleImageView
+        android:id="@+id/userlogo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/defalut_logo" />
+
+    <com.quanliren.quan_one.custom.UserInfoLayout
+        android:id="@+id/userinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/userlogo"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/userlogo"
+        app:info_layout="@layout/user_nick_name" />
+
+    <TextView
+        android:id="@+id/signature"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/userinfo"
+        android:layout_below="@id/userinfo"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:gravity="bottom"
+        android:maxLines="1"
+        android:textColor="@color/signature"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/visit_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/signature"
+        android:textSize="12sp" />
+
+</RelativeLayout>

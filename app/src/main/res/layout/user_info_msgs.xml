@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TableRow
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身份"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/identity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="无"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:textColor="@color/username"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:id="@+id/pay_row"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/payment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支付能力"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="无"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/username"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="center_vertical"
+            android:background="@color/white" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="手机号"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:orientation="vertical" >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="无"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/username"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/go_vip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_toRightOf="@id/phone"
+                        android:textColor="@color/color2"
+                        android:text="成为会员" />
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:id="@+id/constell_ll"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="星座"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/constell"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="无"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/username"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="外貌"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/signature"
+                    android:layout_width="match_parent"
+                    android:text="无"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/username"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:id="@+id/work_ll"
+            android:paddingLeft="8dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingRight="8dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="职业"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/work"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/username"
+                    android:text="无"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:id="@+id/income_ll"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="center_vertical"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收入"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/income"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="无"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/username"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:id="@+id/emotion_ll"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="center_vertical"
+            android:background="@color/white" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="情感"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/emotion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="无"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/username"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自我介绍"
+                android:textColor="@color/darkgray"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:minHeight="46dp"
+                android:paddingLeft="8dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/introduce"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="无"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/username"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/border_color" />
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+	
+</LinearLayout>

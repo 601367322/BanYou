@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="selected_view" type="id" />
+    <item name="gridview" type="id" />
+    <item name="webview" type="id" />
+    <item name="scrollview" type="id" />
+    <item name="ptr_content" type="id" />
+
+
+    <item name="ptr_text" type="id" />
+    <item name="ptr_progress" type="id" />
+
+    <item name="id_child" type="id" />
+
+    <item name="logo_tag" type="id" />
+</resources>

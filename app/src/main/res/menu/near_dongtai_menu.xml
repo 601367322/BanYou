@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/collection"
+        android:icon="@drawable/collection_date"
+        android:title="收藏" />
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/share_date"
+        android:title="分享" />
+    <item
+        android:id="@+id/jubao"
+        android:icon="@drawable/jubao"
+        android:title="举报" />
+</menu>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="reboot_item">
+        <item>http://192.168.1.21:8888</item>
+        <item>http://192.168.1.21:8889</item>
+        <item>http://115.28.134.163</item>
+        <item>http://192.168.1.15:8080</item>
+    </string-array>
+    
+    <string-array name="reboot_item1">
+        <item>192.168.1.21</item>
+        <item>192.168.1.21</item>
+        <item>115.28.134.163</item>
+        <item>192.168.1.15</item>
+    </string-array>
+
+</resources>

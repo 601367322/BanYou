@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transblack">#99000000</color>
+    <color name="userinfotransblack">#77000000</color>
+    <color name="transyindao">#B2000000</color>
+    <color name="actionbar">#151514</color>
+    <color name="darkgray">#818181</color>
+    <color name="location_title_bg">#283a49</color>
+    <color name="location_txt">#a7a7a7</color>
+    <color name="location_divider">#3b3a38</color>
+    <color name="vip_bg">#535353</color>
+    <color name="signature">#95948f</color>
+    <!--<color name="username">#454444</color>-->
+    <color name="username">#1d1d1d</color>
+    <color name="tab_normal_txt">#1d1d1d</color>
+    <color name="tab_press_txt">#2698e8</color>
+    <color name="time">#7f7d70</color>
+    <color name="content">#666666</color>
+    <color name="title_press_txt">#0f6ab4</color>
+    <color name="title">#393939</color>
+    <color name="chat_voice_btn_bg">#828387</color>
+    <color name="enable">#bebebe</color>
+    <color name="ver_line">#d2d2d2</color>
+    <color name="time_bg">#f8f8f8</color>
+    <color name="time_line">#e9e9e9</color>
+    <color name="nav_press_txt">#dd3a31</color>
+    <color name="commit_btn_default_color">#f95e5c</color>
+    <color name="nav_normal_txt">#a51911</color>
+    <color name="nav_bar_commonn">#838385</color>
+    <color name="agree">#77b7e4</color>
+    <color name="red_number">#ee3e3e</color>
+    <color name="delete">#FFFFFF</color>
+    <color name="activity_bg">#eeeeee</color>
+    <color name="activity_second_bg">#eeeeee</color>
+    <color name="quan_username">#ff5193</color>
+    <color name="blue_txt">#228ada</color>
+    <color name="title_btn_press">#d8d8d8</color>
+    <color name="alltransparent">#0000</color>
+    <color name="manage_member_bg">#e6e5e5</color>
+    <color name="manage_member_text">#515151</color>
+    <color name="bottom_bg">#D63f3f3f</color>
+    <color name="bottom_bg_press">#E53f3f3f</color>
+    <color name="dialog_txt">#2696ff</color>
+    <color name="dialog_line">#bdbdbd</color>
+    <color name="popup_bg">#b0000000</color>
+
+    <color name="group_create_key">#646464</color>
+    <color name="group_create_value">#454545</color>
+    <color name="group_create_gray">#acacac</color>
+
+    <color name="user_info_key">#616161</color>
+    <color name="user_info_value">#434341</color>
+    <color name="near_apprence">#595959</color>
+    <color name="near_img">#565656</color>
+    <color name="near_time">#5f5f5f</color>
+    <color name="star_color">#d8bc03</color>
+    <color name="enable_color">#c1c1c1c1</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="msg_emotebar_backgroud">#ff73797d</color>
+    <color name="msg_emotebar_item_press">#ff3b3e40</color>
+    <color name="msg_emotebar_item_selected">#ffececec</color>
+    <color name="msg_emote_divider">#ffa1a1a1</color>
+    <color name="light_notes_color">#ff999999</color>
+    <color name="msg_editor_backgroud">#ffececec</color>
+
+    <color name="border_color">#dbdfe2</color>
+    <color name="shop_tab_press_txt">#63b9ff</color>
+    <color name="shop_tab_bg">#3eafea</color>
+
+    <color name="actionbar_bg">#f6f6f6</color>
+    <color name="actionbar_border_bg">#dcdada</color>
+    <color name="default_progress_bar_color">#FF33B5E5</color>
+    <color name="gold">#e49a33</color>
+    <color name="caclue">#777777</color>
+    <color name="exit_num">#f9f9f9</color>
+    <color name="exit_num_border">#dedede</color>
+
+    <color name="buy_btn_normal">#ff5831</color>
+    <color name="buy_btn_press">#e75230</color>
+
+    <color name="actionbar_left_color">#c4c4c4</color>
+    <color name="actionbar_right_color">#007df8</color>
+
+    <color name="actionbar_left_color_press">#7Fc4c4c4</color>
+    <color name="actionbar_right_color_press">#7F007df8</color>
+
+    <color name="username_normal">#838385</color>
+    <color name="username_press">#dd3a31</color>
+    <color name="username_vip">#868686</color>
+
+    <color name="buy_vip_normal">#f97d21</color>
+    <color name="buy_vip_press">#f76e09</color>
+
+    <color name="vip_name">#faadad</color>
+
+    <color name="color1">#329fcd</color>
+    <color name="color2">#f8931c</color>
+    <color name="color3">#82bf00</color>
+
+    <color name="sex_d">#ebebeb</color>
+    <color name="sex_s">#dd3a31</color>
+    <color name="login_btn_enable">#a5a5a5</color>
+
+    <color name="care_btn_press">#e3e3e3</color>
+
+    <color name="chat_btn_press">#ed5959</color>
+
+    <color name="chat_btn_normal">#f95e5c</color>
+
+    <color name="c_eaeaea">#eaeaea</color>
+</resources>

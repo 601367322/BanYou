@@ -1,0 +1,8 @@
+1、检查IP地址端口和socket端口
+3、检查版本号
+4、检查数据库版本号
+5、检查设置测试IP入口是否关闭
+6、日志开关
+7、QuanPushService
+
+gradlew assembleRelease

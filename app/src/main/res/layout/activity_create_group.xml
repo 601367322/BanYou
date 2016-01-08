@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_bg"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/custom_back_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/userlogo_ll"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:background="@color/white"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/group_touxiang"
+                    android:textColor="@color/group_create_key"
+                    android:textSize="14sp" />
+
+                <com.quanliren.quan_one.custom.CircleImageView
+                    android:id="@+id/userlogo"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="centerCrop"
+                    ptr:border_color="#FFFFFF"
+                    android:src="@drawable/defalut_logo" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@color/white"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/group_create_key"
+                    android:text="@string/group_nickname" />
+
+                <com.quanliren.quan_one.custom.UserNameEditText
+                    android:id="@+id/et_group_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:hint="请输入群昵称"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:gravity="center|right"
+                    android:background="@null"
+                    ptr:maxlen="8"
+                    android:textColor="@color/group_create_value" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@color/white"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/group_create_key"
+                    android:text="@string/group_intro" />
+
+                <com.quanliren.quan_one.custom.UserNameEditText
+                    android:id="@+id/et_group_intro"
+                    android:layout_marginLeft="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="76dp"
+                    android:textSize="14sp"
+                    android:layout_weight="1"
+                    android:hint="请输入群介绍"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    ptr:maxlen="150"
+                    android:textColor="@color/group_create_value" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:id="@+id/groupNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/group_num_img"
+                    android:drawablePadding="6dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="群成员≤20人"
+                    android:background="@drawable/group_create_bg"
+                    android:textColor="@color/time_line"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:drawableLeft="@drawable/group_location_img"
+                    android:drawablePadding="6dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/group_create_bg"
+                    android:textColor="@color/white"
+                    android:text="北京"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/create_group"
+                android:layout_width="fill_parent"
+                android:layout_height="38dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="34dp"
+                android:background="@drawable/commit_btn_selector"
+                android:text="@string/create"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

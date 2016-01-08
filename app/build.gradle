@@ -1,0 +1,155 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+def GaoDeMap_Debug = 'd6f5dae4da2178a70ccd6b887cec3056'
+def GaoDeMap_Release = '0e2cdde1d8f0e97710c35b6027ef3ea8'
+
+android {
+    useLibrary 'org.apache.http.legacy'
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+
+        applicationId rootProject.ext.applicationId
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
+//        renderscriptTargetApi rootProject.ext.targetSdkVersion
+//        renderscriptSupportModeEnabled true
+
+        // 默认是umeng的渠道 高德地图测试
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "banyou", GAODE_MAP_VALUE: "$GaoDeMap_Debug", TEST_SETTING: "open"]
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+        }
+
+        release {
+            storeFile file("banyou")
+            storePassword "123456"
+            keyAlias "伴游"
+            keyPassword "123456"
+        }
+    }
+
+    buildTypes {
+
+        /*debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            testCoverageEnabled true
+            zipAlignEnabled true
+            ndk {
+                abiFilters "armeabi-v7a", "armeabi", "x86"
+                // includes ARM SO files only, so no x86 SO file
+            }
+        }*/
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            ndk {
+                abiFilters "armeabi-v7a", "armeabi"
+            }
+
+            zipAlignEnabled true
+            signingConfig signingConfigs.release
+        }
+    }
+    sourceSets {
+        main {
+        }
+    }
+
+    productFlavors {
+
+        /*wandoujia {}
+        baidu {}
+        c360 {}
+        yingyongbao {}
+        yingyonghui {}
+        xiaomi {}*/
+        banyou {}
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, GAODE_MAP_VALUE: "$GaoDeMap_Release", TEST_SETTING: "open"]
+        }
+
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                // 输出apk名称为dog_v1.0_2015-01-15_wandoujia.apk
+                def fileName = "banyou_v${rootProject.ext.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
+}
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    maven { url "https://raw.githubusercontent.com/umeng/mvn-repo-umeng/master/repository" }
+}
+repositories {
+    maven {
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    apt "org.androidannotations:androidannotations:3.3.2"
+    compile 'org.androidannotations:androidannotations-api:3.3.2'
+    compile 'com.jakewharton:butterknife:7.0.0'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    compile "com.android.support:support-v4:$rootProject.ext.supportVersion"
+    compile 'com.loopj.android:android-async-http:1.4.7'
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
+    compile "com.android.support:cardview-v7:$rootProject.ext.supportVersion"
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.9'
+    compile 'de.greenrobot:eventbus:2.4.0'
+    compile project(':lib-umeng')
+    compile project(':lib-swipeback')
+    compile project(':lib-datetimepicker')
+    compile project(':lib-actionbar-navtab')
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+}
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0].processResources.manifestFile
+        resourcePackageName rootProject.ext.applicationId
+
+        library 'true'
+
+    }
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat_layout_emote"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/msg_editor_backgroud" >
+
+    <com.quanliren.quan_one.custom.emoji.EmoteInputView
+        android:id="@+id/chat_eiv_inputview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+</FrameLayout>
