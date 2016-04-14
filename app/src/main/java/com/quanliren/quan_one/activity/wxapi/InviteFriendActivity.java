@@ -1,9 +1,17 @@
 package com.quanliren.quan_one.activity.wxapi;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
@@ -18,11 +26,19 @@ import com.umeng.socialize.sso.UMSsoHandler;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.ViewById;
 
 @EActivity
 public class InviteFriendActivity extends BaseActivity {
 	private final UMSocialService mController = UMServiceFactory
 			.getUMSocialService(Constants.DESCRIPTOR);
+	@Extra
+	String inviteCode;
+	@ViewById
+	TextView invite_code;
+	@ViewById
+	ImageView top;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -30,7 +46,22 @@ public class InviteFriendActivity extends BaseActivity {
 		setContentView(R.layout.fx);
 		setTitleTxt("邀请好友");
 		// 配置需要分享的相关平台,并设置分享内容
-		configPlatforms(mController,INVITE);
+		configPlatforms(mController, INVITE);
+		invite_code.setText(inviteCode);
+		Bitmap loadedImage = ((BitmapDrawable) top.getDrawable()).getBitmap();
+		int swidth = getResources().getDisplayMetrics().widthPixels;
+		float widthScale = (float) swidth / (float) loadedImage.getWidth();
+		int height = (int) (widthScale * loadedImage.getHeight());
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(swidth, height);
+		top.setLayoutParams(lp);
+		top.setImageBitmap(loadedImage);
+	}
+	@Click(R.id.copy)
+	void copyInviteCode(View view){
+		// 得到剪贴板管理器
+		ClipboardManager cmb = (ClipboardManager)mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+		cmb.setText("伴游注册邀请码："+inviteCode);
+		showCustomToast("邀请码复制成功");
 	}
 	@Click(R.id.fx_sina_btn)
 	public void shareToSina(View view){

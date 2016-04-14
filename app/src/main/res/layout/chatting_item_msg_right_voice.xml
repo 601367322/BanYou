@@ -12,7 +12,6 @@
         android:layout_marginTop="8dp"
         android:drawablePadding="8dp"
         android:gravity="center"
-        android:text="12:22"
         android:textColor="@color/signature"
         android:textSize="14sp" />
 

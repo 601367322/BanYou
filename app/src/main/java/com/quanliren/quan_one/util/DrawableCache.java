@@ -39,8 +39,8 @@ public class DrawableCache {
     }
 
     private DrawableCache() {
-        hashRefs = new Hashtable<Long, MySoftRef>();
-        q = new ReferenceQueue<GifDrawable>();
+        hashRefs = new Hashtable<>();
+        q = new ReferenceQueue<>();
     }
 
     /**
@@ -94,8 +94,8 @@ public class DrawableCache {
                 try {
                     GifDrawable bmp = null;
                     if (hashRefs.containsKey(Long.valueOf(imageUrl.hashCode()))) {
-                        MySoftRef ref = (MySoftRef) hashRefs.get(Long.valueOf(imageUrl.hashCode()));
-                        bmp = (GifDrawable) ref.get();
+                        MySoftRef ref = hashRefs.get(Long.valueOf(imageUrl.hashCode()));
+                        bmp = ref.get();
                         if (bmp != null)
                             bmp.start();
                     }
@@ -123,15 +123,9 @@ public class DrawableCache {
         }
 
         public void run() {
-//			if(imageview instanceof MyGifImageView){
-//				((MyGifImageView)imageview).setImageDrawable(d);
-//			}else{
             imageview.setImageDrawable(d);
-//			}
         }
     }
-
-    ;
 
     Handler hanlder = new Handler(Looper.getMainLooper());
 

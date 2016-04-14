@@ -29,6 +29,8 @@ public class QuanListApi extends BaseApi {
                 return URL.COLLECTLIST;
             case DateListFragment.CARE:
                 return URL.MY_CARE_DATE;
+            case DateListFragment.HOT:
+                return URL.HOT_DATE_LIST;
         }
         return "";
     }

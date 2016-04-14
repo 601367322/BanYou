@@ -47,6 +47,9 @@ public class DateNavFragment extends BaseViewPagerChildNavFragment implements Vi
     @ViewById(R.id.publish_txt)
     View pubTxt;
 
+    @ViewById(R.id.location_txt)
+    View locTxt;
+
     @Override
     public int getConvertViewRes() {
         return R.layout.fragment_date_nav;
@@ -61,11 +64,14 @@ public class DateNavFragment extends BaseViewPagerChildNavFragment implements Vi
         setTitleRightIcon(R.drawable.filter);
 
         createAnimation();
+
+        actionbar_tab.setSelection(1);
     }
 
     @Override
     public List<Fragment> initFragments() {
         List<Fragment> list = new ArrayList<>();
+        list.add(DateListFragment_.builder().type(DateListFragment.HOT).build());
         list.add(DateListFragment_.builder().type(DateListFragment.ALL).build());
         list.add(DateListFragment_.builder().type(DateListFragment.CARE).build());
         return list;
@@ -82,7 +88,7 @@ public class DateNavFragment extends BaseViewPagerChildNavFragment implements Vi
     @UiThread(delay = 1000l)
     public void createAnimation() {
         if (ac.cs.getFIRST_PUBLISH() == CommonShared.OPEN) {
-            if(publishY == -1){
+            if (publishY == -1) {
                 publishY = publish.getY();
             }
             pubTxt.setVisibility(View.VISIBLE);
@@ -92,7 +98,7 @@ public class DateNavFragment extends BaseViewPagerChildNavFragment implements Vi
             yStart.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    if(publishTopY == -1){
+                    if (publishTopY == -1) {
                         publishTopY = publish.getY();
                     }
                     ObjectAnimator yBouncer = ObjectAnimator.ofFloat(publish, "y",
@@ -129,18 +135,22 @@ public class DateNavFragment extends BaseViewPagerChildNavFragment implements Vi
 
     @Override
     public void onPageSelected(int position) {
-        if (position == 0) {//手动刷新
+        /*if (position == 0) {//手动刷新
             DateListFragment fragment = (DateListFragment) fragments.get(position);
             if (fragment != null) {
                 fragment.swipeRefresh();
             }
-        }
-        if (position > 0) {
-            rightBtn.setVisibility(View.GONE);
-            leftBtn.setVisibility(View.GONE);
-        } else {
+        }*/
+        if (position == 1) {
             rightBtn.setVisibility(View.VISIBLE);
             leftBtn.setVisibility(View.VISIBLE);
+            if (ac.cs.getFIRST_CHOSE_LOCATION() == CommonShared.OPEN) {
+                locTxt.setVisibility(View.VISIBLE);
+            }
+        } else {
+            rightBtn.setVisibility(View.GONE);
+            leftBtn.setVisibility(View.GONE);
+            locTxt.setVisibility(View.GONE);
         }
     }
 
@@ -165,7 +175,9 @@ public class DateNavFragment extends BaseViewPagerChildNavFragment implements Vi
 
     @Override
     public void leftClick(View v) {
+        Util.umengCustomEvent(getActivity(), "date_location_choose_btn");
         ChoseLocationActivity_.intent(this).fromActivity(ChosePositionFragment.FromActivity.DateList).startForResult(DateListFragment.CHOSE_LOCTION_RESULT);
+        locTxt.setVisibility(View.GONE);
     }
 
     @OnActivityResult(DateListFragment.CHOSE_LOCTION_RESULT)
@@ -198,15 +210,20 @@ public class DateNavFragment extends BaseViewPagerChildNavFragment implements Vi
         }
     }
 
-    public void updateBadge(){
+    public void updateBadge() {
         LoginUser loginUser = ac.getUser();
         BadgeBean badgeBean = DBHelper.badgeDao.getBadge(loginUser.getId());
-        if(badgeBean!=null) {
+        if (badgeBean != null) {
             if (badgeBean.getBean().isDateBadge()) {
-                actionbar_tab.setBadge(1, true);
+                actionbar_tab.setBadge(2, true);
             } else {
-                actionbar_tab.setBadge(1, false);
+                actionbar_tab.setBadge(2, false);
             }
         }
+    }
+
+    @Override
+    public int getDefaultCurrentItem() {
+        return 1;
     }
 }

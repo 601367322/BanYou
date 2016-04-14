@@ -39,6 +39,7 @@ public class RegFirst extends BaseActivity {
     @ViewById(R.id.commit)
     Button commit;
 
+    int deviceType=0;
     @Override
     public void init() {
         super.init();
@@ -65,7 +66,7 @@ public class RegFirst extends BaseActivity {
         ac.finalHttp.post(URL.REG_SENDCODE, ap, new MyJsonHttpResponseHandler(mContext, Util.progress_arr[1]) {
             @Override
             public void onSuccessRetCode(JSONObject jo) throws Throwable {
-                RegSecond_.intent(mContext).phone(pstr).start();
+                RegSecond_.intent(mContext).phone(pstr).deviceType(deviceType).start();
                 finish();
             }
 
@@ -79,12 +80,14 @@ public class RegFirst extends BaseActivity {
         if (Util.isMobileNO(pstr)) {
             RequestParams ap = getAjaxParams();
             ap.put("mobile", pstr);
+            ap.put("deviceid", ac.cs.getDeviceId());
             ac.finalHttp.post(URL.REG_FIRST, ap, new MyJsonHttpResponseHandler(mContext, Util.progress_arr[1]) {
                 @Override
                 public void onSuccessRetCode(JSONObject jo) throws Throwable {
                     if(BuildConfig.DEBUG) {
                         authcode.setText(jo.getJSONObject(URL.RESPONSE).getString("authcode"));
                     }
+                    deviceType=jo.getJSONObject(URL.RESPONSE).getInt("deviceType");
                     allSec = 180;
                     sendCode.setText("重新获取" + allSec + "");
                     handler.postDelayed(runable, 1000);

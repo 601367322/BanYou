@@ -67,9 +67,9 @@ public class MessageNavFragment extends BaseViewPagerChildNavFragment implements
     @Override
     public void leftClick(View v) {
         if (!getString(R.string.ok).equals(title_left_txt.getText().toString())) {
-            if(((ChatListFragment) fragments.get(0)).edit_open()){
+            if (((ChatListFragment) fragments.get(0)).edit_open()) {
                 setTitleLeftTxt(getString(R.string.ok));
-            }else{
+            } else {
                 Util.toast(getActivity(), getString(R.string.empty_message));
             }
         } else {
@@ -90,16 +90,16 @@ public class MessageNavFragment extends BaseViewPagerChildNavFragment implements
                 }
             });
             for (int i = 0; i < fragments.size(); i++) {
-                ((BaseViewPagerChildFragment)fragments.get(i)).onVisible();
+                ((BaseViewPagerChildFragment) fragments.get(i)).onVisible();
             }
         }
     }
 
     //更新联系tab上的红点 群组和粉丝
-    public void updateBadge(){
+    public void updateBadge() {
         LoginUser loginUser = ac.getUser();
         BadgeBean badgeBean = DBHelper.badgeDao.getBadge(loginUser.getId());
-        if(badgeBean!=null) {
+        if (badgeBean != null && actionbar_tab != null) {
             if (badgeBean.getBean().isFunsBadge() || badgeBean.getBean().isGroupBadge()) {
                 actionbar_tab.setBadge(1, true);
             } else {
@@ -116,8 +116,8 @@ public class MessageNavFragment extends BaseViewPagerChildNavFragment implements
 
     //更新消息tab上的红点
     @Receiver(actions = ChatActivity.ADDMSG)
-    public void setCount(){
-        if(actionbar_tab!=null) {
+    public void setCount() {
+        if (actionbar_tab != null) {
             LoginUser user = ac.getUser();
             try {
                 int num = DBHelper.dfMessageDao.getAllUnReadMessageCount(user.getId());

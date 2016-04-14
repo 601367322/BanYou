@@ -25,11 +25,13 @@ import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.shop.ShopVipDetailActivity_;
 import com.quanliren.quan_one.activity.user.UserInfoActivity_;
 import com.quanliren.quan_one.activity.user.UserOtherInfoActivity_;
+import com.quanliren.quan_one.application.AM;
 import com.quanliren.quan_one.application.AppClass;
 import com.quanliren.quan_one.bean.LoginUser;
 import com.quanliren.quan_one.bean.User;
 import com.quanliren.quan_one.dao.DBHelper;
 import com.quanliren.quan_one.dao.LoginUserDao;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -718,6 +720,10 @@ public class Util {
         return null;
     }
 
+    public static <T> T jsonToBean(String json, Class<T> classOfT) {
+        return new Gson().fromJson(json,classOfT);
+    }
+
     public static int getPage(JSONObject jo) {
         if (jo != null) {
             if (jo.has(URL.RESPONSE)) {
@@ -756,7 +762,9 @@ public class Util {
 
     public static void startUserInfoActivity(Context context, String userId) {
         if (context != null) {
-            Intent i = new Intent(context, userId.equals(LoginUserDao.getInstance(context).getUser().getId()) ? UserInfoActivity_.class : UserOtherInfoActivity_.class);
+            Class clazz = UserOtherInfoActivity_.class;
+            AM.getActivityManager().popActivity(clazz);
+            Intent i = new Intent(context, UserOtherInfoActivity_.class);
             i.putExtra("id", userId);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
@@ -766,6 +774,15 @@ public class Util {
     public static void startUserInfoActivity(Context context, User user) {
         if (context != null && user != null) {
             startUserInfoActivity(context, user.getId());
+        }
+    }
+    /**
+     * umeng统计自定义事件的计数事件
+     * @param enventId
+     */
+    public static void umengCustomEvent(Context context, String enventId) {
+        if (context != null) {
+            MobclickAgent.onEvent(context, enventId);
         }
     }
 }

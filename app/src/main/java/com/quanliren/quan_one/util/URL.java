@@ -69,13 +69,21 @@ public class URL {
      **/
     public static final String SET_PICTURE = URL + "/client/user/img/avatar/update_num.php";
     /**
-     * 发表动态
+     * 发表约会
      **/
     public static final String PUBLISH_TXT = URL + "/client/user/dynamic/pub_text.php";
     /**
-     * 发表动态图片
+     * 发表约会图片
      **/
     public static final String PUBLISH_IMG = URL + "/client/user/dynamic/pub_img.php";
+    /**
+     * 举报发图
+     */
+    public static final String JUBAO_IMG = URL + "/client/user/black/pub_img.php";
+    /**
+     * 发布约会视频
+     */
+    public static final String PUBLISH_VIDEO = URL + "/client/user/dynamic/pub_video.php";
     /**
      * 获取附近的人列表
      **/
@@ -103,11 +111,11 @@ public class URL {
     /**
      * 举报
      **/
-    public static final String JUBAO = URL + "/client/user/black/report.php";
+    public static final String JUBAO = URL + "/client/user/black/new_report.php";
     /**
      * 举报并拉黑
      **/
-    public static final String JUBAOANDBLACK = URL + "/client/user/black/report_and_black.php";
+    public static final String JUBAOANDBLACK = URL + "/client/user/black/new_report_and_black.php";
     /**
      * 加入黑名单
      **/
@@ -129,9 +137,17 @@ public class URL {
      **/
     public static final String SENDFILE = URL + "/client/msg/send_file_msg.php";
     /**
+     * 发送视频
+     */
+    public static final String SENDVIDEO = URL + "/client/msg/send_videofile_msg.php";
+    /**
      * 发送群语音图片
      */
     public static final String SENDGROUPFILE = URL + "/client/group/send_file_msg.php";
+    /**
+     * 发送群语音图片
+     */
+    public static final String SENDGROUPVIDEO = URL + "/client/group/send_videofile_msg.php";
     /**
      * 统计
      **/
@@ -177,10 +193,6 @@ public class URL {
      **/
     public static final String DELETE_VISITLIST = URL + "/client/user/visit/del_visit.php";
     /**
-     * 版本检查更新
-     **/
-    public static final String CHECK_VERSION = URL + "/upgrade_version.php";
-    /**
      * 查找好友
      **/
     public static final String SEARCH_FRIEND = URL + "/client/user/atten/find_new_friends.php";
@@ -220,6 +232,10 @@ public class URL {
      * 微信支付
      */
     public static final String GETWXPAY = URL + "/client/wxpay/build_alipay.php";
+    /**
+     * 钱包支付
+     */
+    public static final String GETWALLETPAY = URL + "/client/user/user_pay.php";
     /**
      * 摇一摇
      */
@@ -301,4 +317,68 @@ public class URL {
      * 邀请关注人列表
      **/
     public static final String GROUPMYCARE = URL + "/client/group/atten/concern_list.php";
+    /**
+     * 获取约会类型列表
+     */
+    public static final String GET_DATE_TYPE_LIST = URL + "/client/dynamic/dynamic_type.php";
+    /**
+     * 获取个人账户信息
+     */
+    public static final String GET_USER_ACCOUNT = URL + "/client/user/user_account.php";
+    /**
+     * 拆红包
+     */
+    public static final String OPEN_RED_PACKET = URL + "/client/red/get_redpacket.php";
+    /**
+     * 查看钱包明细
+     */
+    public static final String GET_PAYMENT_DETAIL = URL + "/client/user/user_bill.php";
+    /**
+     * 钱包提现
+     */
+    public static final String MONEY_TI_XIAN = URL + "/client/user/user_draw.php";
+    /**
+     * 上传真人认证视频和缩略图
+     **/
+    public static final String UPLOADTRUEAUTH = URL + "/client/confirm/add_new_confirm.php";
+    /**
+     * 查看认证视频详情
+     **/
+    public static final String VIDEODETAIL = URL + "/client/confirm/confirm_detail.php";
+    /**
+     * 认证视频回复列表
+     **/
+    public static final String VIDEOREPLY = URL + "/client/confirm/comm_list.php";
+    /**
+     * 评论/回复认证视频
+     **/
+    public static final String REPLYVIDEODETAIL = URL + "/client/report/reply_dy.php";
+    /**
+     * 删除认证视频评论
+     **/
+    public static final String DELETEVIDEOAUTHREPLY = URL + "/client/user/confirm/d_dyreply.php";
+    /**
+     * 删除认证视频
+     **/
+    public static final String DELETEVIDEOAUTH = URL + "/client/confirm/cancel_status.php";
+    /**
+     * 推荐的约会列表
+     */
+    public static final String HOT_DATE_LIST = URL + "/client/user/dynamic/push_list.php";
+    /**
+     * 人气列表
+     */
+    public static final String HOT_USER_LIST = URL + "/client/popularity/popularity_list.php";
+    /**
+     * 我的人气明细
+     */
+    public static final String MY_POPULAR_VALUE = URL + "/client/popularity/pop_bill_list.php";
+    /**
+     * 获取举报类型
+     */
+    public static final String JUBAO_LIST = URL + "/client/report/report_type.php";
+    /**
+     * 公告栏
+     */
+    public static final String NOTICE = URL + "/notice.php";
 }

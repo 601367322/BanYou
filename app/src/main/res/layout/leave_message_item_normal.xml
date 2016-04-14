@@ -2,15 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="61dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/menu_btm_selector"
     android:paddingBottom="8dp"
     android:paddingLeft="0dp"
     android:paddingRight="8dp"
     android:paddingTop="0dp">
 
-    <CheckBox
+    <android.support.v7.widget.AppCompatCheckBox
+        app:theme="@style/RedPacketTheme"
         android:id="@+id/rb"
-        style="@style/custom_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -62,18 +63,6 @@
                 android:singleLine="true"
                 android:textColor="@color/title"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/sex"
-                android:layout_width="wrap_content"
-                android:layout_height="14dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/username"
-                android:background="@drawable/girl_icon"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/time"

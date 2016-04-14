@@ -11,6 +11,7 @@ import com.quanliren.quan_one.adapter.GroupListAdapter;
 import com.quanliren.quan_one.adapter.base.BaseAdapter;
 import com.quanliren.quan_one.api.GroupListApi;
 import com.quanliren.quan_one.api.base.BaseApi;
+import com.quanliren.quan_one.application.AM;
 import com.quanliren.quan_one.bean.BadgeBean;
 import com.quanliren.quan_one.bean.GroupBean;
 import com.quanliren.quan_one.bean.LoginUser;
@@ -42,8 +43,13 @@ public class GroupListFragment extends BaseListFragment<GroupBean> {
     @ViewById(R.id.add_group)
     View addGroup;
 
+    @FragmentArg
+    String otherId;
+    @FragmentArg
+    String title_str;
+
     public enum GroupType {
-        near, my
+        near, my, other
     }
 
     @Override
@@ -71,6 +77,8 @@ public class GroupListFragment extends BaseListFragment<GroupBean> {
         switch (groupType) {
             case near:
                 return super.getCacheKey();
+            case other:
+                return super.getCacheKey() + otherId;
             default:
                 return super.getCacheKey() + ac.getUser().getId();
         }
@@ -103,11 +111,12 @@ public class GroupListFragment extends BaseListFragment<GroupBean> {
 
     /**
      * 删除已解散的群组
+     *
      * @param intent
      * @param bean
      */
     @Receiver(actions = {EditGroupActivity.DISSOLVEGROUP})
-    public void onReceiver(Intent intent,@Receiver.Extra("group") GroupBean bean) {
+    public void onReceiver(Intent intent, @Receiver.Extra("group") GroupBean bean) {
         if (intent.getAction().equals(EditGroupActivity.DISSOLVEGROUP)) {
             if (adapter != null) {
                 List<GroupBean> list = adapter.getList();
@@ -135,6 +144,10 @@ public class GroupListFragment extends BaseListFragment<GroupBean> {
                     if (maction_bar != null)
                         maction_bar.setVisibility(View.GONE);
                     break;
+                case other:
+                    addGroup.setVisibility(View.GONE);
+                    setTitleTxt(title_str);
+                    break;
                 default:
                     setTitleTxt(getString(R.string.my_group));
                     break;
@@ -145,7 +158,7 @@ public class GroupListFragment extends BaseListFragment<GroupBean> {
     @Override
     public void initParams() {
         super.initParams();
-        api.initParam();
+        api.initParam(otherId);
     }
 
     @Override
@@ -166,6 +179,7 @@ public class GroupListFragment extends BaseListFragment<GroupBean> {
                 position--;
                 break;
         }
+        AM.getActivityManager().popActivity(GroupDetailActivity_.class);
         GroupDetailActivity_.intent(this).bean(adapter.getItem(position)).start();
     }
 
@@ -183,14 +197,14 @@ public class GroupListFragment extends BaseListFragment<GroupBean> {
     /**
      * 是否可以创建群
      */
-    void judgeCreat(){
-        ac.finalHttp.post(URL.CAN_CREATE_GROUP, getAjaxParams(), new MyJsonHttpResponseHandler(getActivity(),Util.progress_arr[4]) {
+    void judgeCreat() {
+        ac.finalHttp.post(URL.CAN_CREATE_GROUP, getAjaxParams(), new MyJsonHttpResponseHandler(getActivity(), Util.progress_arr[4]) {
             @Override
             public void onSuccessRetCode(JSONObject jo) throws Throwable {
                 String ratify = jo.getJSONObject(URL.RESPONSE).getString("ratify");
-                if("0".equals(ratify)){
+                if ("0".equals(ratify)) {
                     CreateGroupActivity_.intent(getActivity()).start();
-                }else if("1".equals(ratify)){
+                } else if ("1".equals(ratify)) {
                     showCustomToast("您只能创建一个群");
                 }
             }
@@ -203,10 +217,11 @@ public class GroupListFragment extends BaseListFragment<GroupBean> {
         if (groupType == GroupType.my) {
             LoginUser loginUser = ac.getUser();
             BadgeBean badgeBean = DBHelper.badgeDao.getBadge(loginUser.getId());
-            if(badgeBean!=null) {
+            if (badgeBean != null) {
                 badgeBean.getBean().setGroupBadge(false);
                 DBHelper.badgeDao.update(badgeBean);
             }
         }
     }
+
 }

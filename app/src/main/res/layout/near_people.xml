@@ -7,15 +7,15 @@
 
     <include
         android:id="@+id/maction_bar"
+        layout="@layout/custom_menu_actionbar"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/title_height"
-        layout="@layout/custom_menu_actionbar" />
+        android:layout_height="@dimen/title_height" />
 
     <com.quanliren.quan_one.pull.swipe.SwipeRefreshLayout
         android:id="@+id/swipe_layout"
-        android:layout_below="@id/maction_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/maction_bar">
 
         <com.quanliren.quan_one.pull.XListView
             android:id="@+id/listview"
@@ -31,14 +31,34 @@
             android:listSelector="#00000000"
             android:scrollbars="vertical"></com.quanliren.quan_one.pull.XListView>
     </com.quanliren.quan_one.pull.swipe.SwipeRefreshLayout>
-
+    <ImageView
+        android:id="@+id/date_list"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="84dp"
+        android:layout_marginRight="12dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/exchange_list"/>
+    <ImageView
+        android:id="@+id/data_grid"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="84dp"
+        android:layout_marginRight="12dp"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:src="@drawable/exchange_grid"/>
     <ImageView
         android:id="@+id/ground_through"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="14dp"
         android:layout_marginRight="12dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/roaming"/>
+        android:src="@drawable/roaming" />
+
+
 </RelativeLayout>

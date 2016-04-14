@@ -87,6 +87,7 @@ public class EmoticonDetailActivity extends BaseActivity implements EmoteGridVie
         initView();
         onRefreshStarted();
         receiveBroadcast(EmoticonListActivity.EMOTICONDOWNLOAD_PROGRESS, handler);
+        Util.umengCustomEvent(mContext, "emotion_detail_view");
     }
 
     Handler handler = new Handler() {
@@ -100,10 +101,12 @@ public class EmoticonDetailActivity extends BaseActivity implements EmoteGridVie
                 if (bean.getId() == temp.getId()) {
                     switch (state) {
                         case 0:
+                            buyBtn.setVisibility(View.GONE);
                             smooth_progress.setVisibility(View.GONE);
                             number_progress.setVisibility(View.VISIBLE);
                             break;
                         case 1:
+                            buyBtn.setVisibility(View.GONE);
                             smooth_progress.setVisibility(View.GONE);
                             number_progress.setVisibility(View.VISIBLE);
                             int gress = i.getExtras().getInt("progress");
@@ -154,8 +157,8 @@ public class EmoticonDetailActivity extends BaseActivity implements EmoteGridVie
 
         boolean isExists = false;
         try {
-            EmoticonZip ezb = DBHelper.emoticonZipDao.dao.queryForId(bean.getId());
-            if (ezb != null && ezb.getUserId().equals(ac.getUser().getId())) {
+            EmoticonZip ezb = DBHelper.emoticonZipDao.getEmoticonById(ac.getUser().getId(), bean.getId());
+            if (ezb != null) {
                 isExists = true;
             }
         } catch (Exception e1) {
@@ -183,11 +186,7 @@ public class EmoticonDetailActivity extends BaseActivity implements EmoteGridVie
 
     void initView() {
         child.setVisibility(View.GONE);
-        EmoticonZip be = null;
-        List<EmoticonZip> belist = DBHelper.emoticonZipDao.dao.queryForEq("zipId",bean.getId());
-        if (belist.size() > 0) {
-            be = belist.get(0);
-        }
+        EmoticonZip be = DBHelper.emoticonZipDao.getEmoticonById(ac.getUser().getId(), bean.getId());
         if (be != null) {
             buyBtn.setEnabled(false);
             buyBtn.setText("已下载");
@@ -227,6 +226,7 @@ public class EmoticonDetailActivity extends BaseActivity implements EmoteGridVie
         if (bean == null) {
             return;
         }
+        this.bean = bean;
         child.setVisibility(View.VISIBLE);
         setTitle(bean.getName());
         ImageLoader.getInstance().displayImage(bean.getBannerUrl(), banner, new SimpleImageLoadingListener() {

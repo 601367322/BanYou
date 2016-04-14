@@ -8,6 +8,7 @@ import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.bean.CustomFilterQuanBean;
 import com.quanliren.quan_one.dao.DBHelper;
+import com.quanliren.quan_one.util.Util;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -43,14 +44,19 @@ public class DateFilterActivity extends BaseActivity {
         }
         if (usex == 1 && sex == 0) {
             showIcon(item1);
+            item1.performClick();
         } else if (usex == 0 && sex == 1) {
             showIcon(item2);
+            item2.performClick();
         } else if (usex == 1 && sex == 1) {
             showIcon(item3);
+            item3.performClick();
         } else if (usex == 0 && sex == 0) {
             showIcon(item4);
+            item4.performClick();
         } else if (usex == -1 && sex == -1) {
             showIcon(all);
+            all.performClick();
         }
     }
 
@@ -66,6 +72,7 @@ public class DateFilterActivity extends BaseActivity {
             saveFilter("usex", usex);
             saveFilter("sex", sex);
         }
+        Util.umengCustomEvent(mContext, "date_filter");
         setResult(RESULT_OK);
         finish();
     }

@@ -262,12 +262,26 @@ public class XhsEmoticonsKeyBoardBar extends AutoHeightLayout implements View.On
 
     public void hideEmotion() {
         super.emotionClose();
-        ((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction().hide(chatEivInputview).commitAllowingStateLoss();
+        if(getContext() == null){
+            return;
+        }
+        try {
+            ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().hide(chatEivInputview).commitAllowingStateLoss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void openEmotion() {
         super.emotionOpen();
-        ((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction().show(chatEivInputview).commitAllowingStateLoss();
+        if(getContext() == null){
+            return;
+        }
+        try {
+            ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().show(chatEivInputview).commitAllowingStateLoss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

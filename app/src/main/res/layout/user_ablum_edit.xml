@@ -6,7 +6,12 @@
     android:orientation="vertical">
 
     <include layout="@layout/custom_back_actionbar" />
-
+    <TextView
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="提示：长按图片，可以进行更多操作。"/>
     <FrameLayout
         android:id="@+id/pic_contents"
         android:layout_width="fill_parent"

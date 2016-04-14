@@ -76,10 +76,10 @@ public class EmoticonActivityListBean implements Serializable {
     @DatabaseTable(tableName = "EmoticonZip")
     public static class EmoticonZip implements Serializable {
 
-        @DatabaseField(id = true)
-        private int id;
+        @DatabaseField(generatedId = true)
+        private int generatedId;
         @DatabaseField(index = true)
-        private String zipId;
+        private int id;
         @DatabaseField(index = true)
         private String iconfile;
         @DatabaseField(index = true)
@@ -108,15 +108,6 @@ public class EmoticonActivityListBean implements Serializable {
         private String remark;
         @DatabaseField(dataType = DataType.SERIALIZABLE)
         private ArrayList<EmoticonImageBean> imglist;
-
-
-        public String getZipId() {
-            return zipId;
-        }
-
-        public void setZipId(String zipId) {
-            this.zipId = zipId;
-        }
 
         public String getIconfile() {
             return iconfile;
@@ -290,24 +281,15 @@ public class EmoticonActivityListBean implements Serializable {
             }
         }
 
-        @DatabaseTable(tableName = "EmoticonImageBean")
         public static class EmoticonImageBean implements Serializable {
 
-            @DatabaseField(id = true)
             private int imgid;
-            @DatabaseField
             private String userId;
-            @DatabaseField
             private String emotionId;
-            @DatabaseField
             private String nickname;
-            @DatabaseField
             private String flagName;
-            @DatabaseField
             private String pngUrl;
-            @DatabaseField
             private String gifUrl;
-            @DatabaseField
             private String pngfile;
 
             public String getEmotionId() {

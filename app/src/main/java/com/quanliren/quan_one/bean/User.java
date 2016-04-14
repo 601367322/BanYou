@@ -64,7 +64,62 @@ public class User implements Serializable {
     private String appearance;
     private String memberType;
     private boolean checked;
+    private int confirmType;
     private int title = -1;  //-1:默认无title;0:群成员;1:群主;3:我关注的人
+    private String path;//视频地址
+    private String thumb;//缩略图
+    private String inviteCode;//邀请码
+    private String uvId;//邀请码
+
+    public String getUvId() {
+        return uvId;
+    }
+
+    public void setUvId(String uvId) {
+        this.uvId = uvId;
+    }
+
+    private int popNum;//人气
+    public int getPopNum() {
+        return popNum;
+    }
+
+    public void setPopNum(int popNum) {
+        this.popNum = popNum;
+    }
+
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
+    }
+
+    public int getConfirmType() {
+        return confirmType;
+    }
+
+    public void setConfirmType(int confirmType) {
+        this.confirmType = confirmType;
+    }
 
     public boolean getChecked() {
         return checked;
@@ -211,7 +266,7 @@ public class User implements Serializable {
     }
 
     public String getLongitude() {
-        if(TextUtils.isEmpty(longitude)){
+        if (TextUtils.isEmpty(longitude)) {
             return "0.0";
         }
         return longitude;
@@ -222,7 +277,7 @@ public class User implements Serializable {
     }
 
     public String getLatitude() {
-        if(TextUtils.isEmpty(latitude)){
+        if (TextUtils.isEmpty(latitude)) {
             return "0.0";
         }
         return latitude;

@@ -23,6 +23,7 @@ public class OpenFromNotifyActivity extends Activity {
             MainActivity_.intent(this).start();
         }
         if (clazz != null) {
+            AM.getActivityManager().popActivity(clazz);
             Intent i = new Intent(this, clazz);
             i.addCategory(Intent.CATEGORY_LAUNCHER);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

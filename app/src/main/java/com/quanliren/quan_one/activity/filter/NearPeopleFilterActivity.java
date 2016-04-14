@@ -14,6 +14,7 @@ import com.quanliren.quan_one.bean.CustomFilterBean;
 import com.quanliren.quan_one.bean.User;
 import com.quanliren.quan_one.dao.DBHelper;
 import com.quanliren.quan_one.dao.LoginUserDao;
+import com.quanliren.quan_one.util.Util;
 
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -112,6 +113,7 @@ public class NearPeopleFilterActivity extends BaseActivity implements View.OnCli
                 sexIndex = 1;
                 break;
         }
+        Util.umengCustomEvent(mContext, "near_filter");
         Intent intent=new Intent();
         intent.putExtra("sexIndex", sexIndex);
         intent.putExtra("timeIndex",timeIndex);

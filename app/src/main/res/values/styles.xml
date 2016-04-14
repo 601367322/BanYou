@@ -16,6 +16,13 @@
         <!-- Change Overflow Menu ListView Item Height & Property -->
         <item name="android:listPreferredItemPaddingLeft">5dp</item>
         <item name="android:listPreferredItemPaddingRight">5dp</item>
+        <item name="colorButtonNormal">@color/commit_btn_default_color</item>
+    </style>
+
+    <style name="RedPacketTheme" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/red_packet_action_color</item>
+        <item name="colorPrimary">@color/red_packet_action_color</item>
+        <item name="colorAccent">@color/red_packet_action_color</item>
     </style>
 
     <style name="PopupMenu" parent="android:Widget.Holo.Light.ListPopupWindow">

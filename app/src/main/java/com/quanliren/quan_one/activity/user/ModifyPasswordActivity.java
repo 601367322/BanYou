@@ -91,9 +91,6 @@ public class ModifyPasswordActivity extends BaseActivity {
 			User user = new Gson().fromJson(jo.getString(URL.RESPONSE), User.class);
 			LoginUser lu = new LoginUser(user.getId(), u.getMobile(), u.getPwd(), user.getToken());
 
-			//保存用户
-			DBHelper.userTableDao.updateUser(user);
-
 			//保存登陆用户
 			DBHelper.loginUserDao.clearTable();
 			DBHelper.loginUserDao.create(lu);

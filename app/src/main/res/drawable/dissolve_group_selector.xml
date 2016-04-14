@@ -4,14 +4,14 @@
         <shape>
             <solid android:color="@color/signature" />
 
-            <corners android:radius="8dp" />
+            <corners android:radius="2dp" />
         </shape>
     </item>
     <item>
         <shape>
             <solid android:color="@color/group_create_gray" />
 
-            <corners android:radius="8dp" />
+            <corners android:radius="2dp" />
         </shape>
     </item>
 

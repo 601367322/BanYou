@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.api.base.BaseApi;
+import com.quanliren.quan_one.application.AM;
 import com.quanliren.quan_one.fragment.base.BaseViewPagerChildListFragment;
 import com.quanliren.quan_one.activity.date.DateDetailActivity_;
 import com.quanliren.quan_one.adapter.DateAdapter;
@@ -37,6 +38,7 @@ public class DateListFragment extends BaseViewPagerChildListFragment<DateBean> i
     public static final int MY = 2;
     public static final int COLLECT = 6;
     public static final int CARE = 7;
+    public static final int HOT = 8;//推荐
 
     public static final int PUBLISH_RESULT = 1;
     public static final int CHOSE_LOCTION_RESULT = 2;
@@ -56,6 +58,7 @@ public class DateListFragment extends BaseViewPagerChildListFragment<DateBean> i
         switch (type) {
             case CARE:
             case ALL:
+            case HOT:
                 if (maction_bar != null)
                     maction_bar.setVisibility(View.GONE);
                 break;
@@ -134,6 +137,7 @@ public class DateListFragment extends BaseViewPagerChildListFragment<DateBean> i
         switch (type) {
             case ALL:
             case CARE:
+            case HOT:
                 ShakeImageView adImg = new ShakeImageView(getActivity());
                 adImg.addToListView(listview);
                 break;
@@ -170,6 +174,7 @@ public class DateListFragment extends BaseViewPagerChildListFragment<DateBean> i
 
     @Override
     public void detailClick(DateBean bean) {
+        AM.getActivityManager().popActivity(DateDetailActivity_.class);
         DateDetailActivity_.intent(this).bean(bean).start();
     }
 
@@ -178,6 +183,7 @@ public class DateListFragment extends BaseViewPagerChildListFragment<DateBean> i
         switch (type) {
             case ALL:
             case CARE:
+            case HOT:
                 return false;
         }
         return true;
@@ -188,6 +194,8 @@ public class DateListFragment extends BaseViewPagerChildListFragment<DateBean> i
         switch (type) {
             case ALL:
                 return super.getCacheKey();
+            case HOT:
+                return super.getCacheKey() + "hot";
             case ONCE:
                 return super.getCacheKey() + userId;
             case MY:
@@ -204,20 +212,22 @@ public class DateListFragment extends BaseViewPagerChildListFragment<DateBean> i
     public boolean needBack() {
         switch (type) {
             case ALL:
+            case HOT:
+            case CARE:
                 return false;
             default:
                 return true;
         }
     }
 
-    @Override
+    /*@Override
     public boolean autoRefresh() {
         switch (type) {
-            case ALL:
+            case HOT:
                 return false;
         }
         return super.autoRefresh();
-    }
+    }*/
 
     AtomicBoolean init1 = new AtomicBoolean(false);
 
@@ -283,10 +293,10 @@ public class DateListFragment extends BaseViewPagerChildListFragment<DateBean> i
         if (type == CARE) {
             LoginUser loginUser = ac.getUser();
             BadgeBean badgeBean = DBHelper.badgeDao.getBadge(loginUser.getId());
-            if(badgeBean!=null) {
+            if (badgeBean != null) {
                 badgeBean.getBean().setDateBadge(false);
                 DBHelper.badgeDao.update(badgeBean);
-                ((BaseViewPagerChildNavFragment) getParentFragment()).actionbar_tab.setBadge(1, false);
+                ((BaseViewPagerChildNavFragment) getParentFragment()).actionbar_tab.setBadge(2, false);
             }
         }
     }

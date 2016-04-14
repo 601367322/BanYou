@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_bg"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/custom_back_actionbar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.quanliren.quan_one.custom.SquareLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
+                <FrameLayout
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <RelativeLayout
+                    android:id="@+id/gg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.quanliren.quan_one.custom.SquareImageView
+                        android:id="@+id/recoding_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image_group_qzl" />
+
+                    <ImageView
+                        android:id="@+id/start_recording"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/start_play_icon"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/play_video"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/start_play_icon"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+            </com.quanliren.quan_one.custom.SquareLayout>
+
+            <LinearLayout
+                android:id="@+id/video_intro"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/menu_mid_selector"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="视频描述"
+                    android:textColor="@color/user_info_key"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/intro_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:hint="请填写视频描述"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/user_info_key"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/caret" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/signature" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottom_btns"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:divider="@drawable/group_detail_bottom_btn_space"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:showDividers="middle"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/re_recording_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/commit_btn_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="重新录制"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/commit_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/commit_btn_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="提交审核"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -44,7 +44,7 @@
 	<string name="sex_chose">性别</string>
 	<string name="searching">正在查找</string>
 	<string name="no_find_friend">没有找到相关结果</string>
-	<string name="no_input">请输入ID或昵称</string>
+	<string name="no_input">请输入昵称</string>
 
 	<string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>
@@ -75,7 +75,7 @@
 	<string name="send_loading">正在发送请求</string>
 	<string name="location_fail">定位失败</string>
 	<string name="location_loading">正在定位...</string>
-	<string name="lazy">这个人好懒，什么都没有留下</string>
+	<string name="lazy">这个人有点懒，什么都没有留下</string>
 
 	<string name="info_type_0">评论了您的约会</string>
 	<string name="info_type_1">您发布的约会已过期</string>
@@ -84,6 +84,8 @@
 	<string name="cared_txt">已关注</string>
 	<string name="her_date">她发布的约会</string>
 	<string name="his_date">他发布的约会</string>
+	<string name="her_group">她加入的群组</string>
+	<string name="his_group">他加入的群组</string>
 	<string name="empty">无</string>
 	<string name="hava_a_dating">您有正在进行中的约会！</string>
 	<string name="have_a_dating">您有正在进行中的约会！</string>
@@ -98,7 +100,7 @@
 	<string name="funs">粉丝</string>
 	<string name="care">关注</string>
 	<string name="message_nav_str">消息,联系</string>
-	<string name="date_nav_str">约会,关注</string>
+	<string name="date_nav_str">推荐,约会,关注</string>
 	<string name="near_nav_str">伴友,群组</string>
 	<string name="create_group">创建群</string>
 	<string name="group_touxiang">群头像</string>
@@ -122,4 +124,19 @@
 	<string name="jubaoed">已举报</string>
 	<string name="group_master">群主</string>
 	<string name="care_friend">我关注的人</string>
+	<string name="true_name">实名认证</string>
+	<string name="true_auth">真人认证</string>
+	<string name="upload_front">上传手持身份证正面照片</string>
+	<string name="upload_identify">上传身份证照片</string>
+	<string name="upload_intro_video">上传一段自我介绍视频</string>
+	<string name="commit">提交审核</string>
+	<string name="intro_video">介绍视频</string>
+	<string name="browse">预览</string>
+	<string name="delete">删除</string>
+	<string name="choose_date_content">选择约会内容</string>
+	<string name="send_packet">发红包</string>
+	<string name="red_packet_detail">红包详情</string>
+	<string name="red_packet_runtime">红包超时</string>
+	<string name="helper_invite_title">注册成功</string>
+	<string name="tixian_notify">提现通知</string>
 </resources>

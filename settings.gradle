@@ -1,1 +1,1 @@
-include ':app', ':lib-umeng', ':lib-swipeback', ':lib-datetimepicker', ':lib-actionbar-navtab'
+include ':app', 'lib-amr', ':lib-umeng', ':lib-swipeback', ':lib-datetimepicker', ':lib-actionbar-navtab', 'lib-androidtagview', ':lib-auto_fit_textview', 'lib-blurry', ':lib-qupai-onesdk', ':lib-qupai-coresdk', ':lib-qupai'

@@ -3,6 +3,8 @@
 4、检查数据库版本号
 5、检查设置测试IP入口是否关闭
 6、日志开关
-7、QuanPushService
+7、QuanPushService 是否是 :push
+8、检查视频
+9、检查地图签名
 
 gradlew assembleRelease

@@ -152,9 +152,4 @@
         </LinearLayout>
     </LinearLayout>
 
-    <include
-        layout="@layout/popbg"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-
 </RelativeLayout>

@@ -3,10 +3,10 @@ package com.quanliren.quan_one.activity.user;
 import android.content.Context;
 import android.content.Intent;
 
+import com.google.gson.Gson;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.quanliren.quan_one.application.AppClass;
 import com.quanliren.quan_one.bean.DfMessage;
-import com.quanliren.quan_one.bean.VideoDownBean;
 import com.quanliren.quan_one.dao.DBHelper;
 import com.quanliren.quan_one.dao.DfMessageDao;
 import com.quanliren.quan_one.service.SocketManage;
@@ -61,6 +61,10 @@ public class ChatDownLoadManager {
             case DfMessage.VOICE:
                 url = msg.getContent();
                 break;
+            case DfMessage.VIDEO:
+                DfMessage.VideoBean vb = msg.getVideoBean();
+                url = vb.path;
+                break;
         }
         ac.finalHttp.get(url, new fileDownload(msg, StaticFactory.APKCardPathChatVoice + msg.getContent().hashCode()));
     }
@@ -76,7 +80,7 @@ public class ChatDownLoadManager {
         @Override
         public void onProgress(long bytesWritten, long totalSize) {
             super.onProgress(bytesWritten, totalSize);
-            EventBus.getDefault().post(new VideoDownBean(msg, (int) bytesWritten, (int) totalSize));
+            EventBus.getDefault().post(new ChatPlayVideoFragment.VideoDownBean(msg, (int) bytesWritten, (int) totalSize));
         }
 
         public void onStart() {
@@ -105,6 +109,11 @@ public class ChatDownLoadManager {
             switch (msg.getMsgtype()) {
                 case DfMessage.VOICE:
                     msg.setContent(file.getPath());
+                    break;
+                case DfMessage.VIDEO:
+                    DfMessage.VideoBean vb = msg.getVideoBean();
+                    vb.path = file.getPath();
+                    msg.setContent(new Gson().toJson(vb));
                     break;
             }
             messageDao.update(msg);

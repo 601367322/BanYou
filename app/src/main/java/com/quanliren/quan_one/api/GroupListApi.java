@@ -13,14 +13,14 @@ public class GroupListApi extends BaseApi {
 
     GroupListFragment.GroupType type;
 
-    public GroupListApi(Context context,GroupListFragment.GroupType type) {
+    public GroupListApi(Context context, GroupListFragment.GroupType type) {
         super(context);
         this.type = type;
     }
 
     @Override
     public String getUrl() {
-        switch (type){
+        switch (type) {
             case near:
                 return URL.GROUP_LIST;
             default:
@@ -32,9 +32,11 @@ public class GroupListApi extends BaseApi {
     @Override
     public void initParam(Object... obj) {
         super.initParam(obj);
-        if(type == GroupListFragment.GroupType.near) {
+        if (type == GroupListFragment.GroupType.near) {
             getParams().put("longitude", ac.cs.getLng());
             getParams().put("latitude", ac.cs.getLat());
+        } else if (type == GroupListFragment.GroupType.other) {
+            getParams().put("otherId", obj[0]);
         }
     }
 }

@@ -45,7 +45,7 @@
                     android:layout_alignParentRight="true"
                     android:scaleType="centerCrop"
                     ptr:border_color="#FFFFFF"
-                    android:src="@drawable/defalut_logo" />
+                    android:src="@drawable/defalut_group_logo" />
             </LinearLayout>
 
             <LinearLayout
@@ -127,7 +127,7 @@
                     android:paddingRight="8dp"
                     android:text="群成员≤20人"
                     android:background="@drawable/group_create_bg"
-                    android:textColor="@color/time_line"
+                    android:textColor="@color/white"
                     android:textSize="12sp" />
 
                 <TextView

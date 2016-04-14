@@ -1,8 +1,5 @@
 package com.alipay;
 
-/**
- * Created by BingBing on 2014/9/4.
- */
 public class Keys {
     //合作身份者id，以2088开头的16位纯数字
     public static final String DEFAULT_PARTNER = "2088311410365242";

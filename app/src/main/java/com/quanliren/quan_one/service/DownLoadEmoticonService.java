@@ -195,7 +195,7 @@ public class DownLoadEmoticonService extends Service {
                                         if (System
                                                 .currentTimeMillis()
                                                 - time > 1000) {
-                                            notifys(bean.getName(),bytesWritten, totalSize);
+                                            notifys(bean.getName(), bytesWritten, totalSize);
                                             time = System
                                                     .currentTimeMillis();
                                             Intent i = new Intent(
@@ -218,7 +218,6 @@ public class DownLoadEmoticonService extends Service {
                             });
         }
     }
-
 
 
     Map<Integer, NotificationCompat.Builder> notiMap = new HashMap<Integer, NotificationCompat.Builder>();
@@ -249,7 +248,7 @@ public class DownLoadEmoticonService extends Service {
             } else {
                 notificationBuilder
                         .setAutoCancel(true)
-                        .setProgress((int)max, (int)progress, false)
+                        .setProgress((int) max, (int) progress, false)
                         .setLargeIcon(
                                 BitmapCache.getInstance().getBitmap(
                                         R.mipmap.ic_launcher, this))
@@ -291,13 +290,10 @@ public class DownLoadEmoticonService extends Service {
                 }
                 ebi.setEmotionId(bean.getId() + "");
                 ebi.setUserId(ac.getUser().getId());
-                DBHelper.emoticonImageBeanDao.create(ebi);
             }
             bean.setUserId(ac.getUser().getId());
-            bean.setZipId(bean.getId() + "");
             DBHelper.emoticonZipDao.create(bean);
-            Intent i = new Intent(
-                    EmoticonListActivity.EMOTICONDOWNLOAD_PROGRESS);
+            Intent i = new Intent(EmoticonListActivity.EMOTICONDOWNLOAD_PROGRESS);
             i.putExtra("bean", bean);
             i.putExtra("state", 2);
             sendBroadcast(i);

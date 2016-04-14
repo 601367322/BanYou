@@ -25,8 +25,8 @@
 
             <com.quanliren.quan_one.pull.XListView
                 android:id="@+id/listview"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:cacheColorHint="#00000000"
                 android:divider="#00000000"

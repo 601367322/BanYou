@@ -17,6 +17,7 @@ public class StaticFactory {
     public static final String APKCardPathCrash = APKCardPath + "crash/";//
 	public static final String APKCardPathChatImg = APKCardPath + "chat/img/";
 	public static final String APKCardPathChatVoice = APKCardPath + "chat/voice/";//
+	public static final String APKCardPathChatVideo = APKCardPath + "chat/video/";//
 	public static final String APKCardPathLog = APKCardPath + "log/";//
 
 	public static final String _160x160="_160x160.jpg";

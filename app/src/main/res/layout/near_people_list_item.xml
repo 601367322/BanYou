@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/menu_btm_selector"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="72dp"
+        android:layout_height="72dp">
+
+        <com.quanliren.quan_one.custom.RoundAngleImageView
+            android:id="@+id/userlogo"
+            android:layout_width="72dp"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"
+            app:roundHeight="5dp"
+            app:roundWidth="5dp"
+            android:layout_height="72dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/photo_num"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+        <me.grantland.widget.AutofitTextView
+            xmlns:autofit="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imgConut"
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:singleLine="true"
+            autofit:minTextSize="14sp"
+            android:textStyle="italic"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <com.quanliren.quan_one.custom.UserInfoLayout
+            android:id="@+id/userinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:info_layout="@layout/user_nick_name_new" />
+
+        <TextView
+            android:id="@+id/signature"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/near_apperence"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tourists"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgdes"
+                android:text="游客"
+                android:textColor="@color/near_apperence"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/escort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgdes"
+                android:drawablePadding="4dp"
+                android:drawableRight="@drawable/star"
+                android:gravity="center"
+                android:text="伴游"
+                android:textColor="@color/star_color"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="58分钟前"
+                    android:drawablePadding="4dp"
+                    android:drawableLeft="@drawable/near_time"
+                    android:textColor="@color/near_apperence"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:drawableLeft="@drawable/near_location"
+                    android:drawablePadding="4dp"
+                    android:text="0.05km"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/near_apperence"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

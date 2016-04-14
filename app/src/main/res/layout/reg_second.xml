@@ -329,6 +329,36 @@
                         android:textSize="15sp" />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/invite_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:gravity="center"
+                        android:text="邀 请 码  "
+                        android:textColor="@color/title"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/invite_code"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="6dp"
+                        android:background="@null"
+                        android:password="true"
+                        android:singleLine="true"
+                        android:gravity="center_vertical"
+                        android:hint="您和邀请人各将获得5元现金红包奖励"
+                        android:textColor="@color/title"
+                        android:textSize="15sp" />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_marginTop="16dp"
                     android:layout_marginLeft="8dp"
                     android:layout_width="match_parent"
@@ -353,6 +383,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="30dp"
+                    android:layout_marginBottom="50dp"
                     android:background="@drawable/commit_btn_selector"
                     android:text="提交"
                     android:textColor="@color/white"
@@ -361,9 +392,4 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <include
-        layout="@layout/popbg"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
 </RelativeLayout>

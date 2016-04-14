@@ -21,6 +21,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseUserActivity;
 import com.quanliren.quan_one.activity.date.PhotoAlbumMainActivity_;
+import com.quanliren.quan_one.activity.seting.auth.TrueAuthActivity_;
+import com.quanliren.quan_one.activity.seting.auth.TrueNoAuthActivity_;
 import com.quanliren.quan_one.dao.DBHelper;
 import com.quanliren.quan_one.dao.LoginUserDao;
 import com.quanliren.quan_one.dao.UserTableDao;
@@ -53,6 +55,7 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
     private static final int EDITUSERINFO = 4;
     private static final int USERLOGO = 1;
     private static final int IMG = 2;
+    private static final int EDITAUTH = 8;
     private int uploadImgType;
     @ViewById(R.id.birthday)
     public TextView birthday;
@@ -64,13 +67,19 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
     public TextView vip_time;
     @ViewById(R.id.identitystate)
     public TextView identitystate;
+    @ViewById(R.id.auth_state)
+    public TextView auth_state;
     @ViewById(R.id.vip_tr)
     public LinearLayout vip_tr;
 
     @ViewById(R.id.userlogo_ll)
     public LinearLayout userlogo_ll;
+    @ViewById(R.id.rlayout_video)
+    public LinearLayout rlayout_video;
     @ViewById(R.id.img_first_ll)
     public LinearLayout img_first_ll;
+    @ViewById(R.id.viedo_ll)
+    public LinearLayout viedo_ll;
     @ViewById(R.id.nickname_ll)
     public LinearLayout nickname_ll;
     @ViewById(R.id.signature_ll)
@@ -89,6 +98,8 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
     public LinearLayout identity_ll;
     @ViewById(R.id.pay_ll)
     public LinearLayout pay_ll;
+    @ViewById(R.id.auth_ll)
+    public LinearLayout auth_ll;
     @ViewById(R.id.identitystate_ll)
     public LinearLayout identitystate_ll;
     @ViewById(R.id.by_help)
@@ -140,6 +151,7 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
         phone_ll.setOnClickListener(this);
         identity_ll.setOnClickListener(this);
         pay_ll.setOnClickListener(this);
+        auth_ll.setOnClickListener(this);
         identitystate_ll.setOnClickListener(this);
         birthday.addTextChangedListener(tw_birthday);
 
@@ -220,6 +232,18 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
         } else {
             identitystate_ll.setVisibility(View.VISIBLE);
             identitystate.setText(banyouStates[user.getIdentityState()]);
+        }
+        if (user.getConfirmType() == 0) {
+            auth_state.setText("未认证");
+        } else if (user.getConfirmType() == 1) {
+            auth_state.setText("审核中");
+        } else if (user.getConfirmType() == 2) {
+            auth_state.setText("已认证");
+        }
+        if(user.getConfirmType()==2){
+            rlayout_video.setVisibility(View.VISIBLE);
+        }else{
+            rlayout_video.setVisibility(View.GONE);
         }
         str_nickname = user.getNickname();
         str_age = user.getBirthday();
@@ -393,7 +417,7 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
         try {
             RequestParams ap = Util.getRequestParams(getApplicationContext());
             ap.put("file", file);
-            ac.finalHttp.post(URL.UPLOAD_USER_LOGO, ap, new MyJsonHttpResponseHandler() {
+            ac.finalHttp.post(URL.UPLOAD_USER_LOGO, ap, new MyJsonHttpResponseHandler(mContext,"正在上传头像") {
                 @Override
                 public void onSuccessRetCode(JSONObject jo) throws Throwable {
                     Util.toast(UserInfoActivity.this, "上传成功");
@@ -527,7 +551,7 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
                         ImageUtil.downsize(cameraUserLogo, cameraUserLogo, this);
                         switch (uploadImgType) {
                             case USERLOGO:
-                                ImageLoader.getInstance().displayImage(
+                                 ImageLoader.getInstance().displayImage(
                                         Util.FILE + cameraUserLogo, userlogo);
                                 break;
                         }
@@ -685,6 +709,16 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
             case R.id.img_first_ll:
                 UserAlbumEditActivity_.intent(mContext).userid(user.getId()).imglist(user.getImglist()).startForResult(EDITUSERABLUM);
                 break;
+            case R.id.auth_ll:
+                if (user.getConfirmType() == 2) {
+                    return;
+                }
+                if (user.getConfirmType() == 0) {
+                    TrueNoAuthActivity_.intent(mContext).start();
+                } else {
+                    TrueAuthActivity_.intent(mContext).start();
+                }
+                break;
             case R.id.nickname_ll:
                 NicknameEditActivity_.intent(mContext).str_nickname(str_nickname).startForResult(EDITUSERNAME);
                 break;
@@ -720,9 +754,15 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
         }
     }
 
+    @Click(R.id.viedo_ll)
+    void seeVideo(){
+        TrueAuthActivity_.intent(mContext).start();
+    }
+
     /**
      * 游客转伴游
      */
+
     private void transForBanYou() {
         new AlertDialog.Builder(UserInfoActivity.this)
                 .setMessage("选择伴游后，将不可更改，是否继续？")
@@ -804,5 +844,13 @@ public class UserInfoActivity extends BaseUserActivity implements OnClickListene
     @Click(R.id.by_help)
     public void byHelp(View view) {
         HtmlActivity_.intent(mContext).url("file:///android_asset/banyou.html").title_txt("身份说明").start();
+    }
+    @OnActivityResult(EDITAUTH)
+    void updateAuthState(int resultCode) {
+        if (resultCode == RESULT_OK) {
+            user.setConfirmType(1);
+            auth_state.setText("审核中");
+            DBHelper.userTableDao.updateUser(user);
+        }
     }
 }

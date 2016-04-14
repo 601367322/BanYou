@@ -27,11 +27,15 @@ public class CounterDao extends BaseDao<CounterBean, Integer> {
     }
 
     public CounterBean getCounter(String userId) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("userId", userId);
-        List<CounterBean> list = dao.queryForFieldValues(map);
-        if (list != null && list.size() > 0) {
-            return list.get(0);
+        try {
+            Map<String, Object> map = new HashMap<>();
+            map.put("userId", userId);
+            List<CounterBean> list = dao.queryForFieldValues(map);
+            if (list != null && list.size() > 0) {
+                return list.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

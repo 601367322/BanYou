@@ -309,3 +309,50 @@
 <fields>;
 <methods>;
 }
+
+############qupai#########
+-dontwarn com.alibaba.**
+-keep class com.alibaba.**
+-keepclassmembers class com.alibaba.** {
+    *;
+}
+-keep class com.taobao.**
+-keepclassmembers class com.taobao.** {
+    *;
+}
+
+-dontwarn com.google.common.**
+-dontwarn com.fasterxml.jackson.**
+-dontwarn com.amap.api.**
+-dontwarn net.jcip.annotations.**
+
+-keepattributes Annotation,EnclosingMethod,Signature
+-keep class com.fasterxml.jackson.**
+-keepclassmembers class com.fasterxml.jackson.** {
+    *;
+}
+
+-keep class com.duanqu.**
+-keepclassmembers class com.duanqu.** {
+    *;
+}
+############qupai#########
+
+##---------------Begin: proguard configuration for Gson  ----------
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
+-keep class com.google.gson.**{*;}
+##---------------End: proguard configuration for Gson  ----------
+##---------------Begin: proguard configuration for Gson ----------
+-keep public class com.google.gson.**
+-keep public class com.google.gson.** {public private protected *;}
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep public class co.lujun.** { <fields>;  }
+
+##---------------End: proguard configuration for Gson ----------

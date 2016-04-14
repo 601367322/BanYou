@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class MessageAdapter extends ParentsAdapter {
 
-    public static final int LEFT_TEXT = 0, LEFT_VOICE = 1, LEFT_IMG = 2, LEFT_FACE = 3, LEFT_HELPER = 4;
-    public static final int RIGHT_TEXT = 5, RIGHT_VOICE = 6, RIGHT_IMG = 7, RIGHT_FACE = 8;
+    public static final int LEFT_TEXT = 0, LEFT_VOICE = 1, LEFT_IMG = 2, LEFT_FACE = 3, LEFT_HELPER = 4, LEFT_VIDEO = 9, LEFT_RED_PACKET = 11;
+    public static final int RIGHT_TEXT = 5, RIGHT_VOICE = 6, RIGHT_IMG = 7, RIGHT_FACE = 8, RIGHT_VIDEO = 10, RIGHT_RED_PACKET = 12;
 
     AppClass ac;
 
@@ -34,7 +34,7 @@ public class MessageAdapter extends ParentsAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return 9;
+        return 13;
     }
 
     public MessageAdapter(Context c, List list, Handler hanler) {
@@ -42,7 +42,7 @@ public class MessageAdapter extends ParentsAdapter {
         this.hanlder = hanler;
         ac = (AppClass) c.getApplicationContext();
         user = ac.getUserInfo();
-        type = ((ChatActivity)c).type;
+        type = ((ChatActivity) c).type;
     }
 
     @Override
@@ -89,6 +89,18 @@ public class MessageAdapter extends ParentsAdapter {
             case RIGHT_FACE:
                 holder = new MessageGifHolder(LayoutInflater.from(c).inflate(R.layout.chatting_item_msg_right_gif, viewGroup, false));
                 break;
+            case LEFT_VIDEO:
+                holder = new MessageVideoHolder(LayoutInflater.from(c).inflate(R.layout.chatting_item_msg_left_video, viewGroup, false));
+                break;
+            case RIGHT_VIDEO:
+                holder = new MessageVideoHolder(LayoutInflater.from(c).inflate(R.layout.chatting_item_msg_right_video, viewGroup, false));
+                break;
+            case LEFT_RED_PACKET:
+                holder = new MessageRedPacketHolder(LayoutInflater.from(c).inflate(R.layout.chatting_item_msg_left_red_packet, viewGroup, false));
+                break;
+            case RIGHT_RED_PACKET:
+                holder = new MessageRedPacketHolder(LayoutInflater.from(c).inflate(R.layout.chatting_item_msg_right_red_packet, viewGroup, false));
+                break;
         }
         holder.setMsgType(type);
         holder.setList(list);
@@ -113,12 +125,18 @@ public class MessageAdapter extends ParentsAdapter {
                     } else {
                         return LEFT_TEXT;
                     }
+                case DfMessage.HELPER:
+                    return LEFT_HELPER;
                 case DfMessage.IMAGE:
                     return LEFT_IMG;
                 case DfMessage.VOICE:
                     return LEFT_VOICE;
                 case DfMessage.FACE:
                     return LEFT_FACE;
+                case DfMessage.VIDEO:
+                    return LEFT_VIDEO;
+                case DfMessage.PACKET:
+                    return LEFT_RED_PACKET;
             }
         } else {
             switch (entity.getMsgtype()) {
@@ -130,6 +148,10 @@ public class MessageAdapter extends ParentsAdapter {
                     return RIGHT_VOICE;
                 case DfMessage.FACE:
                     return RIGHT_FACE;
+                case DfMessage.VIDEO:
+                    return RIGHT_VIDEO;
+                case DfMessage.PACKET:
+                    return RIGHT_RED_PACKET;
             }
         }
         return super.getItemViewType(position);
@@ -143,14 +165,14 @@ public class MessageAdapter extends ParentsAdapter {
 
     public void addFirstItem(DfMessage obj) {
         super.addFirstItem(obj);
-        if(!friends.containsKey(obj.getFriend().getId())){
+        if (!friends.containsKey(obj.getFriend().getId())) {
             friends.put(obj.getFriend().getId(), obj.getFriend());
         }
     }
 
     public void setFriend(List<User> friend) {
         for (int i = 0; i < friend.size(); i++) {
-            friends.put(friend.get(i).getId(),friend.get(i));
+            friends.put(friend.get(i).getId(), friend.get(i));
         }
     }
 }

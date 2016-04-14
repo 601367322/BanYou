@@ -27,6 +27,7 @@ import com.quanliren.quan_one.fragment.message.MessageNavFragment_;
 import com.quanliren.quan_one.fragment.near.NearNavFragment_;
 import com.quanliren.quan_one.post.UpdateUserPost;
 import com.quanliren.quan_one.util.BroadcastUtil;
+import com.quanliren.quan_one.util.StaticFactory;
 import com.quanliren.quan_one.util.Util;
 import com.umeng.onlineconfig.OnlineConfigAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -35,6 +36,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +109,19 @@ public class MainActivity extends BaseActivity {
         viewpager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
 
         setCurrentIndex(btn1);
+
+        File file = new File(StaticFactory.APKCardPath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(StaticFactory.APKCardPath + ".nomedia");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

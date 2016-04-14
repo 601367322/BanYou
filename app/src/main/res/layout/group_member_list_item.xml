@@ -61,12 +61,12 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
+            app:theme="@style/RedPacketTheme"
             android:id="@+id/rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:button="@drawable/radio_sex_selector"
             android:checked="false"
             android:padding="2dp"
             android:visibility="gone" />

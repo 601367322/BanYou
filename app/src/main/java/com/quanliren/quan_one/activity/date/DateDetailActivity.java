@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestParams;
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
+import com.quanliren.quan_one.activity.jubao.JuBaoActivity_;
 import com.quanliren.quan_one.adapter.DateDetailReplyAdapter;
 import com.quanliren.quan_one.adapter.DateDetailReplyAdapter.IQuanDetailReplyAdapter;
 import com.quanliren.quan_one.bean.DateBean;
@@ -104,6 +105,8 @@ public class DateDetailActivity extends BaseActivity implements IQuanDetailReply
         configPlatforms(mController, DATE);
 
         refresh();
+
+        Util.umengCustomEvent(mContext, "date_detail_view");
     }
 
     @Override
@@ -247,9 +250,7 @@ public class DateDetailActivity extends BaseActivity implements IQuanDetailReply
         @Override
         public void onSuccessRetCode(JSONObject jo) throws Throwable {
             if (isRefresh == 0) {
-                bean = new Gson().fromJson(jo.getString(URL.RESPONSE),
-                        new TypeToken<DateBean>() {
-                        }.getType());
+                bean = Util.jsonToBean(jo.getString(URL.RESPONSE),DateBean.class);
 
                 setHeadSource();
                 if (Integer.valueOf(bean.getCnum()) < 21) {
@@ -361,11 +362,10 @@ public class DateDetailActivity extends BaseActivity implements IQuanDetailReply
         public void onSuccessRetCode(JSONObject jo) throws Throwable {
             String id = jo.getJSONObject(URL.RESPONSE).getString("id");
             replayBean.setId(id);
-            viewHolder.reply_btn.setText((Integer.valueOf(viewHolder.reply_btn.getText().toString()) + 1) + "");
+            viewHolder.replyBtn.setText((Integer.valueOf(viewHolder.replyBtn.getText().toString()) + 1) + "");
             if (!ac.getUser().getId().equals(bean.getUserid())) {
                 closeInput();
             }
-            et_chat.clearFocus();
             et_chat.setText("");
             et_chat.setHint("");
             et_chat.setTag(null);
@@ -388,8 +388,10 @@ public class DateDetailActivity extends BaseActivity implements IQuanDetailReply
         } else {
             et_chat.setHint("");
         }
+        et_chat.setFocusable(true);
+        et_chat.setFocusableInTouchMode(true);
         et_chat.requestFocus();
-        Utils.openSoftKeyboard(this, null);
+        Utils.openSoftKeyboard(this, et_chat);
     }
 
     public void isMy() {
@@ -437,7 +439,7 @@ public class DateDetailActivity extends BaseActivity implements IQuanDetailReply
                                             }
                                             if (position != -1)
                                                 deleteAnimate(position);
-                                            viewHolder.reply_btn.setText((Integer.valueOf(viewHolder.reply_btn.getText()
+                                            viewHolder.replyBtn.setText((Integer.valueOf(viewHolder.replyBtn.getText()
                                                     .toString()) - 1) + "");
                                         }
 
@@ -470,53 +472,10 @@ public class DateDetailActivity extends BaseActivity implements IQuanDetailReply
             showCustomToast("这是自己的哟~");
             return;
         }
-        new AlertDialog.Builder(DateDetailActivity.this)
-                .setMessage("您确定要举报该约会吗？")
-                .setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                dialogChoiceReason();
-                            }
-                        })
-                .setNegativeButton("取消",
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                            }
-                        }).create().show();
-    }
-
-    public void dialogChoiceReason() {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setItems(
-                        new String[]{"骚扰信息", "个人资料不当", "盗用他人资料", "垃圾广告",
-                                "色情相关"},
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                RequestParams ap = Util.getRequestParams(mContext);
-                                ap.put("otherid", bean.getUserid());
-                                ap.put("type", which);
-                                ap.put("ptype", 1);
-                                ap.put("tid", bean.getDyid());
-                                ac.finalHttp.post(URL.JUBAO, ap,
-                                        new MyJsonHttpResponseHandler(mContext, Util.progress_arr[3]) {
-                                            @Override
-                                            public void onSuccessRetCode(JSONObject jo) throws Throwable {
-                                                showCustomToast("举报成功");
-                                            }
-                                        });
-                            }
-                        }).create();
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
+        User friend = new User();
+        friend.setId(bean.getUserid());
+        friend.setNickname(bean.getNickname());
+        JuBaoActivity_.intent(mContext).other(friend).date(bean).startForResult(20001);
     }
 
     @Override
@@ -529,36 +488,22 @@ public class DateDetailActivity extends BaseActivity implements IQuanDetailReply
         if (ac.getUser() == null) {
             return;
         }
-        String str = bean.getIscollect().equals("0") ? "您确定要收藏该约会吗?"
-                : "您确定要取消收藏该约会吗?";
-        new AlertDialog.Builder(DateDetailActivity.this)
-                .setMessage(str)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        RequestParams ap = Util.getRequestParams(mContext);
-                        ap.put("dyid", bean.getDyid());
-                        ap.put("type", bean.getIscollect());
-                        ac.finalHttp.post(URL.COLLECTDATE, ap, new MyJsonHttpResponseHandler(mContext, Util.progress_arr[3]) {
-                            @Override
-                            public void onSuccessRetCode(JSONObject jo) throws Throwable {
-                                bean.setIscollect(bean.getIscollect().equals("0") ? "1"
-                                        : "0");
-                                if (bean.getIscollect().equals("1")) {
-                                    showCustomToast("收藏成功");
-                                } else {
-                                    showCustomToast("取消收藏成功");
-                                }
-                                collectionText();
-                            }
-                        });
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface arg0, int arg1) {
-                    }
-                }).create().show();
+        RequestParams ap = Util.getRequestParams(mContext);
+        ap.put("dyid", bean.getDyid());
+        ap.put("type", bean.getIscollect());
+        ac.finalHttp.post(URL.COLLECTDATE, ap, new MyJsonHttpResponseHandler(mContext, Util.progress_arr[3]) {
+            @Override
+            public void onSuccessRetCode(JSONObject jo) throws Throwable {
+                bean.setIscollect(bean.getIscollect().equals("0") ? "1"
+                        : "0");
+                if (bean.getIscollect().equals("1")) {
+                    showCustomToast("收藏成功");
+                } else {
+                    showCustomToast("取消收藏成功");
+                }
+                collectionText();
+            }
+        });
     }
 
     public void deleteAnimate(final int position) {
@@ -580,5 +525,12 @@ public class DateDetailActivity extends BaseActivity implements IQuanDetailReply
     protected void onResume() {
         super.onResume();
         Utils.closeSoftKeyboard(mContext);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Utils.closeSoftKeyboard(mContext);
+        keyBoardBar.hideAutoView();
+        super.onDestroy();
     }
 }

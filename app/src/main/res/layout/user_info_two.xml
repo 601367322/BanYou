@@ -79,7 +79,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="相册"
+                    android:text="个人相册"
                     android:textColor="@color/user_info_key"
                     android:textSize="14sp" />
 
@@ -112,6 +112,59 @@
                 android:layout_height="1px"
                 android:background="@color/border_color" />
 
+            <LinearLayout
+                android:id="@+id/rlayout_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/viedo_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:background="@drawable/sex_filter_selector"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="认证视频"
+                        android:textColor="@color/user_info_key"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:textColor="@color/user_info_value"
+                        android:textSize="14sp" />
+
+                    <com.quanliren.quan_one.custom.CircleImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginRight="12dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/default_userlogo"
+                        android:visibility="gone"
+                        app:border_color="#FFFFFF"
+                        app:border_width="1dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/caret" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/border_color" />
+
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/nickname_ll"
                 android:layout_width="match_parent"
@@ -549,10 +602,48 @@
                 android:background="@color/border_color" />
 
             <LinearLayout
-                android:id="@+id/identity_ll"
+                android:id="@+id/auth_ll"
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/sex_filter_selector"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/true_name"
+                    android:textColor="@color/user_info_key"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/auth_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/user_info_value"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/caret" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/border_color" />
+            <LinearLayout
+                android:id="@+id/identity_ll"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
                 android:background="@drawable/sex_filter_selector"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"

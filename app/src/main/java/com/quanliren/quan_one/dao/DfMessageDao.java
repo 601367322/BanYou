@@ -3,6 +3,7 @@ package com.quanliren.quan_one.dao;
 import android.content.Context;
 
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.quanliren.quan_one.bean.ChatListBean;
 import com.quanliren.quan_one.bean.DfMessage;
@@ -95,27 +96,66 @@ public class DfMessageDao extends BaseDao<DfMessage, Integer> {
         }
     }
 
-
-    public void deleteAllMessageByFriendId(String userId, String friendId) {
+    public void updateMsgsReaded(String userId, String friendId) {
         try {
-            QueryBuilder<DfMessage, Integer> queryBuilder = dao.queryBuilder();
-            Where<DfMessage, Integer> queryWhere = queryBuilder.where();
-            queryWhere.and(queryWhere.eq("userid", userId),queryWhere.or(queryWhere.eq("sendUid", friendId), queryWhere.eq("receiverUid", friendId)));
-            List<DfMessage> msgs = dao.query(queryBuilder.prepare());
-            for (int i = 0; i < msgs.size(); i++) {
-                //删除对应文件
-                switch (msgs.get(i).getMsgtype()) {
-                    case DfMessage.IMAGE:
-                    case DfMessage.VOICE:
-                        FileUtil.deleteFile(msgs.get(i).getContent());
-                        break;
-                }
-            }
-            dao.delete(msgs);
-
+            UpdateBuilder<DfMessage, Integer> updateBuilder = dao.updateBuilder();
+            updateBuilder.updateColumnValue("isRead", 1);
+            Where<DfMessage, Integer> where = updateBuilder.where();
+            where.and(where.eq("userid", userId), where.or(where.eq("sendUid", friendId), where.eq("receiverUid", friendId)));
+            updateBuilder.update();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
+    public void deleteAllMessageByFriendId(String userId, String friendId) {
+        try {
+            QueryBuilder<DfMessage, Integer> queryBuilder = dao.queryBuilder();
+            Where<DfMessage, Integer> queryWhere = queryBuilder.where();
+            queryWhere.and(queryWhere.eq("userid", userId), queryWhere.or(queryWhere.eq("sendUid", friendId), queryWhere.eq("receiverUid", friendId)));
+            List<DfMessage> msgs = dao.query(queryBuilder.prepare());
+            try {
+                for (int i = 0; i < msgs.size(); i++) {
+                    //删除对应文件
+                    switch (msgs.get(i).getMsgtype()) {
+                        case DfMessage.IMAGE:
+                        case DfMessage.VOICE:
+                            FileUtil.deleteFile(msgs.get(i).getContent());
+                            break;
+                        case DfMessage.VIDEO:
+                            DfMessage.VideoBean vb = msgs.get(i).getVideoBean();
+                            FileUtil.deleteFile(vb.path);
+                            FileUtil.deleteFile(vb.thumb);
+                            break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            dao.delete(msgs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DfMessage getLastMsg(String userId, String friendId) {
+        QueryBuilder<DfMessage, Integer> qb = null;
+        try {
+            qb = dao.queryBuilder();
+            Where<DfMessage, Integer> where = qb.where();
+            where.and(
+                    where.eq("userid", userId),
+                    where.or(where.eq("sendUid", friendId),
+                            where.eq("receiverUid", friendId)));
+            qb.limit(1l);
+            qb.orderBy("id", false);
+
+            return dao.query(qb.prepare()).get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

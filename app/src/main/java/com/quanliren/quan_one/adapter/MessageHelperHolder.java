@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.loopj.android.http.RequestParams;
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.group.GroupDetailActivity_;
+import com.quanliren.quan_one.activity.user.ChatActivity;
+import com.quanliren.quan_one.application.AM;
 import com.quanliren.quan_one.bean.DfMessage;
 import com.quanliren.quan_one.bean.GroupBean;
 import com.quanliren.quan_one.dao.DBHelper;
@@ -61,6 +63,9 @@ public class MessageHelperHolder extends MessageBaseHolder {
         helper.setOnClickListener(null);
         btn_selector.setBackgroundResource(R.drawable.see_detail);
         final DfMessage.OtherHelperMessage msg = bean.getOtherHelperContent();
+        if (msg == null) {
+            return;
+        }
         StringBuilder sb = new StringBuilder();
         if (!TextUtils.isEmpty(msg.getNickname())) {
             sb.append("<font color='#ee3e3e'>" + msg.getNickname() + "</font>");
@@ -78,16 +83,24 @@ public class MessageHelperHolder extends MessageBaseHolder {
             case DfMessage.OtherHelperMessage.INFO_TYPE_APPLY_JOIN_GROUP:
                 sb.append(String.format(context.getString(R.string.apply_your_group), msg.getGroupName()));
                 break;
-            case DfMessage.OtherHelperMessage.INFO_TYPE_AGREE_APPLY:
-            case DfMessage.OtherHelperMessage.INFO_TYPE_KICK_OUT:
-            case DfMessage.OtherHelperMessage.INFO_TYPE_JIE_SAN:
+            case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE_JOIN_GROUP:
+                sb.append(String.format(context.getString(R.string.invite_your_group), msg.getGroupName()));
+                break;
+            case DfMessage.OtherHelperMessage.INFO_TYPE_RED_RUNTIME:
+                sb = new StringBuilder();
+                sb.append(context.getString(R.string.red_packet_runtime));
+                break;
+            case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE:
+                sb.append(context.getString(R.string.helper_invite_title));
+                break;
+            case DfMessage.OtherHelperMessage.INFO_TYPE_TIXIAN:
+                sb.append(context.getString(R.string.tixian_notify));
+                break;
+            default://只显示一句话
                 helper.setVisibility(View.GONE);
                 context_tv.setVisibility(View.VISIBLE);
                 context_tv.setText(msg.getText());
                 return;
-            case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE_JOIN_GROUP:
-                sb.append(String.format(context.getString(R.string.invite_your_group), msg.getGroupName()));
-                break;
         }
         send_type.setTag(bean);
         send_type.setText(Html.fromHtml(sb.toString()));
@@ -105,6 +118,9 @@ public class MessageHelperHolder extends MessageBaseHolder {
             case DfMessage.OtherHelperMessage.INFO_TYPE_COMMIT:
             case DfMessage.OtherHelperMessage.INFO_TYPE_PAST_DUE:
             case DfMessage.OtherHelperMessage.INFO_TYPE_REPLY_COMMIT:
+            case DfMessage.OtherHelperMessage.INFO_TYPE_RED_RUNTIME:
+            case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE:
+            case DfMessage.OtherHelperMessage.INFO_TYPE_TIXIAN:
                 see_detail.setVisibility(View.VISIBLE);
                 see_detail.setTag(bean);
                 see_detail.setOnClickListener(detailClick);
@@ -141,13 +157,20 @@ public class MessageHelperHolder extends MessageBaseHolder {
     public void nickNameClick(View view) {
         final DfMessage msg = (DfMessage) view.getTag();
         final DfMessage.OtherHelperMessage helperMessage = msg.getOtherHelperContent();
-        if (helperMessage.getInfoType() == DfMessage.OtherHelperMessage.INFO_TYPE_APPLY_JOIN_GROUP) {
-            Util.startUserInfoActivity(context, helperMessage.getuId());
-        } else if (helperMessage.getInfoType() == DfMessage.OtherHelperMessage.INFO_TYPE_INVITE_JOIN_GROUP) {
-            GroupBean group = new GroupBean();
-            group.setId(helperMessage.getgId());
-            group.setNickname(helperMessage.getGroupName());
-            GroupDetailActivity_.intent(context).bean(group).start();
+        switch (helperMessage.getInfoType()) {
+            case DfMessage.OtherHelperMessage.INFO_TYPE_APPLY_JOIN_GROUP:
+            case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE:
+                if (!TextUtils.isEmpty(helperMessage.getuId())) {
+                    Util.startUserInfoActivity(context, helperMessage.getuId());
+                }
+                break;
+            case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE_JOIN_GROUP:
+                GroupBean group = new GroupBean();
+                group.setId(helperMessage.getgId());
+                group.setNickname(helperMessage.getGroupName());
+                AM.getActivityManager().popActivity(GroupDetailActivity_.class);
+                GroupDetailActivity_.intent(context).bean(group).start();
+                break;
         }
     }
 
@@ -218,7 +241,7 @@ public class MessageHelperHolder extends MessageBaseHolder {
     View.OnClickListener detailClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            getHandler().obtainMessage(0, v.getTag()).sendToTarget();
+            getHandler().obtainMessage(ChatActivity.HANDLER_CLICK, v.getTag()).sendToTarget();
         }
     };
 }

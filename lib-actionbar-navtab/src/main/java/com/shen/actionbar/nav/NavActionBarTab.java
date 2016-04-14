@@ -16,8 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import java.util.Date;
-
 /**
  * Created by Shen on 2015/11/23.
  */
@@ -146,8 +144,6 @@ public class NavActionBarTab extends RelativeLayout implements View.OnTouchListe
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        Date now = new Date();
 
         //画边框
         float border_s = dip2px(getContext(), tabBorderWidth);//边宽

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.loopj.android.http.RequestParams;
 import com.quanliren.quan_one.application.AppClass;
+import com.quanliren.quan_one.util.LogUtil;
 import com.quanliren.quan_one.util.Util;
 
 import java.io.Serializable;
@@ -21,10 +22,12 @@ public abstract class BaseApi implements Serializable {
 
     public BaseApi(Context context) {
         this.context = context;
-        if (context != null) {
-            ac = (AppClass) context.getApplicationContext();
-            params = Util.getRequestParams(context);
+        if (this.context == null) {
+            LogUtil.d("context null");
+            this.context = AppClass.getContext();
         }
+        ac = (AppClass) this.context.getApplicationContext();
+        params = Util.getRequestParams(this.context);
     }
 
     public abstract String getUrl();

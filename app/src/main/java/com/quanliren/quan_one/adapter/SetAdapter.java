@@ -1,84 +1,109 @@
 package com.quanliren.quan_one.adapter;
 
-import java.util.List;
-
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.quanliren.quan_one.activity.R;
+import com.quanliren.quan_one.adapter.base.BaseAdapter;
+import com.quanliren.quan_one.adapter.base.BaseHolder;
 import com.quanliren.quan_one.bean.SetBean;
 import com.quanliren.quan_one.util.ImageUtil;
 
-public class SetAdapter extends ParentsAdapter{
+import butterknife.Bind;
 
-	public SetAdapter(Context c, List list) {
-		super(c, list);
-	}
+public class SetAdapter extends BaseAdapter<SetBean> {
+
+    @Override
+    public BaseHolder getHolder(View view) {
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public int getConvertView(int position) {
+        int type = getItemViewType(position);
+        if (type == SetBean.ItemType.NORMAL.getValue()) {
+            return R.layout.seting_item_normal;
+        } else if (type == SetBean.ItemType.CACHE.getValue()) {
+            return R.layout.seting_item_cache;
+        } else if (type == SetBean.ItemType.NEW.getValue()) {
+            return R.layout.seting_item_new;
+        } else if (type == SetBean.ItemType.REDPACKET.getValue()) {
+            return R.layout.seting_item_red_packet;
+        }
+        return R.layout.seting_item_new;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 4;
+    }
+
     @Override
     public int getItemViewType(int position) {
-        SetBean sb = (SetBean) list.get(position);
-        return sb.isEmotion;
+        return getItem(position).itemType.getValue();
     }
-	@Override
-	public View getView(int position, View convertView, ViewGroup arg2) {
-		ViewHolder holder;
-		if(convertView==null){
-			holder=new ViewHolder();
-            switch (getItemViewType(position)) {
-                case 1:
-                    convertView=View.inflate(c, R.layout.seting_item_emotion_new, null);
-                    break;
-                default:
-                    convertView=View.inflate(c, R.layout.seting_item, null);
-                    break;
-            }
-			holder.icon=(ImageView) convertView.findViewById(R.id.icon);
-			holder.caret=(ImageView) convertView.findViewById(R.id.caret);
-			holder.newimg=(ImageView) convertView.findViewById(R.id.newimg);
-			holder.text=(TextView) convertView.findViewById(R.id.text);
-			holder.source=(TextView) convertView.findViewById(R.id.source);
-			holder.center=(LinearLayout) convertView.findViewById(R.id.center);
-			holder.lp1=(LinearLayout.LayoutParams) holder.center.getLayoutParams();
-			convertView.setTag(holder);
-		}else{
-			holder=(ViewHolder) convertView.getTag();
-		}
-		SetBean sb=(SetBean) list.get(position);
-		holder.icon.setImageResource(sb.icon);
-		holder.text.setText(sb.title);
-		if(sb.isFirst){
-			holder.lp1.topMargin=ImageUtil.dip2px(c, 8);
-		}else{
-			holder.lp1.topMargin=ImageUtil.dip2px(c, 1);
-		}
-		holder.center.setLayoutParams(holder.lp1);
-        if (sb.title.equals("清除缓存")) {
-            holder.caret.setVisibility(View.GONE);
-            holder.source.setVisibility(View.VISIBLE);
-            holder.source.setText(sb.getSource());
-        } else {
-            try {
-                holder.caret.setVisibility(View.VISIBLE);
-                holder.source.setVisibility(View.GONE);
-            } catch (Exception e) {
-            }
-        }
-        if(sb.img==1){
-            holder.newimg.setVisibility(View.VISIBLE);
-        }else {
-            holder.newimg.setVisibility(View.GONE);
-        }
-		return convertView;
-	}
 
-	class ViewHolder{
-		ImageView icon,newimg,caret;
-		TextView text,source;
-		LinearLayout center;
-		LinearLayout.LayoutParams lp1;
-	}
+    public SetAdapter(Context context) {
+        super(context);
+    }
+
+    class ViewHolder extends BaseHolder<SetBean> {
+        @Bind(R.id.icon)
+        ImageView icon;
+        @Nullable
+        @Bind(R.id.newimg)
+        ImageView newimg;
+        @Nullable
+        @Bind(R.id.caret)
+        ImageView caret;
+        @Bind(R.id.text)
+        TextView text;
+        @Nullable
+        @Bind(R.id.source)
+        TextView source;
+        @Bind(R.id.center)
+        LinearLayout center;
+        @Bind(R.id.btm_line)
+        View btm_line;
+        LinearLayout.LayoutParams lp1;
+
+        @Override
+        public void bind(SetBean bean, int position) {
+            icon.setImageResource(bean.icon);
+            text.setText(bean.title);
+
+            btm_line.setVisibility(View.VISIBLE);
+
+            lp1.topMargin = 0;
+
+            if (bean.site == SetBean.Site.TOP) {
+                lp1.topMargin = ImageUtil.dip2px(context, 8);
+            } else if (bean.site == SetBean.Site.BTM) {
+                btm_line.setVisibility(View.GONE);
+            }
+
+            center.setLayoutParams(lp1);
+
+            if (bean.itemType == SetBean.ItemType.CACHE) {
+                source.setText(bean.getSource());
+            }
+
+            if (newimg != null) {
+                if (bean.img == 1) {
+                    newimg.setVisibility(View.VISIBLE);
+                } else {
+                    newimg.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        public ViewHolder(View view) {
+            super(view);
+            lp1 = (LinearLayout.LayoutParams) center.getLayoutParams();
+        }
+    }
 }

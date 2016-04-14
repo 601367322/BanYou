@@ -6,12 +6,16 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.util.List;
 
+import co.lujun.androidtagview.TagBean;
+
 public class DateBean implements Serializable{
 	private String dyid;
 	private String ctime;
 	private String content;
 	private String userid;
 	private String nickname;
+	private String mobile;
+	private int phoneMode = 1;
 	private String age;
 	private String sex;
 	private String objsex;
@@ -28,6 +32,43 @@ public class DateBean implements Serializable{
 	private int pay;
 	public int zambia;
 	public String zambiastate;
+	public Video video;
+
+	public List<TagBean> typelist;
+
+	public List<TagBean> getTypelist() {
+		return typelist;
+	}
+
+	public void setTypelist(List<TagBean> typelist) {
+		this.typelist = typelist;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public int getPhoneMode() {
+		return phoneMode;
+	}
+
+	public void setPhoneMode(int phoneMode) {
+		this.phoneMode = phoneMode;
+	}
+
+	public int getConfirmType() {
+		return confirmType;
+	}
+
+	public void setConfirmType(int confirmType) {
+		this.confirmType = confirmType;
+	}
+
+	public int confirmType;
 
 	public int getPay() {
 		return pay;
@@ -72,7 +113,15 @@ public class DateBean implements Serializable{
 		return cnum;
 	}
 
-    public String getIscollect() {
+	public Video getVideo() {
+		return video;
+	}
+
+	public void setVideo(Video video) {
+		this.video = video;
+	}
+
+	public String getIscollect() {
         return iscollect;
     }
 
@@ -202,5 +251,10 @@ public class DateBean implements Serializable{
 				}.getType());
 		this.commStr = commStr;
 	}
-	
+
+	public class Video implements Serializable{
+		public String videoImg;
+		public String video;
+		public int videoType;
+	}
 }

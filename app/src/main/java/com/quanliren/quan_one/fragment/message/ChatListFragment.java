@@ -14,17 +14,16 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.quanliren.quan_one.activity.R;
-import com.quanliren.quan_one.fragment.base.BaseViewPagerChildFragment;
 import com.quanliren.quan_one.activity.user.ChatActivity;
 import com.quanliren.quan_one.activity.user.ChatActivity_;
 import com.quanliren.quan_one.adapter.LeaveMessageAdapter;
 import com.quanliren.quan_one.bean.ChatListBean;
-import com.quanliren.quan_one.bean.DfMessage;
 import com.quanliren.quan_one.bean.LoginUser;
 import com.quanliren.quan_one.bean.User;
 import com.quanliren.quan_one.dao.ChatListBeanDao;
 import com.quanliren.quan_one.dao.DBHelper;
 import com.quanliren.quan_one.dao.DfMessageDao;
+import com.quanliren.quan_one.fragment.base.BaseViewPagerChildFragment;
 import com.quanliren.quan_one.listener.ICheckBoxInterface;
 import com.quanliren.quan_one.pull.swipe.SwipeRefreshLayout;
 import com.quanliren.quan_one.util.Util;
@@ -82,7 +81,7 @@ public class ChatListFragment extends BaseViewPagerChildFragment implements Swip
             title_right_icon.setVisibility(View.VISIBLE);
             adapter.setShow(false);
             for (int i = 0; i < adapter.getCount(); i++) {
-                ChatListBean bean = (ChatListBean) adapter.getItem(i);
+                ChatListBean bean = adapter.getItem(i);
                 bean.setChoosed(false);
             }
             selectAll.setChecked(false);
@@ -304,9 +303,9 @@ public class ChatListFragment extends BaseViewPagerChildFragment implements Swip
                 }
                 if (position != -1) {
                     adapter.remove(position);
+                    adapter.add(position, bean);
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.add(position, bean);
-                adapter.notifyDataSetChanged();
             }
             isEmpty();
             super.dispatchMessage(msg);
@@ -437,6 +436,7 @@ public class ChatListFragment extends BaseViewPagerChildFragment implements Swip
     void deleteMsg(List<ChatListBean> deletelist) {
         adapter.removeAll(deletelist);
         notifyData();
+
         for (ChatListBean cb : deletelist) {
             remove(cb);
         }
@@ -455,6 +455,13 @@ public class ChatListFragment extends BaseViewPagerChildFragment implements Swip
         if (deleteProgress != null && deleteProgress.isShowing()) {
             deleteProgress.dismiss();
         }
+        //自动隐藏
+        if(adapter.getCount() == 0){
+            if(getParentFragment() instanceof MessageNavFragment){
+                ((MessageNavFragment)getParentFragment()).setTitleLeftTxt(getString(R.string.edit));
+            }
+            edit_close();
+        }
     }
 
     @UiThread
@@ -467,25 +474,8 @@ public class ChatListFragment extends BaseViewPagerChildFragment implements Swip
     void markerMsg(List<ChatListBean> readlist) {
         if (readlist != null && readlist.size() > 0) {
             for (ChatListBean c : readlist) {
-                //未读消息队列
-                List<Integer> ids = new ArrayList<Integer>();
-                final List<DfMessage> dfMList = DBHelper.dfMessageDao.getMsgList(user.getId(), c.getFriendid(), -1);
-                for (DfMessage dfMessage : dfMList) {
-                    //将未读变为已读
-                    if (dfMessage.getIsRead() == 0) {
-                        ids.add(dfMessage.getId());
-                        dfMessage.setIsRead(1);
-                    }
-                }
                 //更新未读消息变为已读
-                if (ids.size() > 0) {
-                    StringBuilder sb = new StringBuilder();
-                    for (Integer integer : ids) {
-                        sb.append(integer + ",");
-                    }
-                    sb.deleteCharAt(sb.length() - 1);
-                    DBHelper.dfMessageDao.updateMsgReaded(sb.toString());
-                }
+                DBHelper.dfMessageDao.updateMsgsReaded(user.getId(), c.getFriendid());
                 c.setMsgCount(0);
                 notifyData();
             }

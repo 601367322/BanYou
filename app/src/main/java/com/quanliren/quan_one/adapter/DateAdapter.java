@@ -28,7 +28,7 @@ public class DateAdapter extends BaseAdapter<DateBean> {
 
     @Override
     public BaseHolder getHolder(View view) {
-        return new DateViewHolder(view, context, detailClick,coin);
+        return new DateViewHolder(view, context, detailClick, coin);
     }
 
     @Override
@@ -48,4 +48,5 @@ public class DateAdapter extends BaseAdapter<DateBean> {
     public interface IQuanAdapter {
         public void detailClick(DateBean bean);
     }
+
 }

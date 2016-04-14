@@ -1,12 +1,10 @@
 package com.quanliren.quan_one.activity.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
 import com.loopj.android.http.RequestParams;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.util.URL;
@@ -32,7 +30,6 @@ public class IntroEditActivity extends BaseActivity {
 	@Override
 	public void init() {
 		super.init();
-		ImageLoader.getInstance().stop();
 		setTitleRightTxt("完成");
 		intro_edit.setText(str_introduce);
 		if(type==0){

@@ -7,14 +7,9 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.activity.user.LoginActivity_;
@@ -23,33 +18,18 @@ import com.quanliren.quan_one.dao.LoginUserDao;
 import com.quanliren.quan_one.share.CommonShared;
 import com.quanliren.quan_one.util.BitmapCache;
 
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
 @EActivity
-public class WelcomeActivity extends BaseActivity implements View.OnTouchListener {
+public class WelcomeActivity extends BaseActivity implements View.OnClickListener {
 
     ArrayList<View> views = new ArrayList<View>();
 
     @ViewById(R.id.whatsnew_viewpager)
     ViewPager mViewPager;
-    @ViewById(R.id.page0)
-    ImageView mPage0;
-    @ViewById(R.id.page1)
-    ImageView mPage1;
-    @ViewById(R.id.page2)
-    ImageView mPage2;
-    @ViewById(R.id.page3)
-    ImageView mPage3;
-    @ViewById(R.id.enter_btn)
-    Button enter_btn;
-    @ViewById(R.id.text)
-    TextView text;
-    @ViewById(R.id.pages)
-    View pages;
     @ViewById(R.id.bg)
     View bg;
 
@@ -69,9 +49,6 @@ public class WelcomeActivity extends BaseActivity implements View.OnTouchListene
             public void run() {
                 String isFirstStart = ac.cs.getIsFirstStart();
                 if ("".equals(isFirstStart)) {
-                    pages.setVisibility(View.VISIBLE);
-                    text.setText(str[0]);
-                    mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
                     try {
                         views = new ArrayList<View>();
                         LayoutInflater mLi = LayoutInflater.from(WelcomeActivity.this);
@@ -84,7 +61,13 @@ public class WelcomeActivity extends BaseActivity implements View.OnTouchListene
                         View view3 = mLi.inflate(R.layout.whats1, null);
                         view3.setBackgroundDrawable(new BitmapDrawable(BitmapCache.getInstance().getBitmap(R.drawable.welcome_3, WelcomeActivity.this)));
                         views.add(view3);
-                        view3.setOnTouchListener(WelcomeActivity.this);
+                        View view4 = mLi.inflate(R.layout.whats1, null);
+                        view4.setBackgroundDrawable(new BitmapDrawable(BitmapCache.getInstance().getBitmap(R.drawable.welcome_4, WelcomeActivity.this)));
+                        views.add(view4);
+                        View view5 = mLi.inflate(R.layout.whats1, null);
+                        view5.setBackgroundDrawable(new BitmapDrawable(BitmapCache.getInstance().getBitmap(R.drawable.welcome_5, WelcomeActivity.this)));
+                        views.add(view5);
+                        view5.setOnClickListener(WelcomeActivity.this);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -121,15 +104,14 @@ public class WelcomeActivity extends BaseActivity implements View.OnTouchListene
                     finish();
                 }
             }
-        }, 1000);
+        }, 1500);
 
         createShorcut(R.mipmap.ic_launcher);
-
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+    public void onClick(View v) {
+        if (mViewPager.getCurrentItem() == views.size() - 1) {
             LoginUser user = LoginUserDao.getInstance(this).getUser();
             if (user == null) {
                 LoginActivity_.intent(mContext).start();
@@ -139,58 +121,6 @@ public class WelcomeActivity extends BaseActivity implements View.OnTouchListene
             ac.cs.setIsFirstStart("1");
             finish();
         }
-        return true;
-    }
-
-    public class MyOnPageChangeListener implements OnPageChangeListener {
-
-        public void onPageSelected(int arg0) {
-            switch (arg0) {
-                case 0:
-                    mPage0.setImageResource(R.drawable.page_now);
-                    mPage1.setImageResource(R.drawable.page);
-                    break;
-                case 1:
-                    mPage1.setImageResource(R.drawable.page_now);
-                    mPage0.setImageResource(R.drawable.page);
-                    mPage2.setImageResource(R.drawable.page);
-                    break;
-                case 2:
-                    mPage2.setImageResource(R.drawable.page_now);
-                    mPage1.setImageResource(R.drawable.page);
-                    mPage3.setImageResource(R.drawable.page);
-                    break;
-                case 3:
-                    mPage3.setImageResource(R.drawable.page_now);
-                    mPage2.setImageResource(R.drawable.page);
-                    break;
-            }
-            if (arg0 == 3) {
-                enter_btn.setVisibility(View.VISIBLE);
-            } else {
-                enter_btn.setVisibility(View.GONE);
-            }
-            text.setText(str[arg0]);
-        }
-
-        public void onPageScrollStateChanged(int arg0) {
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-        }
-    }
-
-    @Click(R.id.enter_btn)
-    public void startbutton(View v) {
-        LoginUser user = LoginUserDao.getInstance(this).getUser();
-        if (user == null) {
-            LoginActivity_.intent(mContext).start();
-        } else {
-            MainActivity_.intent(mContext).start();
-        }
-        ac.cs.setIsFirstStart("1");
-        finish();
     }
 
     private void createShorcut(int id) {

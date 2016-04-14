@@ -54,9 +54,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @EActivity(R.layout.emoticonlist)
 public class EmoticonListActivity extends BaseActivity implements
@@ -99,6 +97,8 @@ public class EmoticonListActivity extends BaseActivity implements
         }
 
         refresh();
+
+        Util.umengCustomEvent(mContext, "emotion_list_view");
     }
 
     @Receiver(actions = {DELETE_EMOTICONDOWNLOAD, EMOTICONDOWNLOAD_PROGRESS}, registerAt = Receiver.RegisterAt.OnResumeOnPause)
@@ -238,9 +238,7 @@ public class EmoticonListActivity extends BaseActivity implements
 
         if (bean.getPlist() != null) {
             try {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("userId", loginUser.getId());
-                List<EmoticonZip> list = DBHelper.emoticonZipDao.dao.queryForFieldValues(map);
+                List<EmoticonZip> list = DBHelper.emoticonZipDao.getAllMyEmoticon(ac.getUser().getId());
 
                 for (EmoticonZip ez : bean.getPlist()) {
                     for (EmoticonZip emoticonZip : list) {
@@ -276,9 +274,7 @@ public class EmoticonListActivity extends BaseActivity implements
     public void checkHave(List<EmoticonZip> plist) {
         if (plist != null) {
             try {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("userId", ac.getUser().getId());
-                List<EmoticonZip> list = DBHelper.emoticonZipDao.dao.queryForFieldValues(map);
+                List<EmoticonZip> list = DBHelper.emoticonZipDao.getAllMyEmoticon(ac.getUser().getId());
 
                 for (EmoticonZip ez : plist) {
                     ez.setHave(false);
@@ -420,8 +416,8 @@ public class EmoticonListActivity extends BaseActivity implements
         }
         boolean isExists = false;
         try {
-            EmoticonZip ezb = DBHelper.emoticonZipDao.dao.queryForId(ez.getId());
-            if (ezb != null && ezb.getUserId().equals(ac.getUser().getId())) {
+            EmoticonZip ezb = DBHelper.emoticonZipDao.getEmoticonById(ac.getUser().getId(),ez.getId());
+            if (ezb != null) {
                 isExists = true;
             }
         } catch (Exception e1) {
@@ -432,6 +428,7 @@ public class EmoticonListActivity extends BaseActivity implements
         try {
             if ((ez.getType() == 0 || ez.getIsBuy() == 1 || (ez.getType() == 1 && user
                     .getIsvip() > 0)) && !isExists) {
+                Util.umengCustomEvent(mContext, "emotion_download_btn");
                 Intent i = new Intent(this, DownLoadEmoticonService_.class);
                 i.setAction(BroadcastUtil.DOWNLOADEMOTICON);
                 i.putExtra("bean", ez);

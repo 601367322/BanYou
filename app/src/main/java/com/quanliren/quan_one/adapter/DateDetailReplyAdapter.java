@@ -53,6 +53,8 @@ public class DateDetailReplyAdapter extends BaseAdapter<DateReplyBean> {
         View delete_ll;
         @Bind(R.id.userlogo)
         ImageView userlogo;
+        @Bind(R.id.reply_icon)
+        ImageView reply_icon;
 
         public ViewHolder(View view) {
             super(view);
@@ -78,8 +80,10 @@ public class DateDetailReplyAdapter extends BaseAdapter<DateReplyBean> {
             }
             content_rl.setTag(bean);
             content_rl.setOnClickListener(viewClick);
-            userlogo.setTag(bean);
+            userlogo.setTag(R.id.logo_tag, bean);
             userlogo.setOnClickListener(viewClick);
+            reply_icon.setTag(bean);
+            reply_icon.setOnClickListener(viewClick);
             time.setText(Util.getTimeDateChinaStr(bean.getCtime()));
             ImageLoader.getInstance().displayImage(
                     bean.getAvatar() + StaticFactory._160x160, userlogo, ac.options_userlogo);
@@ -108,19 +112,13 @@ public class DateDetailReplyAdapter extends BaseAdapter<DateReplyBean> {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.userlogo:
-                    listener.logoCick((DateReplyBean) v.getTag());
+                    listener.logoCick((DateReplyBean) v.getTag(R.id.logo_tag));
                     break;
                 case R.id.content_rl:
-                    listener.contentClick((DateReplyBean) v.getTag());
-                    break;
-                case R.id.delete_content:
-                    listener.delete_contentClick((DateReplyBean) v.getTag());
-                    break;
-
                 case R.id.reply_icon:
                     listener.contentClick((DateReplyBean) v.getTag());
                     break;
-                case R.id.delete_ll:
+                case R.id.delete_content:
                     listener.delete_contentClick((DateReplyBean) v.getTag());
                     break;
 

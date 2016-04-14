@@ -48,6 +48,7 @@
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
     <!-- 验证快捷方式是否存在权限： -->
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -64,12 +65,12 @@
         <activity
             android:name=".MainActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppBaseTheme"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseTheme"></activity>
         <activity
             android:name=".WelcomeActivity_"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -78,49 +79,54 @@
         </activity>
         <activity
             android:name=".user.UserInfoActivity_"
-            android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".user.NicknameEditActivity_"
-            android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity
             android:name=".user.IntroEditActivity_"
-            android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+        <activity
+            android:name=".seting.auth.TrueAuthIntroEditActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity
             android:name=".seting.ShakeActivity_"
-            android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".user.LoginActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity
             android:name=".reg.RegFirst_"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity
             android:name=".reg.RegSecond_"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
 
         </activity>
         <activity
             android:name=".shop.ShopVipIntroduce_"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize">
-        </activity>
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".user.ChatActivity_"
@@ -163,7 +169,16 @@
         <activity
             android:name=".date.PublishActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".date.ChooseContentActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".user.BlackListActivity_"
@@ -175,27 +190,31 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".reg.ForgetPassWordActivity1_"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+        <activity
+            android:name=".user.SendRedPacketActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/RedPacketTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity
             android:name=".date.ChoseLocationActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustNothing"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustNothing"></activity>
         <activity
             android:name=".shop.ShopVipDetailActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            >
-        </activity>
-        <activity
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".filter.NearPeopleFilterActivity_"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".filter.NearPeopleFilterActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".filter.DateFilterActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".user.UserAlbumEditActivity_"
@@ -211,8 +230,8 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".date.DateDetailActivity_"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity
             android:name="com.quanliren.quan_one.activity.date.PersonalDateListActivity_"
@@ -260,24 +279,41 @@
         <activity
             android:name=".group.GroupDetailActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustNothing"
-            android:screenOrientation="portrait">
-        </activity>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustNothing"></activity>
         <activity
             android:name=".group.GroupMemberListActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".user.RedPacketDetailActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/RedPacketTheme"></activity>
+        <activity
+            android:name=".rank.RankListActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".user.PopularValueActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jubao.JuBaoActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
         <!-- QQ -->
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -305,6 +341,9 @@
             android:name="com.amap.api.v2.apikey"
             android:value="${GAODE_MAP_VALUE}" />
 
+        <!-- 定位需要的服务 -->
+        <service android:name="com.amap.api.location.APSService"></service>
+
         <!-- 支付宝 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -318,8 +357,6 @@
             <intent-filter>
                 <action android:name="com.quan.service.checkconnect" />
                 <!-- 定时检查登陆状态 -->
-                <action android:name="com.quan.service.checkmessage" />
-                <!-- 定时检查未发送信息 -->
                 <action android:name="com.quan.service.outline" />
                 <!-- 下线通知 -->
             </intent-filter>
@@ -339,8 +376,8 @@
         <!-- android:process=":remote" -->
         <service
             android:name="com.quanliren.quan_one.service.QuanPushService"
-            android:process=":push"
-            android:enabled="true">
+            android:enabled="true"
+            android:process=":push">
             <intent-filter>
                 <action android:name="com.quan.service.connect" />
                 <!-- 登陆 -->
@@ -353,8 +390,8 @@
 
         <service
             android:name="com.quanliren.quan_one.service.DownLoadEmoticonService_"
-            android:exported="false"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.quanliren.quan_one.service.downloademoticon" />
                 <!-- 下载表情 -->
@@ -376,22 +413,22 @@
             android:name="UMENG_APPKEY"
             android:value="55cd8f73e0f55a17ae000b6e" />
 
-        <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
 
-        <activity
-            android:name="com.umeng.fb.ConversationActivity"/>
+        <activity android:name="com.umeng.fb.ConversationActivity" />
         <service
             android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService" >
-        </service>
+            android:process=":DownloadingService"></service>
+
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name="com.umeng.socialize.view.ShareActivity"
             android:configChanges="orientation|keyboard"
@@ -408,9 +445,36 @@
             android:name=".group.EditGroupActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".group.InviteFriendActivity_"
+        <activity
+            android:name=".group.InviteFriendActivity_"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".seting.auth.TrueNoAuthActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".seting.auth.TrueAuthActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".filter.ThroughFilterActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".seting.MyWalletActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".seting.wallet.PaymentDetailActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".seting.wallet.TiXianlActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+
+        <!--趣拍-->
     </application>
 
 </manifest>

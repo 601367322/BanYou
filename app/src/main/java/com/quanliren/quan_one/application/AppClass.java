@@ -1,5 +1,6 @@
 package com.quanliren.quan_one.application;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,6 +33,7 @@ import com.quanliren.quan_one.util.BitmapCache;
 import com.quanliren.quan_one.util.DefaultExceptionHandler;
 import com.quanliren.quan_one.util.DeviceUuidFactory;
 import com.quanliren.quan_one.util.Util;
+import com.quanliren.quan_one.util.VideoUtil;
 import com.quanliren.quan_one.util.http.MyHttpClient;
 
 import org.androidannotations.annotations.EApplication;
@@ -63,91 +65,97 @@ public class AppClass extends Application {
         return context;
     }
 
-    public AppClass() {
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        //如果要加载视频模块，则开启MultiDex模式
+//        MultiDex.install(this);
     }
 
-
-    public static final DisplayImageOptions options_defalut = new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.image_group_qzl)
-            .showImageForEmptyUri(R.drawable.image_group_qzl)
-            .showImageOnFail(R.drawable.image_group_load_f).cacheInMemory(true)
-            .cacheOnDisk(true).build();
-    public static final DisplayImageOptions options_no_defalut = new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.default_img)
-            .showImageForEmptyUri(R.drawable.default_img)
-            .showImageOnFail(R.drawable.default_img).cacheInMemory(true)
-            .cacheOnDisk(true).build();
-    public static final DisplayImageOptions options_chat = new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.ic_chat_def_pic)
-            .showImageForEmptyUri(R.drawable.ic_chat_def_emote_failure)
-            .showImageOnFail(R.drawable.ic_chat_def_emote_failure).cacheInMemory(true)
-            .cacheOnDisk(true).build();
-    public static final DisplayImageOptions options_userlogo = new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.defalut_logo)
-            .showImageForEmptyUri(R.drawable.defalut_logo)
-            .showImageOnFail(R.drawable.defalut_logo).cacheInMemory(true)
-            .cacheOnDisk(true).build();
-    public static final DisplayImageOptions options_defalut_face = new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.default_face)
-            .showImageForEmptyUri(R.drawable.default_face)
-            .showImageOnFail(R.drawable.default_face).cacheInMemory(true)
-            .cacheOnDisk(true).build();
+    public AppClass() {
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-//		LeakCanary.install(this);
-
-        if(!BuildConfig.DEBUG) {
-            Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler(this));
-        }
-
+        //初始化数据库
         DBHelper helper = new DBHelper(this);
         OpenHelperManager.setHelper(helper);
         helper.init();
 
         context = this;
+        //初始化版本信息
         cs = new CommonShared(getApplicationContext());
         cs.setVersionName(Util.getAppVersionName(this));
         cs.setVersionCode(Util.getAppVersionCode(this));
         cs.setChannel(Util.getChannel(this));
-
         try {
             cs.setDeviceId(new DeviceUuidFactory(this).getDeviceUuid().toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-                getApplicationContext()).defaultDisplayImageOptions(options_defalut)
-                .build();
-        L.writeLogs(false);
-        L.writeDebugLogs(false);
-        ImageLoader.getInstance().init(config);
-
-        for (int i = 1; i < 64; i++) {
-            String emoticonsName = "[zem" + i + "]";
-            int emoticonsId = getResources().getIdentifier("zem" + i,
-                    "drawable", getPackageName());
-            mEmoticons.add(emoticonsName);
-            mEmoticons_Zem.add(emoticonsName);
-            mEmoticonsId.put(emoticonsName, emoticonsId);
-        }
-        for (int i = 1; i < 59; i++) {
-            String emoticonsName = "[zemoji" + i + "]";
-            int emoticonsId = getResources().getIdentifier("zemoji_e" + i,
-                    "drawable", getPackageName());
-            mEmoticons.add(emoticonsName);
-            mEmoticons_Zemoji.add(emoticonsName);
-            mEmoticonsId.put(emoticonsName, emoticonsId);
-        }
-        initEmoticon1();
-        initEmoticon2();
-        finalHttp = new MyHttpClient();
-        finalHttp.setCookieStore(new PersistentCookieStore(this));
-
+        //初始化gif缓存
         BitmapCache.getInstance();
+
+        //因为有两个进程，以下是只需要在主进程里初始化的内容
+        if (getCurProcessName(this).equals("com.quanliren.quan_one.activity")) {
+//    		LeakCanary.install(this);
+            //捕获异常重启
+            if (!BuildConfig.DEBUG) {
+                Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler(this));
+            }
+
+            //初始化图片加载器
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+                    getApplicationContext()).defaultDisplayImageOptions(options_defalut)
+                    .build();
+            L.writeLogs(false);
+            L.writeDebugLogs(false);
+            ImageLoader.getInstance().init(config);
+
+            //初始化表情
+            for (int i = 1; i < 64; i++) {
+                String emoticonsName = "[zem" + i + "]";
+                int emoticonsId = getResources().getIdentifier("zem" + i,
+                        "drawable", getPackageName());
+                mEmoticons.add(emoticonsName);
+                mEmoticons_Zem.add(emoticonsName);
+                mEmoticonsId.put(emoticonsName, emoticonsId);
+            }
+            for (int i = 1; i < 59; i++) {
+                String emoticonsName = "[zemoji" + i + "]";
+                int emoticonsId = getResources().getIdentifier("zemoji_e" + i,
+                        "drawable", getPackageName());
+                mEmoticons.add(emoticonsName);
+                mEmoticons_Zemoji.add(emoticonsName);
+                mEmoticonsId.put(emoticonsName, emoticonsId);
+            }
+            initEmoticon1();
+            initEmoticon2();
+
+            //初始化网络请求
+            finalHttp = new MyHttpClient();
+            finalHttp.setCookieStore(new PersistentCookieStore(this));
+
+            //初始化视频录制
+            VideoUtil.getInstance(this).initVideoSdk(this);
+        }
+    }
+
+    String getCurProcessName(Context context) {
+        int pid = android.os.Process.myPid();
+        ActivityManager mActivityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager
+                .getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+
+                return appProcess.processName;
+            }
+        }
+        return null;
     }
 
     void initEmoticon1() {
@@ -238,16 +246,6 @@ public class AppClass extends Application {
         return false;
     }
 
-    public void sendMessage(String str) {
-        try {
-            if (remoteService != null) {
-                remoteService.sendMessage(str);
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void startServices() {
         stopServices();
         Intent i = new Intent(this, QuanPushService.class);
@@ -296,4 +294,28 @@ public class AppClass extends Application {
     public User getUserInfo() {
         return LoginUserDao.getInstance(this).getUserInfo();
     }
+
+
+    public static final DisplayImageOptions options_defalut = new DisplayImageOptions.Builder()
+            .showImageOnLoading(R.drawable.image_group_qzl)
+            .showImageForEmptyUri(R.drawable.image_group_qzl)
+            .showImageOnFail(R.drawable.image_group_load_f).cacheInMemory(true)
+            .cacheOnDisk(true).build();
+    public static final DisplayImageOptions options_no_defalut = new DisplayImageOptions.Builder().cacheInMemory(true)
+            .cacheOnDisk(true).build();
+    public static final DisplayImageOptions options_userlogo = new DisplayImageOptions.Builder()
+            .showImageOnLoading(R.drawable.defalut_logo)
+            .showImageForEmptyUri(R.drawable.defalut_logo)
+            .showImageOnFail(R.drawable.defalut_logo).cacheInMemory(true)
+            .cacheOnDisk(true).build();
+    public static final DisplayImageOptions options_group_userlogo = new DisplayImageOptions.Builder()
+            .showImageOnLoading(R.drawable.defalut_group_logo)
+            .showImageForEmptyUri(R.drawable.defalut_group_logo)
+            .showImageOnFail(R.drawable.defalut_group_logo).cacheInMemory(true)
+            .cacheOnDisk(true).build();
+    public static final DisplayImageOptions options_defalut_face = new DisplayImageOptions.Builder()
+            .showImageOnLoading(R.drawable.default_face)
+            .showImageForEmptyUri(R.drawable.default_face)
+            .showImageOnFail(R.drawable.default_face).cacheInMemory(true)
+            .cacheOnDisk(true).build();
 }

@@ -15,10 +15,10 @@
             android:id="@+id/nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:layout_weight="1"
             android:textColor="@color/username"
             android:textSize="16sp" />
 
@@ -35,26 +35,36 @@
     <TextView
         android:id="@+id/sex"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/nick_ll"
-        android:background="@drawable/boy_icon"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
         android:gravity="center_vertical"
         android:textColor="@color/white"
-        android:textSize="10sp" />
+        android:textSize="11sp" />
 
     <TextView
         android:id="@+id/constell"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/nick_ll"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/sex"
-        android:textColor="@color/white"
+        android:background="@drawable/constell_bg"
         android:gravity="center_vertical"
-        android:textSize="11sp"
-        android:background="@drawable/constell_bg" />
+        android:textColor="@color/white"
+        android:textSize="11sp" />
 
+    <TextView
+        android:id="@+id/auth_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/constell"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@id/constell"
+        android:text="认证"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:background="@drawable/auth_icon" />
 </RelativeLayout>

@@ -1,5 +1,8 @@
 package com.quanliren.quan_one.activity.seting;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -8,9 +11,8 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.bean.User;
 import com.quanliren.quan_one.custom.CircleImageView;
 import com.quanliren.quan_one.custom.UserInfoLayout;
+import com.quanliren.quan_one.util.AnimUtil;
 import com.quanliren.quan_one.util.StaticFactory;
 import com.quanliren.quan_one.util.URL;
 import com.quanliren.quan_one.util.Util;
@@ -34,10 +37,10 @@ import org.androidannotations.annotations.ViewById;
 import org.json.JSONObject;
 
 @EActivity
-public class ShakeActivity extends BaseActivity implements SensorEventListener, Animation.AnimationListener {
+public class ShakeActivity extends BaseActivity implements SensorEventListener, Animator.AnimatorListener {
     private SensorManager sensorManager;
     private Sensor sensor;
-    private Animation shark_Annotation = null;
+    private ValueAnimator shark_Annotation = null;
     @ViewById(R.id.img_shark)
     ImageView img_shark;
     @ViewById(R.id.user_ll)
@@ -68,11 +71,17 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener, 
         /**
          * 设置动画效果
          */
-        this.shark_Annotation = AnimationUtils.loadAnimation(this, R.anim.shake);
-        this.shark_Annotation.setAnimationListener(this);
+        this.shark_Annotation = ObjectAnimator.ofFloat(img_shark, AnimUtil.ROTATION, -15f, 15f).setDuration(100);
+        this.shark_Annotation.setRepeatCount(4);
+
+        this.shark_Annotation.setRepeatMode(ValueAnimator.REVERSE);
+        this.shark_Annotation.addListener(this);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.shake_sound_male);
         matchPlayer = MediaPlayer.create(this, R.raw.shake_match);
+
+        img_shark.setLayerType(ViewCompat.LAYER_TYPE_SOFTWARE, null);
+        Util.umengCustomEvent(mContext, "shake_btn");
     }
 
     @Click(R.id.user_ll)
@@ -93,7 +102,7 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener, 
         float y = event.values[SensorManager.DATA_Y];
         float z = event.values[SensorManager.DATA_Z];
         if (Math.abs(x) >= 18 || Math.abs(y) >= 18 || Math.abs(z) >= 18) {//判断加速度>14时，这个值是可以修改的。
-            img_shark.startAnimation(shark_Annotation);
+            shark_Annotation.start();
             user_ll.setVisibility(View.INVISIBLE);
             tv_shake.setVisibility(View.GONE);
 
@@ -115,14 +124,19 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener, 
     }
 
     @Override
-    public void onAnimationEnd(Animation animation) {
+    public void onAnimationStart(Animator animation) {
 
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+        img_shark.setRotation(0f);
         loading.setVisibility(View.GONE);
         if (isCanPost) {
             RequestParams params = getAjaxParams();
             params.put("longitude", ac.cs.getLng());
             params.put("latitude", ac.cs.getLat());
-            ac.finalHttp.post(URL.SHAKESWEEP,params, new MyJsonHttpResponseHandler(mContext) {
+            ac.finalHttp.post(URL.SHAKESWEEP, params, new MyJsonHttpResponseHandler(mContext) {
 
                 @Override
                 public void onStart() {
@@ -142,6 +156,7 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener, 
                             new TypeToken<User>() {
                             }.getType());
                     initUser();
+                    Util.umengCustomEvent(mContext, "shake");
                 }
 
                 @Override
@@ -161,6 +176,15 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener, 
             });
             isCanPost = false;
         }
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
 
     }
 
@@ -172,24 +196,12 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener, 
     public void initUser() {
         if (user != null) {
             user_ll.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(user.getAvatar()+ StaticFactory._160x160, userlogo,ac.options_userlogo);
+            ImageLoader.getInstance().displayImage(user.getAvatar() + StaticFactory._160x160, userlogo, ac.options_userlogo);
             userinfo.setUser(user);
 //            nickname.setTextColor(getResources().getColor(R.color.enable));
             distance.setText("相距  " + Util.getDistance(Double.valueOf(ac.cs.getLng()),
                     Double.valueOf(ac.cs.getLat()), Double.valueOf(user.getLongitude()), Double.valueOf(user.getLatitude())) + "公里");
         }
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
-
-
-    }
-
-    @Override
-    public void onAnimationStart(Animation animation) {
-
-
     }
 
     @Override

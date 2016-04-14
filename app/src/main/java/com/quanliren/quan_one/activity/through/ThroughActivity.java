@@ -2,16 +2,14 @@ package com.quanliren.quan_one.activity.through;
 
 
 import android.graphics.Bitmap;
-import android.location.Location;
-import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.location.LocationManagerProxy;
-import com.amap.api.location.LocationProviderProxy;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.AMapOptions;
 import com.amap.api.maps2d.LocationSource;
@@ -34,8 +32,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
+import com.quanliren.quan_one.bean.CustomFilterBean;
 import com.quanliren.quan_one.bean.User;
 import com.quanliren.quan_one.custom.ThroughImageView;
+import com.quanliren.quan_one.dao.DBHelper;
 import com.quanliren.quan_one.util.StaticFactory;
 import com.quanliren.quan_one.util.URL;
 import com.quanliren.quan_one.util.Util;
@@ -48,15 +48,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @EActivity(R.layout.through_map)
 public class ThroughActivity extends BaseActivity implements LocationSource,
-        AMapLocationListener, AMap.OnCameraChangeListener, GeocodeSearch.OnGeocodeSearchListener,AMap.OnMarkerClickListener {
+        AMapLocationListener, AMap.OnCameraChangeListener, GeocodeSearch.OnGeocodeSearchListener, AMap.OnMarkerClickListener {
     public static final LatLng BEIJING = new LatLng(39.908691, 116.397506);// 北京市经纬度
 
     private static final String MAP_FRAGMENT_TAG = "map";
     AMap amap;
     private OnLocationChangedListener mListener;
-    private LocationManagerProxy mAMapLocationManager;
+    private AMapLocationClient locationClient = null;
+    private AMapLocationClientOption locationOption = null;
     private SupportMapFragment map;
 
     @ViewById(R.id.tv_position)
@@ -79,7 +81,7 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
             fragmentTransaction.commit();
 
         }
-
+        Util.umengCustomEvent(mContext, "near_through_btn");
     }
 
     @Override
@@ -88,6 +90,7 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
         LatLng mTarget = amap.getCameraPosition().target;
         ThroughListActivity_.intent(this).ll(mTarget).start();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -98,12 +101,18 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
         title.setText("会员漫游");
         setTitleRightTxt("列表");
     }
+
     @Override
     public void activate(OnLocationChangedListener listener) {
         mListener = listener;
-        if (mAMapLocationManager == null) {
-            mAMapLocationManager = LocationManagerProxy.getInstance(this);
-            mAMapLocationManager.requestLocationData(LocationProviderProxy.AMapNetwork, -1, 0, this);
+        if (locationClient == null) {
+            locationClient = new AMapLocationClient(getApplicationContext());
+            locationOption = new AMapLocationClientOption();
+            // 设置定位模式为高精度模式
+            locationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            // 设置定位监听
+            locationClient.setLocationListener(this);
+            locationClient.startLocation();
         }
     }
 
@@ -128,11 +137,15 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
     @Override
     public void deactivate() {
         mListener = null;
-        if (mAMapLocationManager != null) {
-            mAMapLocationManager.removeUpdates(this);
-            mAMapLocationManager.destroy();
+        if (null != locationClient) {
+            /**
+             * 如果AMapLocationClient是在当前Activity实例化的，
+             * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
+             */
+            locationClient.onDestroy();
+            locationClient = null;
+            locationOption = null;
         }
-        mAMapLocationManager = null;
     }
 
     @Override
@@ -152,7 +165,7 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
         RegeocodeQuery query = new RegeocodeQuery(lp, 200, GeocodeSearch.AMAP);
         geocoderSearch.getFromLocationAsyn(query);
 
-        if(!Util.isFastDoubleClick()) {
+        if (!Util.isFastDoubleClick()) {
             getUserList();
         }
     }
@@ -165,7 +178,7 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
             }
             LatLng mTarget = amap.getCameraPosition().target;
             if (mTarget.longitude == searchLL.longitude && mTarget.latitude == searchLL.latitude) {
-                if (rCode == 0) {
+                if (rCode == 1000) {
                     if (result != null && result.getRegeocodeAddress() != null
                             && result.getRegeocodeAddress().getFormatAddress() != null) {
                         String addressName = result.getRegeocodeAddress().getFormatAddress();
@@ -184,7 +197,7 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
 
     @Override
     public void onLocationChanged(AMapLocation aLocation) {
-        if (mListener != null && aLocation != null && aLocation.getAMapException().getErrorCode() == 0) {
+        if (mListener != null && aLocation != null && aLocation.getErrorCode() == 0) {
             mListener.onLocationChanged(aLocation);
             isLocationFinish.compareAndSet(false, true);
             onCameraChangeFinish(null);
@@ -201,44 +214,7 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
 
     /**
      * 无用
-     * @param location
-     */
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    /**
-     * 无用
-     * @param provider
-     * @param status
-     * @param extras
-     */
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    /**
-     * 无用
-     * @param provider
-     */
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    /**
-     * 无用
-     * @param provider
-     */
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    /**
-     * 无用
+     *
      * @param geocodeResult
      * @param i
      */
@@ -268,20 +244,32 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
 
         LatLng mTarget = amap.getCameraPosition().target;
         RequestParams params = getAjaxParams();
-        params.put("p","0");
+        params.put("p", "0");
+        List<CustomFilterBean> listCB = DBHelper.customFilterBeanDao.getAllFilter();
+        if (listCB != null)
+            for (CustomFilterBean cfb : listCB) {
+                if ("sex_through".equals(cfb.key)) {
+                    params.put("sex", cfb.id + "");
+                }
+                if ("actime_through".equals(cfb.key)) {
+                    params.put("actime", cfb.id + "");
+                }
+            }
         params.put("longitude", String.valueOf(mTarget.longitude));
         params.put("latitude", String.valueOf(mTarget.latitude));
-        ac.finalHttp.post(URL.NearUserList,params, callBack);
+        params.put("type", 1);
+        ac.finalHttp.post(URL.NearUserList, params, callBack);
     }
 
-    MyJsonHttpResponseHandler callBack=new MyJsonHttpResponseHandler() {
+    MyJsonHttpResponseHandler callBack = new MyJsonHttpResponseHandler() {
         @Override
         public void onSuccessRetCode(JSONObject jo) throws Throwable {
-            jo=jo.getJSONObject(URL.RESPONSE);
-            List<User> list=new Gson().fromJson(jo.getString(URL.LIST), new TypeToken<ArrayList<User>>(){}.getType());
+            jo = jo.getJSONObject(URL.RESPONSE);
+            List<User> list = new Gson().fromJson(jo.getString(URL.LIST), new TypeToken<ArrayList<User>>() {
+            }.getType());
             String loginUserId = ac.getUser().getId();
             for (User user : list) {
-                if (!user.getId().equals(loginUserId) &&  Double.valueOf(user.getLatitude()) != 0 &&  Double.valueOf(user.getLongitude()) != 0) {
+                if (!user.getId().equals(loginUserId) && Double.valueOf(user.getLatitude()) != 0 && Double.valueOf(user.getLongitude()) != 0) {
                     addStoreMarket(user);
                 }
             }
@@ -309,14 +297,14 @@ public class ThroughActivity extends BaseActivity implements LocationSource,
         ImageLoader.getInstance().loadImage(userbean.getAvatar() + StaticFactory._160x160, ac.options_userlogo, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                if(loadedImage == null){
+                if (loadedImage == null) {
                     return;
                 }
                 if (tiv == null) {
                     tiv = new ThroughImageView(ThroughActivity.this);
                 }
                 MarkerOptions markerOption = new MarkerOptions();
-                markerOption.position(new LatLng( Double.valueOf(userbean.getLatitude()),  Double.valueOf(userbean.getLongitude())));
+                markerOption.position(new LatLng(Double.valueOf(userbean.getLatitude()), Double.valueOf(userbean.getLongitude())));
                 markerOption.draggable(true);
                 tiv.setmBitmap(loadedImage);
                 markerOption.icon(BitmapDescriptorFactory.fromBitmap(tiv.getmBitmap()));

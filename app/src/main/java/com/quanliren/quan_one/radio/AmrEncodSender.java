@@ -82,7 +82,7 @@ public class AmrEncodSender extends Thread implements OnCompletionListener{
 				// 平方和除以数据总长度，得到音量大小。
 				double mean = v / (double) read;
 				double volume = 10 * Math.log10(mean);
-				LogUtil.d("分贝值:" + volume);
+//				LogUtil.d("分贝值:" + volume);
 
 				mtl.getMicRealTimeSize(volume, System.currentTimeMillis() - milltime);
 			} catch (IOException e) {

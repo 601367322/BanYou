@@ -141,15 +141,9 @@ public abstract class MessageBaseHolder {
         public void onClick(View v) {
             DfMessage msg = (DfMessage) v.getTag();
             Message ms = handler.obtainMessage();
-            switch (msg.getMsgtype()) {
-                case DfMessage.IMAGE:
-                case DfMessage.VOICE:
-                    ms.what = msg.getMsgtype();
-                    ms.obj = msg;
-                    ms.sendToTarget();
-                    break;
-            }
-
+            ms.what = ChatActivity.HANDLER_CLICK;
+            ms.obj = msg;
+            ms.sendToTarget();
         }
     };
 
@@ -159,25 +153,9 @@ public abstract class MessageBaseHolder {
         public boolean onLongClick(View v) {
             DfMessage msg = (DfMessage) v.getTag();
             Message ms = handler.obtainMessage();
-            switch (v.getId()) {
-                case R.id.chat_context_tv:
-                    if (msg.getMsgtype() == DfMessage.TEXT) {
-                        ms.what = 3;
-                    } else {
-                        ms.what = 4;
-                    }
-                    ms.obj = msg;
-                    ms.sendToTarget();
-                    break;
-                case R.id.helper:
-                case R.id.img_ll:
-                case R.id.voice_ll:
-                case R.id.gif_ll:
-                    ms.what = 4;
-                    ms.obj = msg;
-                    ms.sendToTarget();
-                    break;
-            }
+            ms.what = ChatActivity.HANDLER_LONG_CLICK;
+            ms.obj = msg;
+            ms.sendToTarget();
             return true;
         }
     };
@@ -187,16 +165,16 @@ public abstract class MessageBaseHolder {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.chat_user_logo:
+                case R.id.chat_user_logo://头像
                     DfMessage logoMsg = (DfMessage) v.getTag(R.id.logo_tag);
                     if (!StaticFactory.Manager_ID.equals(logoMsg.getFriend().getId())) {
                         Util.startUserInfoActivity(context, logoMsg.getFriend());
                     }
                     break;
-                case R.id.error_btn:
+                case R.id.error_btn://重发
                     DfMessage msg = (DfMessage) v.getTag();
                     Message ms = handler.obtainMessage();
-                    ms.what = 6;
+                    ms.what = ChatActivity.HANDLER_RESEND;
                     ms.obj = msg;
                     ms.sendToTarget();
                     break;

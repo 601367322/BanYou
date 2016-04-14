@@ -116,6 +116,10 @@ public abstract class BaseListFragment<T> extends BaseFragment implements SwipeR
             @Override
             public void onSuccessRetCode(JSONObject jo) throws Throwable {
 
+                if (getActivity() == null) {
+                    return;
+                }
+
                 if (needCache() && currentPage == 0) {
                     ACache.get(getActivity()).put(getCacheKey(), jo);
                 }
@@ -172,7 +176,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements SwipeR
      * @param list
      * @param cache 如果是缓存数据，不改变页数
      */
-    public void onSuccessRefreshUI(JSONObject jo, List list, boolean cache) {
+    public void onSuccessRefreshUI(JSONObject jo, List<T> list, boolean cache) {
         if (list != null) {
             if (currentPage == 0) {
                 adapter.setList(list);
@@ -190,7 +194,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements SwipeR
         }
     }
 
-    public void showHideEmptyView(){
+    public void showHideEmptyView() {
         if (emptyView != null) {
             if (adapter.getCount() <= 0) {
                 emptyView.setVisibility(View.VISIBLE);
@@ -200,7 +204,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements SwipeR
         }
     }
 
-    @UiThread
+    @UiThread(delay = 100l)
     public void onFinshRefreshUI() {
         swipe_layout.setRefreshing(false);
         listview.stop();

@@ -1,5 +1,8 @@
 package com.quanliren.quan_one.custom;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -7,14 +10,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.seting.ShakeActivity_;
+import com.quanliren.quan_one.util.AnimUtil;
 
 /**
  * kong
@@ -25,7 +27,7 @@ public class ShakeImageView extends ImageView {
 
     public ShakeImageView(Context context) {
         super(context);
-        init(context);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     Handler handler = new Handler(){
@@ -36,7 +38,7 @@ public class ShakeImageView extends ImageView {
                 case 1:
                     if(shakeAnim!=null) {
                         handler.sendEmptyMessageDelayed(1, 5000);
-                        ShakeImageView.this.startAnimation(shakeAnim);
+                        shakeAnim.start();
                     }
                     break;
             }
@@ -45,30 +47,53 @@ public class ShakeImageView extends ImageView {
 
     public ShakeImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     public ShakeImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
-    Animation shakeAnim;
+    ValueAnimator shakeAnim;
 
-    private void init(Context context){
-        shakeAnim = AnimationUtils.loadAnimation(context, R.anim.shake_imageview);
+    private void init(){
+        this.shakeAnim = ObjectAnimator.ofFloat(this, AnimUtil.ROTATION, 1f, -1f).setDuration(100);
+        this.shakeAnim.setRepeatCount(4);
+        this.shakeAnim.setRepeatMode(ValueAnimator.REVERSE);
+        this.shakeAnim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setRotation(0f);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         handler.sendEmptyMessage(1);
+        init();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         handler.removeMessages(1);
+        shakeAnim.removeAllUpdateListeners();
+        shakeAnim.removeAllListeners();
         shakeAnim = null;
     }
 

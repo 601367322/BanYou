@@ -152,11 +152,9 @@ public class EmoteView extends BaseFragment implements EmoteGridView.EmoticonLis
 
     public void addMoreEmote() {
         try {
-
-
-            List<EmoticonZip> emoticonList = DBHelper.emoticonZipDao.dao.queryForEq("userId", ac.getUser().getId());
+            List<EmoticonZip> emoticonList = DBHelper.emoticonZipDao.getAllMyEmoticon(ac.getUser().getId());
             for (EmoticonZip emoticonBean : emoticonList) {
-                ArrayList<ArrayList<EmoticonImageBean>> emotions_large = new ArrayList<ArrayList<EmoticonImageBean>>();
+                ArrayList<ArrayList<EmoticonImageBean>> emotions_large = new ArrayList<>();
                 createTab(ImageLoader.getInstance().loadImageSync(
                         Util.FILE + emoticonBean.getIconfile(), options_no_default), true);
                 ArrayList<EmoticonImageBean> temp_e = null;
@@ -227,6 +225,14 @@ public class EmoteView extends BaseFragment implements EmoteGridView.EmoticonLis
         }
     };
 
+    int lastPosition = 0;
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        lastPosition = viewpager.getCurrentItem();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EMOTICONRESPONSE) {
@@ -242,6 +248,13 @@ public class EmoteView extends BaseFragment implements EmoteGridView.EmoticonLis
             viewpager.removeAllViews();
             initView();
             addMoreEmote();
+
+            viewpager.post(new Runnable() {
+                @Override
+                public void run() {
+                    viewpager.setCurrentItem(lastPosition,false);
+                }
+            });
         }
     }
 

@@ -26,7 +26,13 @@ public class BaseDao<T, ID> {
     }
 
     public void create(T bean){
-        dao.create(bean);
+        try {
+            if(dao.isTableExists()) {
+                dao.create(bean);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     public void update(T bean){

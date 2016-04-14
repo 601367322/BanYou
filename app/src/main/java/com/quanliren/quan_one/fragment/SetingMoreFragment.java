@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -12,21 +13,24 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.quanliren.quan_one.activity.R;
-import com.quanliren.quan_one.fragment.base.BaseViewPagerChildFragment;
 import com.quanliren.quan_one.activity.date.PersonalDateListActivity_;
 import com.quanliren.quan_one.activity.date.VisitorListActivity_;
 import com.quanliren.quan_one.activity.seting.AboutUsActivity_;
 import com.quanliren.quan_one.activity.seting.EmoticonListActivity_;
+import com.quanliren.quan_one.activity.seting.MyWalletActivity_;
 import com.quanliren.quan_one.activity.seting.RemindMessageActivity_;
 import com.quanliren.quan_one.activity.seting.TestSetting_;
+import com.quanliren.quan_one.activity.seting.auth.TrueAuthActivity_;
+import com.quanliren.quan_one.activity.seting.auth.TrueNoAuthActivity_;
 import com.quanliren.quan_one.activity.user.BlackListActivity_;
 import com.quanliren.quan_one.activity.user.LoginActivity_;
 import com.quanliren.quan_one.activity.user.ModifyPasswordActivity_;
+import com.quanliren.quan_one.activity.user.PopularValueActivity_;
 import com.quanliren.quan_one.activity.user.UserInfoActivity_;
 import com.quanliren.quan_one.activity.wxapi.InviteFriendActivity_;
 import com.quanliren.quan_one.adapter.SetAdapter;
@@ -38,6 +42,7 @@ import com.quanliren.quan_one.bean.LoginUser;
 import com.quanliren.quan_one.bean.SetBean;
 import com.quanliren.quan_one.bean.User;
 import com.quanliren.quan_one.dao.DBHelper;
+import com.quanliren.quan_one.fragment.base.BaseViewPagerChildFragment;
 import com.quanliren.quan_one.fragment.date.DateListFragment;
 import com.quanliren.quan_one.post.CounterPost;
 import com.quanliren.quan_one.post.UpdateUserPost;
@@ -59,6 +64,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.blurry.Blurry;
+
 @EFragment
 public class SetingMoreFragment extends BaseViewPagerChildFragment {
 
@@ -66,13 +73,14 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
     public static final String UPDATE_USERINFO_ = "com.quanliren.quan_one.fragment.SetingMoreFragment.UPDATE_USERINFO_";
     @ViewById(R.id.listview)
     ListView listview;
+
     List<SetBean> list = new ArrayList<SetBean>();
-    RelativeLayout head_bg;
+    ImageView head_bg;
     ImageView userlogo;
     TextView nickname;
     View head = null;
     ImageView vip;
-    SetBean clearSb, emotionSb, visitSb;
+    SetBean clearSb, emotionSb, visitSb, trueNameSb, walletSb, inviteSb, popularSb;
     SetAdapter adapter;
 
     @SystemService
@@ -88,7 +96,8 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
         super.init();
         listview.addHeaderView(head = LayoutInflater.from(getActivity()).inflate(R.layout.seting_head,
                 listview, false));
-        head_bg = (RelativeLayout) head.findViewById(R.id.head_bg);
+        head_bg = (ImageView) head.findViewById(R.id.head_bg_img);
+
         userlogo = (ImageView) head.findViewById(R.id.userlogo);
         nickname = (TextView) head.findViewById(R.id.nickname);
         vip = (ImageView) head.findViewById(R.id.vip);
@@ -96,34 +105,38 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
         Intent i = PersonalDateListActivity_.intent(getActivity()).type(DateListFragment.MY).get();
         Intent i_conllect = PersonalDateListActivity_.intent(getActivity()).type(DateListFragment.COLLECT).get();
         final Intent i_visitor = VisitorListActivity_.intent(getActivity()).get();
-        list.add(visitSb = new SetBean(R.drawable.set_icon_6, "访客记录(0)", 0, true, i_visitor));
-        list.add(new SetBean(R.drawable.set_icon_1, "我发布的", 0, false, i));
+        list.add(visitSb = new SetBean(R.drawable.set_icon_6, "访客记录(0)", SetBean.Site.MID, SetBean.ItemType.NORMAL, i_visitor));
+        list.add(new SetBean(R.drawable.set_icon_1, "我的约会", SetBean.Site.MID, SetBean.ItemType.NORMAL, i));
+        list.add(new SetBean(R.drawable.set_icon_5, "我的收藏", SetBean.Site.MID, SetBean.ItemType.NORMAL, i_conllect));
+        list.add(popularSb = new SetBean(R.drawable.set_icon_5, "我的人气", SetBean.Site.MID, SetBean.ItemType.NEW, PopularValueActivity_.intent(getActivity()).get()));
+        list.add(walletSb = new SetBean(R.drawable.wallet, "我的钱包", SetBean.Site.MID, SetBean.ItemType.NEW, MyWalletActivity_.intent(getActivity()).get()));
+        list.add(emotionSb = new SetBean(R.drawable.set_icon_2, "表情下载", SetBean.Site.MID, SetBean.ItemType.NEW, EmoticonListActivity_.intent(getActivity()).get()));
+        list.add(trueNameSb = new SetBean(R.drawable.auth_img, "真人认证", SetBean.Site.MID, SetBean.ItemType.NEW, null));
+        list.add(new SetBean(R.drawable.set_icon_3, "修改密码", SetBean.Site.BTM, SetBean.ItemType.NORMAL, ModifyPasswordActivity_.intent(getActivity()).get()));
+        list.add(inviteSb = new SetBean(R.drawable.set_icon_4, "邀请好友", SetBean.Site.TOP, SetBean.ItemType.REDPACKET, InviteFriendActivity_.intent(getActivity()).get()));
+        list.add(new SetBean(R.drawable.set_icon_9, "关于我们", SetBean.Site.MID, SetBean.ItemType.NORMAL, AboutUsActivity_.intent(getActivity()).get()));
+        list.add(clearSb = new SetBean(R.drawable.set_icon_13, "清除缓存", SetBean.Site.MID, SetBean.ItemType.CACHE, null));
+        list.add(new SetBean(R.drawable.set_icon_12, "消息通知", SetBean.Site.MID, SetBean.ItemType.NORMAL, RemindMessageActivity_.intent(getActivity()).get()));
+        list.add(new SetBean(R.drawable.feedback, "意见反馈", SetBean.Site.BTM, SetBean.ItemType.NORMAL, null));
 
-        list.add(emotionSb = new SetBean(R.drawable.set_icon_2, "表情下载", 1, false, EmoticonListActivity_.intent(getActivity()).get()));
-        list.add(new SetBean(R.drawable.set_icon_5, "我的收藏", 0, false, i_conllect));
-        list.add(new SetBean(R.drawable.set_icon_3, "修改密码", 0, false, ModifyPasswordActivity_.intent(getActivity()).get()));
-        list.add(new SetBean(R.drawable.set_icon_4, "邀请好友", 0, true, InviteFriendActivity_.intent(getActivity()).get()));
-        list.add(new SetBean(R.drawable.set_icon_9, "关于我们", 0, false, AboutUsActivity_.intent(getActivity()).get()));
-        list.add(clearSb = new SetBean(R.drawable.set_icon_13, "清除缓存", 0, false, null));
-        list.add(new SetBean(R.drawable.set_icon_12, "消息通知", 0, false, RemindMessageActivity_.intent(getActivity()).get()));
-        list.add(new SetBean(R.drawable.feedback, "意见反馈", 0, false, null));
-
-        list.add(new SetBean(R.drawable.set_icon_10, "黑名单", 0, true, BlackListActivity_.intent(getActivity()).get()));
+        list.add(new SetBean(R.drawable.set_icon_10, "黑名单", SetBean.Site.TOP, SetBean.ItemType.NORMAL, BlackListActivity_.intent(getActivity()).get()));
         try {
             ApplicationInfo appInfo = getActivity().getPackageManager()
                     .getApplicationInfo(getActivity().getPackageName(),
                             PackageManager.GET_META_DATA);
             String msg = appInfo.metaData.getString("TEST_SETTING");
             if (msg.equals("open")) {
-                list.add(new SetBean(R.drawable.set_icon_11, "测试设置", 0, false, TestSetting_.intent(getActivity()).get()));
+                list.add(new SetBean(R.drawable.set_icon_11, "测试设置", SetBean.Site.MID, SetBean.ItemType.NORMAL, TestSetting_.intent(getActivity()).get()));
             } else {
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        list.add(new SetBean(R.drawable.set_icon_11, "退出当前账号", 0, false, null));
+        list.add(new SetBean(R.drawable.set_icon_11, "退出当前账号", SetBean.Site.BTM, SetBean.ItemType.NORMAL, null));
 
-        listview.setAdapter(adapter = new SetAdapter(getActivity(), list));
+        listview.setAdapter(adapter = new SetAdapter(getActivity()));
+
+        adapter.setList(list);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -132,13 +145,19 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
                                     int position, long arg3) {
                 if (position == list.size()) {
                     loginout(view);
-                } else if (position == 10) {
+                } else if (list.get(position-1).title.equals("意见反馈")) {
                     FeedbackAgent agent = new FeedbackAgent(getActivity());
                     agent.closeAudioFeedback();
                     agent.closeFeedbackPush();
                     agent.startFeedbackActivity();
-
-                } else if (position == 8) {
+                } else if (list.get(position-1).title.equals("真人认证")) {
+                    User user = ac.getUserInfo();
+                    if (user.getConfirmType() == 0) {
+                        TrueNoAuthActivity_.intent(getActivity()).start();
+                    } else {
+                        TrueAuthActivity_.intent(getActivity()).start();
+                    }
+                } else if (list.get(position-1).title.equals("清除缓存")) {
                     clearCache();
                 } else {
                     if (position > 0) {
@@ -158,11 +177,11 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
 
             @Override
             public void onClick(View arg0) {
-                UserInfoActivity_.intent(getActivity()).start();
+                Util.startUserInfoActivity(getActivity(), ac.getUser().getId());
             }
         });
         getFileSize();
-        receiveBroadcast(new String[]{UPDATE_USERINFO,UPDATE_USERINFO_}, handler);
+        receiveBroadcast(new String[]{UPDATE_USERINFO, UPDATE_USERINFO_}, handler);
 
         onVisible();
     }
@@ -213,7 +232,7 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
             String action = i.getAction();
             if (action.equals(UPDATE_USERINFO)) {
                 new UpdateUserPost(getActivity(), null);
-            }else if(action.equals(UPDATE_USERINFO_)){
+            } else if (action.equals(UPDATE_USERINFO_)) {
                 initSource((User) i.getExtras().getSerializable("user"));
             }
             super.dispatchMessage(msg);
@@ -252,7 +271,7 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
     @Override
     public void onVisible() {
         super.onVisible();
-        if(init.get()){
+        if (init.get()) {
             //初始化用户信息
             User user = ac.getUserInfo();
             initSource(user);
@@ -264,6 +283,7 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
             statistic();
 
             updateCount();
+            inviteSb.clazz.putExtra("inviteCode", user.getInviteCode());
         }
     }
 
@@ -279,7 +299,7 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(init.get()){
+        if (init.get()) {
             //更新用户信息
             User user = ac.getUserInfo();
             initSource(user);
@@ -288,27 +308,47 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
         }
     }
 
-    public void updateCount(){
+    public void updateCount() {
         LoginUser loginUser = ac.getUser();
         CounterBean counterBean = DBHelper.counterDao.getCounter(loginUser.getId());
         BadgeBean badgeBean = DBHelper.badgeDao.getBadge(loginUser.getId());
-        if(badgeBean!=null) {
+        if (badgeBean != null) {
             if (badgeBean.getBean().isEmotionBadge()) {
                 emotionSb.img = 1;
             } else {
                 emotionSb.img = 0;
             }
         }
-        if(counterBean!=null) {
+        if (counterBean != null) {
             visitSb.title = "访客记录(" + counterBean.getBean().getVcnt() + ")";
 
+        }
+        if (ac.cs.getTRUE_NAME() == 0) {
+            trueNameSb.img = 1;
+        } else {
+            trueNameSb.img = 0;
+        }
+        if (ac.cs.getWALLET() == 0) {
+            walletSb.img = 1;
+        } else {
+            walletSb.img = 0;
+        }
+        if (ac.cs.getPopularValue() == 0) {
+            popularSb.img = 1;
+        } else {
+            popularSb.img = 0;
         }
         adapter.notifyDataSetChanged();
     }
 
     public void initSource(User user) {
         ImageLoader.getInstance().displayImage(
-                user.getAvatar() + StaticFactory._320x320, userlogo, ac.options_userlogo);
+                user.getAvatar() + StaticFactory._320x320, userlogo, ac.options_userlogo, new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        blur(imageUri, loadedImage);
+                    }
+                });
         nickname.setText(user.getNickname());
         if (user.getIsvip() == 1) {
             vip.setVisibility(View.VISIBLE);
@@ -318,6 +358,23 @@ public class SetingMoreFragment extends BaseViewPagerChildFragment {
             vip.setImageResource(R.drawable.vip_2);
         } else {
             vip.setVisibility(View.GONE);
+        }
+    }
+
+    @UiThread
+    public void blur(String imageUri, Bitmap loadedImage) {
+        try {
+            if (head_bg.getTag(R.id.logo_tag) == null || !head_bg.getTag(R.id.logo_tag).toString().equals(imageUri)) {
+                head_bg.setImageBitmap(loadedImage);
+                head_bg.setTag(R.id.logo_tag, imageUri);
+                Blurry.with(getActivity())
+                        .radius(10)
+                        .sampling(8)
+                        .capture(head_bg)
+                        .into(head_bg);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 

@@ -5,18 +5,27 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeAddress;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.activity.date.PhotoAlbumMainActivity_;
 import com.quanliren.quan_one.activity.location.GDLocation;
-import com.quanliren.quan_one.activity.location.ILocationImpl;
+import com.quanliren.quan_one.activity.location.ILocationExactly;
+import com.quanliren.quan_one.application.AM;
 import com.quanliren.quan_one.bean.GroupBean;
 import com.quanliren.quan_one.bean.User;
 import com.quanliren.quan_one.util.ImageUtil;
@@ -35,7 +44,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @EActivity(R.layout.activity_create_group)
-public class CreateGroupActivity extends BaseActivity implements ILocationImpl {
+public class CreateGroupActivity extends BaseActivity implements ILocationExactly,GeocodeSearch.OnGeocodeSearchListener {
     @ViewById(R.id.address)
     TextView address;
     @ViewById(R.id.groupNum)
@@ -55,15 +64,20 @@ public class CreateGroupActivity extends BaseActivity implements ILocationImpl {
     User user;
     String longitude;
     String latitude;
-
+    GeocodeSearch geocoderSearch;
     @Override
     public void init() {
         super.init();
         setTitleTxt(R.string.create_group);
         address.setText(getString(R.string.location_loading));
-        location = new GDLocation(this, this, true);
+        location = new GDLocation(this, this, false);
         user = ac.getUserInfo();
         groupNum.setText(user.getIsvip() == 1 ? "群成员≤20人" : "群成员≤50人");
+        location.needLocationPoi(true);
+        location.startLocation();
+        Util.umengCustomEvent(mContext, "create_group_btn");
+        geocoderSearch= new GeocodeSearch(ac.getApplicationContext());
+        geocoderSearch.setOnGeocodeSearchListener(this);
     }
 
     @Click(R.id.create_group)
@@ -111,9 +125,7 @@ public class CreateGroupActivity extends BaseActivity implements ILocationImpl {
 
     @Override
     public void onLocationSuccess() {
-        address.setText(ac.cs.getLocationArea());
-        longitude=ac.cs.getLng();
-        latitude=ac.cs.getLat();
+
     }
 
     @Override
@@ -211,6 +223,7 @@ public class CreateGroupActivity extends BaseActivity implements ILocationImpl {
                 public void onSuccessRetCode(JSONObject jo) throws Throwable {
                     GroupBean bean=new GroupBean();
                     bean.setId(groupId);
+                    AM.getActivityManager().popActivity(GroupDetailActivity_.class);
                     GroupDetailActivity_.intent(mContext).bean(bean).start();
                     finish();
                 }
@@ -265,5 +278,49 @@ public class CreateGroupActivity extends BaseActivity implements ILocationImpl {
     public void back(View v) {
         closeInput();
         dialogFinish();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (location != null) {
+            location.destory();
+        }
+    }
+
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
+        if (rCode == 1000) {
+            if (result != null && result.getRegeocodeAddress() != null
+                    && result.getRegeocodeAddress().getFormatAddress() != null) {
+                RegeocodeAddress addr = result.getRegeocodeAddress();
+                String str;
+                if (TextUtils.isEmpty(addr.getNeighborhood())) {
+                    int index = addr.getPois().get(0).getTitle().indexOf('(');
+                    if (index > 0) {
+                        str = addr.getPois().get(0).getTitle().substring(0, index);
+                    } else {
+                        str = addr.getPois().get(0).getTitle();
+                    }
+                } else {
+                    str = addr.getNeighborhood();
+                }
+                address.setText(str);
+                longitude = ac.cs.getLng();
+                latitude = ac.cs.getLat();
+            }
+        }
+    }
+
+    @Override
+    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
+    }
+
+    @Override
+    public void onLocationSuccess(LatLng latLng) {
+        LatLonPoint lp = new LatLonPoint(latLng.latitude, latLng.longitude);
+        RegeocodeQuery query = new RegeocodeQuery(lp, 200, GeocodeSearch.AMAP);
+        geocoderSearch.getFromLocationAsyn(query);
     }
 }

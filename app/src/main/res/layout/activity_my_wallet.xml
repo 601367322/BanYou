@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/custom_back_actionbar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/my_wallet_bg"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/my_money_bg"/>
+            <TextView
+                android:layout_marginTop="35dp"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="我的零钱"
+                android:textColor="@color/money"
+                android:textSize="15sp"
+                android:layout_height="wrap_content" />
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/all_money"
+                android:layout_marginTop="60dp"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:singleLine="true"
+                autofit:minTextSize="15sp"
+                android:textColor="@color/money"
+                android:text="￥0.00"/>
+        </RelativeLayout>
+        <Button
+            android:id="@+id/chongzhi_btn"
+            android:layout_marginTop="56dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="充值"
+            android:background="@drawable/commit_btn_selector"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/tixian_btn"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="26dp"
+            android:textSize="14sp"
+            android:textColor="@color/red_number"
+            android:background="@drawable/tixian_btn_selector"
+            android:text="提现" />
+    </LinearLayout>
+</LinearLayout>

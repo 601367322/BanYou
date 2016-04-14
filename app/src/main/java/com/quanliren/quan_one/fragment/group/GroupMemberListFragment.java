@@ -19,6 +19,9 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Shen on 2015/12/29.
  */
@@ -94,7 +97,8 @@ public class GroupMemberListFragment extends BaseListFragment<User> implements G
         ac.finalHttp.post(getActivity(), URL.GROUP_MANAGER_USER, params, new MyJsonHttpResponseHandler(getActivity(), Util.progress_arr[4]) {
             @Override
             public void onSuccessRetCode(JSONObject jo) throws Throwable {
-                adapter.remove(user);
+                dataList.remove(user);
+                adapter.setList(updateList(dataList));
                 adapter.notifyDataSetChanged();
             }
         });
@@ -108,5 +112,34 @@ public class GroupMemberListFragment extends BaseListFragment<User> implements G
                 Util.startUserInfoActivity(getActivity(), user);
             }
         }
+    }
+
+    List dataList = new ArrayList();
+
+    @Override
+    public void onSuccessRefreshUI(JSONObject jo, List list, boolean cache) {
+        dataList.clear();
+        dataList.addAll(list);
+        super.onSuccessRefreshUI(jo, updateList(list), cache);
+    }
+
+    List updateList(List<User> list) {
+        List<User> master = new ArrayList<User>();
+        List<User> member = new ArrayList<User>();
+        for (User user : list) {
+            if ("1".equals(user.getMemberType())) {
+                master.add(user);
+            } else if ("0".equals(user.getMemberType())) {
+                member.add(user);
+            }
+        }
+        if (master.size() > 0) {
+            master.add(0, new User(1));
+        }
+        if (member.size() > 0) {
+            member.add(0, new User(0));
+        }
+        master.addAll(member);
+        return master;
     }
 }

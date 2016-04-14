@@ -82,6 +82,37 @@ public class ChatListBean implements Serializable {
         this.content = content;
     }
 
+    public void setContent(DfMessage msg) {
+        if (msg != null) {
+            switch (msg.getMsgtype()) {
+                case DfMessage.HELPER:
+                case DfMessage.TEXT:
+                    this.content = msg.getContent();
+                    break;
+                case DfMessage.IMAGE:
+                    this.content = "[图片]";
+                    break;
+                case DfMessage.VOICE:
+                    this.content = "[语音]";
+                    break;
+                case DfMessage.FACE:
+                    this.content = msg.getGifContent().flagName;
+                    break;
+                case DfMessage.VIDEO:
+                    this.content = "[视频]";
+                    break;
+                case DfMessage.PACKET:
+                    this.content = "[红包]";
+                    break;
+                default:
+                    this.content = "";
+                    break;
+            }
+        } else {
+            this.content = "";
+        }
+    }
+
     public int getMsgCount() {
         return msgCount;
     }
@@ -102,22 +133,27 @@ public class ChatListBean implements Serializable {
         this.userlogo = msg.getUserlogo();
         this.nickname = msg.getNickname();
         switch (msg.getMsgtype()) {
-            case 0:
+            case DfMessage.HELPER:
+            case DfMessage.TEXT:
                 this.content = msg.getContent();
                 break;
-            case 1:
+            case DfMessage.IMAGE:
                 this.content = "[图片]";
                 break;
-            case 2:
+            case DfMessage.VOICE:
                 this.content = "[语音]";
                 break;
-            case 5:
+            case DfMessage.FACE:
                 this.content = msg.getGifContent().flagName;
                 break;
-            default:
+            case DfMessage.VIDEO:
+                this.content = "[视频]";
+                break;
+            case DfMessage.PACKET:
+                this.content = "[红包]";
                 break;
         }
-        if(!TextUtils.isEmpty(msg.getFriendDetail())){
+        if (!TextUtils.isEmpty(msg.getFriendDetail())) {
             this.type = 1;
         }
     }
@@ -129,23 +165,28 @@ public class ChatListBean implements Serializable {
         this.userlogo = friend.getAvatar();
         this.nickname = friend.getNickname();
         switch (msg.getMsgtype()) {
-            case 0:
+            case DfMessage.HELPER:
+            case DfMessage.TEXT:
                 this.content = msg.getContent();
                 break;
-            case 1:
+            case DfMessage.IMAGE:
                 this.content = "[图片]";
                 break;
-            case 2:
+            case DfMessage.VOICE:
                 this.content = "[语音]";
                 break;
-            case 5:
+            case DfMessage.FACE:
                 EmoticonActivityListBean.EmoticonZip.EmoticonJsonBean ejb = msg.getGifContent();
                 this.content = ejb.getFlagName();
                 break;
-            default:
+            case DfMessage.VIDEO:
+                this.content = "[视频]";
+                break;
+            case DfMessage.PACKET:
+                this.content = "[红包]";
                 break;
         }
-        if(!TextUtils.isEmpty(msg.getFriendDetail())){
+        if (!TextUtils.isEmpty(msg.getFriendDetail())) {
             this.type = 1;
         }
     }

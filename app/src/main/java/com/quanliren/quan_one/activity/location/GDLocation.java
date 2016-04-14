@@ -1,13 +1,12 @@
 package com.quanliren.quan_one.activity.location;
 
 import android.content.Context;
-import android.location.Location;
-import android.os.Bundle;
 
 import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.location.LocationManagerProxy;
-import com.amap.api.location.LocationProviderProxy;
+import com.amap.api.maps2d.model.LatLng;
 import com.quanliren.quan_one.application.AppClass;
 import com.quanliren.quan_one.bean.Area;
 import com.quanliren.quan_one.fragment.date.ChosePositionFragment;
@@ -20,12 +19,12 @@ import java.util.List;
 public class GDLocation implements AMapLocationListener {
 
     private ILocationImpl locationListener;
+    private boolean isNeedPoi = false;//创建群组手动刷新
 
-    public void setLocationListener(ILocationImpl locationListener) {
-        this.locationListener = locationListener;
-    }
 
-    private LocationManagerProxy mAMapLocationManager;
+    private AMapLocationClient locationClient = null;
+    private AMapLocationClientOption locationOption = null;
+
     private AppClass ac;
     private Context context;
 
@@ -33,45 +32,31 @@ public class GDLocation implements AMapLocationListener {
         this.ac = (AppClass) context.getApplicationContext();
         this.context = context;
         this.locationListener = listener;
-        if (autoStart){
+        if (autoStart) {
             startLocation();
         }
     }
 
     public void startLocation() {
-        if (Util.isFastLocation()) {
+        if (Util.isFastLocation() && !isNeedPoi) {
             if (locationListener != null) {
                 locationListener.onLocationSuccess();
             }
             return;
         } else {
-            mAMapLocationManager = LocationManagerProxy.getInstance(context);
-            mAMapLocationManager.requestLocationData(
-                    LocationProviderProxy.AMapNetwork, -1, 0, this);
-
+            locationClient = new AMapLocationClient(context.getApplicationContext());
+            locationOption = new AMapLocationClientOption();
+            // 设置定位模式为高精度模式
+            locationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            // 设置定位监听
+            locationClient.setLocationListener(this);
+            locationClient.startLocation();
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
 
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-
+    public void needLocationPoi(boolean isNeed) {
+        this.isNeedPoi = isNeed;
     }
 
     @Override
@@ -79,7 +64,7 @@ public class GDLocation implements AMapLocationListener {
 
         deactivate();
         if (aLocation == null
-                || aLocation.getAMapException().getErrorCode() != 0) {
+                || aLocation.getErrorCode() != 0) {
             if (locationListener != null)
                 locationListener.onLocationFail();
             return;
@@ -89,8 +74,6 @@ public class GDLocation implements AMapLocationListener {
             ac.cs.setLat(df.format(aLocation.getLatitude()));
         if (!df.format(aLocation.getLongitude()).equals("0"))
             ac.cs.setLng(df.format(aLocation.getLongitude()));
-//        if (aLocation.getDistrict() != null)
-//            ac.cs.setArea(aLocation.getDistrict());
         String city = aLocation.getCity();
         if (city != null) {
             List<Area> areaList = ChosePositionFragment.getAreas();
@@ -105,21 +88,30 @@ public class GDLocation implements AMapLocationListener {
                 ac.cs.setLocation(temp.name);
                 ac.cs.setLocationID(temp.id);
                 ac.cs.setArea(temp.name);
-                ac.cs.setLocationArea(aLocation.getPoiName());
             }
         }
         Util.locationTime = System.currentTimeMillis();
-        if (locationListener != null)
-            locationListener.onLocationSuccess();
+        if (locationListener != null) {
+            if (locationListener instanceof ILocationExactly) {
+                LatLng latLng = new LatLng(aLocation.getLatitude(), aLocation.getLongitude());
+                ((ILocationExactly) locationListener).onLocationSuccess(latLng);
+            } else {
+                locationListener.onLocationSuccess();
+            }
+        }
 
     }
 
     public void deactivate() {
-        if (mAMapLocationManager != null) {
-            mAMapLocationManager.removeUpdates(this);
-            mAMapLocationManager.destroy();
+        if (null != locationClient) {
+            /**
+             * 如果AMapLocationClient是在当前Activity实例化的，
+             * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
+             */
+            locationClient.onDestroy();
+            locationClient = null;
+            locationOption = null;
         }
-        mAMapLocationManager = null;
     }
 
     public void destory() {

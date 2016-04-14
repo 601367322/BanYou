@@ -23,8 +23,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.quanliren.quan_one.activity.R;
 
 public class XListView extends ListView implements OnScrollListener {
@@ -87,10 +85,10 @@ public class XListView extends ListView implements OnScrollListener {
         // user's listener (as a proxy).
         super.setOnScrollListener(this);
 
-        boolean pauseOnScroll = false; // or true
+        /*boolean pauseOnScroll = false; // or true
         boolean pauseOnFling = true; // or false
         OnScrollListener listener = new PauseOnScrollListener(ImageLoader.getInstance(), pauseOnScroll, pauseOnFling);
-        setOnScrollListener(listener);
+        setOnScrollListener(listener);*/
 
         // init footer view
         mFooterView = new XListViewFooter(context);

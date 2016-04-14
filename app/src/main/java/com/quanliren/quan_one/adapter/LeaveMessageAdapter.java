@@ -15,6 +15,7 @@ import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.group.GroupDetailActivity_;
 import com.quanliren.quan_one.adapter.base.BaseAdapter;
 import com.quanliren.quan_one.adapter.base.BaseHolder;
+import com.quanliren.quan_one.application.AM;
 import com.quanliren.quan_one.bean.ChatListBean;
 import com.quanliren.quan_one.bean.DfMessage;
 import com.quanliren.quan_one.bean.GroupBean;
@@ -70,12 +71,13 @@ public class LeaveMessageAdapter extends BaseAdapter<ChatListBean> {
         @OnClick(R.id.userlogo)
         void userlogo(View v) {
             ChatListBean bean = (ChatListBean) v.getTag(R.id.logo_tag);
-            if(bean.getType() == 1){
+            if (bean.getType() == 1) {
                 GroupBean group = new GroupBean();
                 group.setId(bean.getFriendid());
                 group.setNickname(bean.getNickname());
+                AM.getActivityManager().popActivity(GroupDetailActivity_.class);
                 GroupDetailActivity_.intent(context).bean(group).start();
-            }else{
+            } else {
                 Util.startUserInfoActivity(context, bean.getFriendid());
             }
         }
@@ -96,29 +98,31 @@ public class LeaveMessageAdapter extends BaseAdapter<ChatListBean> {
                     bean.getUserlogo() + StaticFactory._160x160, userlogo, ac.options_userlogo);
             time.setText(Util.getTimeDateStr(bean.getCtime()));
             if (StaticFactory.Manager_ID.equals(bean.getFriendid())) {
-                DfMessage.OtherHelperMessage msg = new Gson().fromJson(bean.getContent(), new TypeToken<DfMessage.OtherHelperMessage>() {
-                }.getType());
-                switch (msg.getInfoType()) {
-                    case DfMessage.OtherHelperMessage.INFO_TYPE_COMMIT:
-                        signature.setText(msg.getNickname() + context.getString(R.string.info_type_0));
-                        break;
-                    case DfMessage.OtherHelperMessage.INFO_TYPE_PAST_DUE:
-                        signature.setText(context.getString(R.string.info_type_1));
-                        break;
-                    case DfMessage.OtherHelperMessage.INFO_TYPE_REPLY_COMMIT:
-                        signature.setText(msg.getNickname() + context.getString(R.string.info_type_2));
-                        break;
-                    case DfMessage.OtherHelperMessage.INFO_TYPE_APPLY_JOIN_GROUP:
-                        signature.setText(msg.getNickname() + String.format(context.getString(R.string.apply_your_group), msg.getGroupName()));
-                        break;
-                    case DfMessage.OtherHelperMessage.INFO_TYPE_AGREE_APPLY:
-                    case DfMessage.OtherHelperMessage.INFO_TYPE_KICK_OUT:
-                    case DfMessage.OtherHelperMessage.INFO_TYPE_JIE_SAN:
-                        signature.setText(msg.getText());
-                        break;
-                    case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE_JOIN_GROUP:
-                        signature.setText(msg.getNickname() + String.format(context.getString(R.string.invite_your_group), msg.getGroupName()));
-                        break;
+                try {
+                    DfMessage.OtherHelperMessage msg = new Gson().fromJson(bean.getContent(), new TypeToken<DfMessage.OtherHelperMessage>() {
+                    }.getType());
+                    switch (msg.getInfoType()) {
+                        case DfMessage.OtherHelperMessage.INFO_TYPE_COMMIT:
+                            signature.setText(msg.getNickname() + context.getString(R.string.info_type_0));
+                            break;
+                        case DfMessage.OtherHelperMessage.INFO_TYPE_PAST_DUE:
+                            signature.setText(context.getString(R.string.info_type_1));
+                            break;
+                        case DfMessage.OtherHelperMessage.INFO_TYPE_REPLY_COMMIT:
+                            signature.setText(msg.getNickname() + context.getString(R.string.info_type_2));
+                            break;
+                        case DfMessage.OtherHelperMessage.INFO_TYPE_APPLY_JOIN_GROUP:
+                            signature.setText(msg.getNickname() + String.format(context.getString(R.string.apply_your_group), msg.getGroupName()));
+                            break;
+                        case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE_JOIN_GROUP:
+                            signature.setText(msg.getNickname() + String.format(context.getString(R.string.invite_your_group), msg.getGroupName()));
+                            break;
+                        default:
+                            signature.setText(msg.getText());
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else {
                 signature.setText(bean.getContent());

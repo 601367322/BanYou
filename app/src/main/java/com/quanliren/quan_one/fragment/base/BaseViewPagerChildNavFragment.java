@@ -46,10 +46,12 @@ public abstract class BaseViewPagerChildNavFragment extends BaseViewPagerChildFr
         viewpager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         actionbar_tab.addViewPager(viewpager);
         viewpager.addOnPageChangeListener(this);
+
+        viewpager.setCurrentItem(getDefaultCurrentItem());
         viewpager.post(new Runnable() {
             @Override
             public void run() {
-                onPageSelected(0);
+                onPageSelected(getDefaultCurrentItem());
             }
         });
     }
@@ -100,4 +102,8 @@ public abstract class BaseViewPagerChildNavFragment extends BaseViewPagerChildFr
     public abstract List<Fragment> initFragments();
 
     public abstract String getTabStr();
+
+    public int getDefaultCurrentItem(){
+        return 0;
+    }
 }

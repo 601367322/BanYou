@@ -3,152 +3,285 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activity_second_bg"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <include
+        layout="@layout/custom_back_actionbar"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/title_height"
-        layout="@layout/custom_back_actionbar" />
+        android:layout_height="@dimen/title_height" />
 
-    <LinearLayout
-        android:id="@+id/fx_sina_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/menu_mid_selector"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/fx_sina_icon" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="新浪邀请"
-            android:textColor="@color/title"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:background="#e3493d"
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/fx_qq_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/menu_mid_selector"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+            <ImageView
+                android:id="@+id/top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:src="@drawable/invite_top" />
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/fx_qq_icon" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-30dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="QQ邀请"
-            android:textColor="@color/title"
-            android:textSize="16sp" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/fx_qzone_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/menu_mid_selector"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/my_invite_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="我的邀请码"
+                    android:textColor="@color/border_color"
+                    android:textSize="18sp" />
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/fx_qzone_icon" />
+                <TextView
+                    android:id="@+id/invite_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/my_invite_code"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:text="BY123456"
+                    android:textColor="@color/white"
+                    android:textSize="34sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="QQ空间邀请"
-            android:textColor="@color/title"
-            android:textSize="16sp" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/fx_msg_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/menu_mid_selector"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+                <Button
+                    android:id="@+id/copy"
+                    android:layout_width="98dp"
+                    android:layout_height="32dp"
+                    android:layout_below="@+id/invite_code"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/invite_code_copy_bg"
+                    android:text="复  制"
+                    android:textColor="@color/invite_copy_color"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/fx_msg_icon" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/invite_border"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="短信邀请"
-            android:textColor="@color/title"
-            android:textSize="16sp" />
-    </LinearLayout>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/invite_type_shape"
+                    android:text="分享方式"
+                    android:textColor="@color/invite_copy_color" />
 
-    <LinearLayout
-        android:id="@+id/fx_weixin_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/menu_mid_selector"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/fx_weixin_icon" />
+                    <LinearLayout
+                        android:id="@+id/fx_weixin_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="微信邀请"
-            android:textColor="@color/title"
-            android:textSize="16sp" />
-    </LinearLayout>
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/fx_weixin_icon" />
 
-    <LinearLayout
-        android:id="@+id/fx_friend_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/menu_mid_selector"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="微信"
+                            android:textColor="@color/title"
+                            android:textSize="16sp" />
+                    </LinearLayout>
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/fx_friend_icon" />
+                    <LinearLayout
+                        android:id="@+id/fx_sina_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="朋友圈邀请"
-            android:textColor="@color/title"
-            android:textSize="16sp" />
-    </LinearLayout>
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/fx_sina_icon" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="微博"
+                            android:textColor="@color/title"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fx_friend_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/fx_friend_icon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="朋友圈"
+                            android:textColor="@color/title"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/fx_qq_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/fx_qq_icon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="QQ"
+                            android:textColor="@color/title"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fx_qzone_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/fx_qzone_icon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="空间"
+                            android:textColor="@color/title"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fx_msg_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/fx_msg_icon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="短信"
+                            android:textColor="@color/title"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/invite_border"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动说明："
+                    android:textColor="@color/title"
+                    android:textSize="16sp"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="6dp"
+                    android:text="1、将邀请码复制给没有伴游账号的好友。\n2、好友注册账号时输入此邀请码。\n3、好友注册成功后需进行真人认证。\n4、真人认证审核通过后，双方同时获得5元现金红包(可提现)。\n5、每人限最多邀请20人。如果第21人输入次邀请码，则不会获得奖励。"
+                    android:textSize="15sp"></TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="免责声明："
+                    android:textColor="@color/title"
+                    android:textSize="16sp"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="6dp"
+                    android:text="1、严禁使用非法手段进行作弊行为。\n2、严禁通过欺骗、欺诈、诱导他人注册，骗取奖励。\n3、以上两点，违反其一，永久封号。\n4、本公司拥有最终解释权。"
+                    android:textSize="15sp"></TextView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

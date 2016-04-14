@@ -1,5 +1,7 @@
 package com.quanliren.quan_one.activity.group;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,10 +26,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.activity.image.ImageBrowserActivity_;
+import com.quanliren.quan_one.activity.jubao.JuBaoActivity_;
 import com.quanliren.quan_one.activity.user.ChatActivity;
 import com.quanliren.quan_one.activity.user.ChatActivity_;
 import com.quanliren.quan_one.adapter.GroupDetailMemberPicAdapter;
 import com.quanliren.quan_one.adapter.GroupDetailPicAdapter;
+import com.quanliren.quan_one.application.AM;
 import com.quanliren.quan_one.application.AppClass;
 import com.quanliren.quan_one.bean.GroupBean;
 import com.quanliren.quan_one.bean.User;
@@ -37,6 +41,7 @@ import com.quanliren.quan_one.custom.UserInfoLayout;
 import com.quanliren.quan_one.dao.DBHelper;
 import com.quanliren.quan_one.fragment.message.ChatListFragment;
 import com.quanliren.quan_one.util.ImageUtil;
+import com.quanliren.quan_one.util.LogUtil;
 import com.quanliren.quan_one.util.StaticFactory;
 import com.quanliren.quan_one.util.URL;
 import com.quanliren.quan_one.util.Util;
@@ -61,7 +66,7 @@ import butterknife.OnClick;
  * Created by Shen on 2015/12/25.
  */
 @EActivity(R.layout.activity_group_detail)
-public class GroupDetailActivity extends BaseActivity {
+public class GroupDetailActivity extends BaseActivity implements PullScrollView.OnTurnListener {
     private static final int EDIT_USERINFO = 1;
     @Extra
     GroupBean bean;
@@ -75,6 +80,8 @@ public class GroupDetailActivity extends BaseActivity {
     public void init() {
         super.init();
 
+        setTitleTxt(R.drawable.title_back_icon_normal_dark);
+
         holder = new ViewHolder(findViewById(android.R.id.content));
 
         setTitleTxt(bean.getGroupName());
@@ -83,13 +90,14 @@ public class GroupDetailActivity extends BaseActivity {
 
         onRefresh();
 
-        holder.scrollView.smoothScrollTo(0, 0);
-
+        Util.umengCustomEvent(mContext, "group_detail_view");
     }
 
     @Receiver(actions = {EditGroupActivity.DISSOLVEGROUP})
-    public void onReceiver(Intent intent) {
-        finish();
+    public void onReceiver(@Receiver.Extra("group") GroupBean groupBean) {
+        if (groupBean.getId().equals(bean.getId())) {
+            finish();
+        }
     }
 
     public void onRefresh() {
@@ -99,6 +107,7 @@ public class GroupDetailActivity extends BaseActivity {
             @Override
             public void onSuccessRetCode(JSONObject jo) throws Throwable {
                 initView(jo);
+                holder.scrollView.smoothScrollTo(0, 0);
             }
         });
     }
@@ -112,7 +121,7 @@ public class GroupDetailActivity extends BaseActivity {
             if (bean.getImglist().size() == 1) {//如果只有一张图
                 holder.onePicLl.setVisibility(View.VISIBLE);
                 holder.gridview.setVisibility(View.GONE);
-                ImageLoader.getInstance().displayImage(bean.getImglist().get(0).imgpath + StaticFactory._320x320, holder.groupAvatar, AppClass.options_defalut);
+                ImageLoader.getInstance().displayImage(bean.getImglist().get(0).imgpath + StaticFactory._320x320, holder.groupAvatar, AppClass.options_group_userlogo);
             } else {//否则
                 holder.onePicLl.setVisibility(View.GONE);
                 holder.gridview.setVisibility(View.VISIBLE);
@@ -155,7 +164,7 @@ public class GroupDetailActivity extends BaseActivity {
             int maxWidth = holder.memberGridview.getMeasuredWidth() + ImageUtil.dip2px(mContext, 8);
             int maxNum = (int) (Float.valueOf(maxWidth) / Float.valueOf(ImageUtil.dip2px(mContext, 38)));
             if (bean.getAvatarList().size() > maxNum) {
-                bean.setAvatarList((ArrayList<User>) bean.getAvatarList().subList(0, maxNum));
+                bean.setAvatarList(new ArrayList<User>(bean.getAvatarList().subList(0, maxNum)));
             }
             memberPicAdapter.setList(bean.getAvatarList());
             memberPicAdapter.notifyDataSetChanged();
@@ -166,7 +175,7 @@ public class GroupDetailActivity extends BaseActivity {
         holder.messageBtn.setVisibility(View.GONE);
         holder.inviteBtn.setVisibility(View.GONE);
         holder.moreMemberIcon.setVisibility(View.GONE);
-
+        holder.scrollView.setOnTurnListener(this);
         holder.bottom_btns.setVisibility(View.VISIBLE);
 
         switch (bean.getType()) {
@@ -199,27 +208,35 @@ public class GroupDetailActivity extends BaseActivity {
     }
 
     @Override
+    public void onTurn() {
+        ValueAnimator animator = ObjectAnimator.ofFloat(holder.picContents.getAlpha(), 1f).setDuration(200);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                holder.picContents.setAlpha(Float.valueOf(animation.getAnimatedValue().toString()));
+                holder.logoBgDark.setAlpha(Float.valueOf(animation.getAnimatedValue().toString()));
+            }
+        });
+        animator.start();
+    }
+
+    @Override
+    public void onScrolling(float scrollY) {
+        LogUtil.d(scrollY + "");
+        if (scrollY < 0.25f) {
+            scrollY = 0f;
+        }
+        holder.picContents.setAlpha(scrollY);
+        holder.logoBgDark.setAlpha(scrollY);
+    }
+
+    @Override
     public void rightClick(View v) {
         super.rightClick(v);
         if (bean.getUser().getId().equals(ac.getUser().getId())) {
             EditGroupActivity_.intent(this).group(bean).startForResult(EDIT_USERINFO);
         } else {
-            new AlertDialog.Builder(this).setMessage("您确定要举报该群组吗？").setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    new AlertDialog.Builder(GroupDetailActivity.this).setItems(new String[]{"垃圾广告", "色情相关", "欺诈骗钱", "其他"}, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            juBao(which);
-                        }
-                    }).create().show();
-                }
-            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            }).create().show();
-
+            JuBaoActivity_.intent(mContext).other(bean.getUser()).group(bean).startForResult(20001);
         }
     }
 
@@ -228,20 +245,6 @@ public class GroupDetailActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             onRefresh();
         }
-    }
-
-    private void juBao(int which) {
-        which += 3;
-        RequestParams params = Util.getRequestParams(mContext);
-        params.put("ptype", 2);
-        params.put("type", which);
-        params.put("gid", bean.getId());
-        ac.finalHttp.post(URL.JUBAO, params, new MyJsonHttpResponseHandler(mContext, Util.progress_arr[4]) {
-            @Override
-            public void onSuccessRetCode(JSONObject jo) throws Throwable {
-                Util.toast(mContext, getString(R.string.jubaoed));
-            }
-        });
     }
 
     @Click(R.id.group_master_detail)
@@ -253,7 +256,7 @@ public class GroupDetailActivity extends BaseActivity {
 
     @Click(R.id.group_member_list)
     public void memberClick() {
-        if (bean.getType() > 0) {
+        if (bean.getType() == 1 || bean.getType() == 2) {
             //组员列表
             GroupMemberListActivity_.intent(this).group(bean).start();
         }
@@ -322,6 +325,10 @@ public class GroupDetailActivity extends BaseActivity {
         TextView groupJuli;
         @Bind(R.id.bottom_btns)
         View bottom_btns;
+        @Bind(R.id.logo_bg_dark)
+        View logoBgDark;
+        @Bind(R.id.pic_contents)
+        View picContents;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -344,6 +351,11 @@ public class GroupDetailActivity extends BaseActivity {
                     joinClick(params, 0);
                     break;
                 case R.id.invite_btn:
+                    if (bean.getGroupType().equals("2")) {
+                        Util.toast(mContext, "您的群组已过期，成为会员激活该群");
+                        Util.goVip(mContext, 0);
+                        return;
+                    }
                     InviteFriendActivity_.intent(mContext).group(bean).start();
                     break;
                 case R.id.exit_btn:
@@ -353,12 +365,14 @@ public class GroupDetailActivity extends BaseActivity {
         }
 
         @OnClick(R.id.message_btn)
-        public void messageClick(View view) {
+        public void messageClick() {
+            Util.umengCustomEvent(mContext, "group_detail_chat_btn");
             User friend = new User();
             friend.setId(bean.getId());
             friend.setNickname(bean.getGroupName());
             friend.setAvatar(bean.getAvatar());
-            ChatActivity_.intent(mContext).type(ChatActivity.ChatType.group).friend(friend).start();
+            AM.getActivityManager().popActivity(ChatActivity_.class);
+            ChatActivity_.intent(mContext).type(ChatActivity.ChatType.group).flags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK).friend(friend).start();
         }
 
         private void exitClick(final RequestParams params) {
@@ -375,6 +389,11 @@ public class GroupDetailActivity extends BaseActivity {
         }
 
         private void joinClick(final RequestParams params, final int type) {
+
+            if (bean.getGroupType().equals("2")) {
+                Util.toast(mContext, "该群已过期");
+                return;
+            }
 
             final Dialog dialog = new Dialog(mContext, R.style.red_line_dialog);
             View convertView = LayoutInflater.from(mContext).inflate(R.layout.group_apply_join_dialog, null);
@@ -424,9 +443,11 @@ public class GroupDetailActivity extends BaseActivity {
                             break;
                         case 2:
                             Util.toast(mContext, getString(R.string.exited));
+                            bean.setType(0);//设置为非群员
                             joinBtn.setVisibility(View.VISIBLE);
                             exitBtn.setVisibility(View.GONE);
                             messageBtn.setVisibility(View.GONE);
+                            DBHelper.chatListBeanDao.deleteChatList(ac.getUser().getId(), bean.getId());
                             DBHelper.dfMessageDao.deleteAllMessageByFriendId(ac.getUser().getId(), bean.getId());
                             Intent chatlist = new Intent(ChatListFragment.REMOVE);
                             chatlist.putExtra("friendId", bean.getId());

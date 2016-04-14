@@ -2,17 +2,16 @@ package com.quanliren.quan_one.activity.date;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -20,15 +19,17 @@ import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.activity.location.GDLocation;
 import com.quanliren.quan_one.activity.location.ILocationImpl;
+import com.quanliren.quan_one.activity.user.PlayVideoFragment_;
+import com.quanliren.quan_one.bean.DfMessage;
 import com.quanliren.quan_one.bean.LoginUser;
-import com.quanliren.quan_one.custom.emoji.EmoteInputView;
-import com.quanliren.quan_one.fragment.date.ChosePositionFragment;
 import com.quanliren.quan_one.fragment.custom.AddPicFragment;
-import com.quanliren.quan_one.fragment.custom.AddPicFragment.OnArticleSelectedListener;
+import com.quanliren.quan_one.fragment.date.ChosePositionFragment;
+import com.quanliren.quan_one.util.ImageUtil;
 import com.quanliren.quan_one.util.StaticFactory;
 import com.quanliren.quan_one.util.URL;
 import com.quanliren.quan_one.util.Util;
 import com.quanliren.quan_one.util.Utils;
+import com.quanliren.quan_one.util.VideoUtil;
 import com.quanliren.quan_one.util.http.MyJsonHttpResponseHandler;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -36,26 +37,32 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.FragmentById;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@EActivity
+import co.lujun.androidtagview.TagBean;
+import co.lujun.androidtagview.TagContainerLayout;
+import co.lujun.androidtagview.TagView;
+
+@EActivity(R.layout.publish)
 public class PublishActivity extends BaseActivity implements
-        OnArticleSelectedListener, ILocationImpl {
+        ILocationImpl, TagView.OnTagClickListener, TextWatcher {
+
+    public static final int CHOOSE_DATE_CONTENT_RESPONSE = 12;
 
     @ViewById(R.id.tv_address)
     TextView tv_address;
-    @ViewById(R.id.ll_place)
-    View ll_place;
-    @ViewById(R.id.chat_eiv_inputview)
-    EmoteInputView gridview;
     @ViewById(R.id.text)
     EditText edittxt;
 
@@ -63,13 +70,18 @@ public class PublishActivity extends BaseActivity implements
     ImageView pb_time;
     @ViewById(R.id.pb_place)
     ImageView pb_place;
-    @ViewById(R.id.pb_gender)
-    ImageView pb_gender;
     @ViewById(R.id.pb_cash)
     ImageView pb_cash;
     @ViewById(R.id.pb_remark)
     ImageView pb_remark;
+    @ViewById(R.id.pb_dytype)
+    ImageView pb_dytype;
+    @ViewById(R.id.pb_relation)
+    ImageView pb_relation;
+    @ViewById(R.id.pb_pic)
+    public ImageView pb_pic;
 
+    @FragmentById(R.id.picFragment)
     AddPicFragment fragment;
 
     @ViewById(R.id.sex_btn)
@@ -86,21 +98,75 @@ public class PublishActivity extends BaseActivity implements
     View pay_ll;
     @ViewById(R.id.pay_parent)
     View pay_parent;
-    GDLocation location;
+    @ViewById(R.id.tags)
+    TagContainerLayout tags;
+    @ViewById(R.id.date_content_hint)
+    View date_content_hint;
+    @ViewById(R.id.relation_text)
+    TextView relation_text;
+    @ViewById(R.id.add_video_btn)
+    ImageView addVideoBtn;//录制视频按钮
+    @ViewById(R.id.add_video_text)
+    TextView addVideoText;
 
-    ImageView tempImageView = null;
+    GDLocation location;//定位
+    File[] videoFiles;//视频 0视频 1缩略图
+    String[] pays = {"面议", "100-500元/天", "500-1000元/天", "1000-2000元/天", "2000-3000元/天", "3000-4000元/天", "4000-5000元/天", "5000-10000元/天", "1万元以上/天"};
+    String[] phone_items = new String[]{"只对会员公开", "不公开"};
+    int phoneMode = 1;//默认手机号不公开
+    String cityName = "";//城市名称
+    int cityid = 0;//城市ID
+    AtomicBoolean canPost = new AtomicBoolean(true);//防止重复提交
+    private String dyid;//上传完文字后返回得到约会id
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ImageLoader.getInstance().stop();
-        setContentView(R.layout.publish);
+    public void init() {
+        super.init();
+        //开启定位
+        location = new GDLocation(this, this, false);
+
+        //设置标题和按钮文字
         setTitleRightTxt("完成");
         setTitleTxt("发布");
-        setListener();
-        location = new GDLocation(this, this, false);
+
+        //umeng在线参数判断是否显示薪酬
         if (!Utils.showCoin(this)) {
             pay_parent.setVisibility(View.GONE);
+        }
+
+        //umeng统计打开次数
+        Util.umengCustomEvent(mContext, "create_date_btn");
+
+        //约会内容点击事件
+        tags.setOnTagClickListener(this);
+
+        //其他说明的文字输入事件
+        edittxt.addTextChangedListener(this);
+
+        //设置录像按钮宽高
+        int videoWidth = (int) ((float) (getResources().getDisplayMetrics().widthPixels - ImageUtil
+                .dip2px(mContext, 24 + 3 * 4)) / 4);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) addVideoBtn.getLayoutParams();
+        params.width = videoWidth;
+        params.height = videoWidth;
+        addVideoBtn.setLayoutParams(params);
+        addVideoBtn.setTag(R.id.logo_tag, AddPicFragment.DEFAULT);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (TextUtils.isEmpty(edittxt.getText().toString().trim())) {
+            pb_remark.setSelected(false);
+        } else {
+            pb_remark.setSelected(true);
         }
     }
 
@@ -138,7 +204,6 @@ public class PublishActivity extends BaseActivity implements
         datePickerDialog.show(getFragmentManager(), "");
     }
 
-    String[] pays = {"面议", "100-500元/天", "500-1000元/天", "1000-2000元/天", "2000-3000元/天", "3000-4000元/天", "4000-5000元/天", "5000-10000元/天", "1万元以上/天"};
 
     @Click(R.id.pay_ll)
     public void pay_chose(View view) {
@@ -229,83 +294,9 @@ public class PublishActivity extends BaseActivity implements
             return "0" + String.valueOf(c);
     }
 
-    public void setListener() {
-
-        fragment = (AddPicFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.picFragment);
-    }
-
-    public void add_pic_btn(View v) {
-        tempImageView = (ImageView) v;
-        gridview.setVisibility(View.GONE);
-        if (v.getTag().toString().equals(AddPicFragment.DEFAULT)) {
-            new AlertDialog.Builder(this).setItems(new String[]{"相机", "从相册中选择"}, menuClick).create().show();
-        } else {
-            new AlertDialog.Builder(this).setItems(new String[]{"删除"}, menuDeleteClick).create().show();
-        }
-        closeInput();
-    }
-
-    DialogInterface.OnClickListener menuClick = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-                case 0:
-                    if (Util.existSDcard()) {
-                        Intent intent = new Intent(); // 调用照相机
-                        String messagepath = StaticFactory.APKCardPath;
-                        File fa = new File(messagepath);
-                        if (!fa.exists()) {
-                            fa.mkdirs();
-                        }
-                        fragment.cameraPath = messagepath + new Date().getTime();// 图片路径
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                Uri.fromFile(new File(fragment.cameraPath)));
-                        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, AddPicFragment.Camera);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "亲，请检查是否安装存储卡!",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case 1:
-                    if (Util.existSDcard()) {
-                        String messagepath = StaticFactory.APKCardPath;
-                        File fa = new File(messagepath);
-                        if (!fa.exists()) {
-                            fa.mkdirs();
-                        }
-                        PhotoAlbumMainActivity_.intent(mContext).maxnum(3).paths(fragment.getSdibs()).startForResult(AddPicFragment.Album);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "亲，请检查是否安装存储卡!",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-            }
-        }
-    };
-
-    DialogInterface.OnClickListener menuDeleteClick = new DialogInterface.OnClickListener() {
-
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-                case 0:
-                    fragment.removeByView(tempImageView);
-                    break;
-            }
-        }
-    };
-
 
     public void onBackPressed() {
-        if (gridview.getVisibility() == View.VISIBLE) {
-            gridview.setVisibility(View.GONE);
-            showKeyBoard();
-            return;
-        } else {
-            dialogFinish();
-        }
+        dialogFinish();
     }
 
     @Override
@@ -322,6 +313,7 @@ public class PublishActivity extends BaseActivity implements
             String date_str = time_chose.getText().toString().trim();
             String address_str = tv_address.getText().toString().trim();
             String pay_str = pay_chose.getText().toString().trim();
+            String relation_str = relation_text.getText().toString().trim();
             remark = edittxt.getText().toString().trim();
             if (TextUtils.isEmpty(date_str)) {
                 showCustomToast("请选择时间");
@@ -331,6 +323,18 @@ public class PublishActivity extends BaseActivity implements
                 return;
             } else if (pay_parent.getVisibility() == View.VISIBLE && TextUtils.isEmpty(pay_str)) {
                 showCustomToast("请选择薪酬");
+                return;
+            } else if (tags.getTags().size() == 0) {
+                showCustomToast("请选择约会内容");
+                return;
+            } else if (TextUtils.isEmpty(relation_str)) {
+                showCustomToast("请选择是否公开联系方式");
+                return;
+            } else if (TextUtils.isEmpty(remark)) {
+                showCustomToast("请填写其他说明");
+                return;
+            } else if (fragment.imagePath.size() == 0 && videoFiles == null) {
+                showCustomToast("图片与视频至少选择一项添加");
                 return;
             }
             int sexButtonId = sex_btn.getCheckedRadioButtonId();
@@ -345,30 +349,10 @@ public class PublishActivity extends BaseActivity implements
                     sex = 2;
                     break;
             }
+            canPost.compareAndSet(true, false);
             location.startLocation();
         }
 
-    }
-
-    AtomicBoolean canPost = new AtomicBoolean(true);
-    private String dyid;
-
-    public void uploadImg(int i) {
-        if (i == fragment.getCount()) {
-            canPost.compareAndSet(false, true);
-            return;
-        }
-        LoginUser user = ac.getUser();
-        try {
-            RequestParams ap = getAjaxParams();
-            ap.put("file", new File(fragment.getItem(i)));
-            ap.put("userid", user.getId());
-            ap.put("dyid", dyid);
-            ap.put("position", i + "");
-            ac.finalHttp.post(URL.PUBLISH_IMG, ap, new callBack(i));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -388,20 +372,26 @@ public class PublishActivity extends BaseActivity implements
                 ap.put("pay", java.util.Arrays.asList(pays).indexOf(pay_chose.getText().toString().trim()) + "");
             }
             ap.put("area", ac.cs.getArea());
+            JSONArray ids = new JSONArray();
+            for (int i = 0; i < tags.getTags().size(); i++) {
+                ids.put(tags.getTags().get(i).getId());
+            }
+            ap.put("dyType", ids);
+            ap.put("phoneMode", phoneMode);
             ac.finalHttp.post(URL.PUBLISH_TXT, ap, new MyJsonHttpResponseHandler(mContext, Util.progress_arr[3]) {
                 @Override
                 public void onStart() {
                     super.onStart();
-                    canPost.compareAndSet(true, false);
                 }
 
                 @Override
                 public void onSuccessRetCode(JSONObject jo) throws Throwable {
-                    if (fragment.getCount() > 0) {
+                    if (fragment.imagePath.size() > 0) {
                         dyid = jo.getJSONObject(URL.RESPONSE).getString("dyid");
                         uploadImg(0);
+                    } else if (videoFiles != null) {
+                        uploadVideo();
                     } else {
-                        canPost.compareAndSet(false, true);
                         showCustomToast("发布成功");
                         setResult(RESULT_OK);
                         finish();
@@ -413,6 +403,12 @@ public class PublishActivity extends BaseActivity implements
                     super.onFailRetCode(jo);
                     canPost.compareAndSet(false, true);
                 }
+
+                @Override
+                public void onFailure() {
+                    super.onFailure();
+                    canPost.compareAndSet(false, true);
+                }
             });
         }
     }
@@ -420,6 +416,28 @@ public class PublishActivity extends BaseActivity implements
     @Override
     public void onLocationFail() {
         showCustomToast("定位失败");
+        canPost.compareAndSet(false, true);
+    }
+
+    public void uploadImg(int i) {
+        if (i == fragment.imagePath.size()) {
+            canPost.compareAndSet(false, true);
+            return;
+        }
+        LoginUser user = ac.getUser();
+        try {
+            RequestParams ap = getAjaxParams();
+            File newFile = new File(StaticFactory.APKCardPath + fragment.imagePath.get(i).toString());
+            ImageUtil.downsize(fragment.imagePath.get(i), newFile.getPath(), mContext);
+            ap.put("file", newFile);
+            ap.put("userid", user.getId());
+            ap.put("dyid", dyid);
+            ap.put("position", i + "");
+            ac.finalHttp.post(URL.PUBLISH_IMG, ap, new callBack(i));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            canPost.compareAndSet(false, true);
+        }
     }
 
     class callBack extends MyJsonHttpResponseHandler {
@@ -433,11 +451,12 @@ public class PublishActivity extends BaseActivity implements
 
         @Override
         public void onSuccessRetCode(JSONObject jo) throws Throwable {
-            if (index == (fragment.getCount() - 1)) {
-                canPost.compareAndSet(false, true);
-                showCustomToast("上传成功");
-                setResult(RESULT_OK);
-                finish();
+            if (index == (fragment.imagePath.size() - 1)) {
+                if (videoFiles != null) {
+                    uploadVideo();
+                } else {
+                    uploadSuccess();
+                }
             } else {
                 uploadImg(index + 1);
             }
@@ -446,14 +465,51 @@ public class PublishActivity extends BaseActivity implements
         @Override
         public void onFailRetCode(JSONObject jo) {
             super.onFailRetCode(jo);
-            canPost.compareAndSet(false, true);
+            finish();
         }
+
+        @Override
+        public void onFailure() {
+            super.onFailure();
+            finish();
+        }
+    }
+
+    private void uploadVideo() throws FileNotFoundException {
+        RequestParams params = Util.getRequestParams(mContext);
+        params.put("dyid", dyid);
+        params.put("file", videoFiles[0]);
+        params.put("file1", videoFiles[1]);
+        ac.finalHttp.post(mContext, URL.PUBLISH_VIDEO, params, new MyJsonHttpResponseHandler(mContext, "正在上传视频") {
+            @Override
+            public void onSuccessRetCode(JSONObject jo) throws Throwable {
+                uploadSuccess();
+            }
+
+            @Override
+            public void onFailRetCode(JSONObject jo) {
+                super.onFailRetCode(jo);
+                finish();
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                finish();
+            }
+        });
+    }
+
+    private void uploadSuccess() {
+        showCustomToast("上传成功");
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        for (String str : fragment.getIbs()) {
+        for (String str : fragment.imagePath) {
             File file = new File(str);
             if (file.exists()) {
                 file.delete();
@@ -462,26 +518,103 @@ public class PublishActivity extends BaseActivity implements
         location.destory();
     }
 
-    @Override
-    public void onArticleSelected(View articleUri) {
-        add_pic_btn(articleUri);
-    }
-
-    String cityName = "";
-    int cityid = 0;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 66 && resultCode == RESULT_OK) {
+    @OnActivityResult(66)
+    public void onChooseLocationResult(int result, Intent data) {
+        if (result == RESULT_OK) {
             cityName = data.getStringExtra("cityName");
             cityid = data.getIntExtra("cityId", 1001);
             tv_address.setText(cityName);
             pb_place.setSelected(true);
-        } else {
-            fragment.onActivityResult(requestCode, resultCode, data);
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
+    @Click(R.id.chose_content_btn)
+    public void startChoseContenActivity() {
+        ChooseContentActivity_.intent(this).list((ArrayList<TagBean>) tags.getTags()).startForResult(CHOOSE_DATE_CONTENT_RESPONSE);
+    }
+
+    @OnActivityResult(value = CHOOSE_DATE_CONTENT_RESPONSE)
+    public void onChooseContentResult(int result, Intent intent) {
+        if (result == RESULT_OK) {
+
+            tags.setVisibility(View.VISIBLE);
+
+            List<TagBean> list = (List<TagBean>) intent.getSerializableExtra("tags");
+            tags.removeAllTags();
+            tags.setTags(list);
+            date_content_hint.setVisibility(View.GONE);
+
+            pb_dytype.setSelected(true);
+        }
+    }
+
+
+    @Click(R.id.relation_btn)
+    public void onRelationBtnClick() {
+        new AlertDialog.Builder(this).setItems(phone_items, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int position) {
+                phoneMode = position;
+                relation_text.setText(phone_items[position]);
+                pb_relation.setSelected(true);
+            }
+        }).create().show();
+    }
+
+    @Click(R.id.add_video_btn)
+    public void addVideoBtnClick(View view) {
+        if (videoFiles == null) {
+            VideoUtil.getInstance(mContext).startRecording(mContext);
+        } else {
+            new AlertDialog.Builder(mContext).setItems(new String[]{"播放", "删除"}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0:
+                            PlayVideoFragment_.builder().bean(new DfMessage.VideoBean(videoFiles[0].getPath(), videoFiles[1].getPath())).build().show(getSupportFragmentManager(), "dialog");
+                            break;
+                        case 1:
+                            videoFiles = null;
+                            addVideoBtn.setImageResource(R.drawable.publish_add_pic_icon_big);
+                            addVideoText.setVisibility(View.VISIBLE);
+                            isPbPicSelected();
+                            break;
+                    }
+                }
+            }).create().show();
+        }
+    }
+
+    @OnActivityResult(value = 10001)
+    public void onVideoComplete(int resultCode, Intent data) {
+        videoFiles = VideoUtil.getInstance(mContext).getVideoFiles(mContext, resultCode, data);
+        if (videoFiles != null && videoFiles.length > 1) {
+            ImageLoader.getInstance().displayImage(Util.FILE + videoFiles[1].getPath(), addVideoBtn);
+            addVideoText.setVisibility(View.GONE);
+            isPbPicSelected();
+        }
+    }
+
+    @Click(R.id.tags)
+    public void onTagsClick() {
+        startChoseContenActivity();
+    }
+
+    @Override
+    public void onTagClick(int position, String text) {
+        startChoseContenActivity();
+    }
+
+    @Override
+    public void onTagLongClick(int position, String text) {
+    }
+
+    public void isPbPicSelected() {
+        if (fragment.imagePath.size() > 0 || videoFiles != null) {
+            pb_pic.setSelected(true);
+        } else {
+            pb_pic.setSelected(false);
+        }
+    }
 }

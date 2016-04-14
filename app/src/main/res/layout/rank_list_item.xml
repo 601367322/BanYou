@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/menu_mid_selector"
+    android:padding="0dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:padding="0dp">
+
+        <RelativeLayout
+            android:layout_width="62dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/number_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/ranking_first_icon" />
+
+            <TextView
+                android:id="@+id/number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="2"
+                android:textColor="#dd3a31"
+                android:textSize="28dp"
+                android:textStyle="bold|italic" />
+        </RelativeLayout>
+
+        <com.quanliren.quan_one.custom.CircleImageView
+            android:id="@+id/userlogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/defalut_logo" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:orientation="vertical">
+
+            <com.quanliren.quan_one.custom.UserInfoLayout
+                android:id="@+id/userinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                app:info_layout="@layout/user_nick_name_new" />
+
+            <TextView
+                android:id="@+id/popular_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="4dp"
+                android:textSize="12sp"
+                android:textColor="#7a7a7a"
+                android:drawableLeft="@drawable/renqi"
+                android:drawablePadding="4dp"
+                android:text="999" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginLeft="62dp"
+        android:background="#efefef"
+        android:layout_height="1px"/>
+</LinearLayout>

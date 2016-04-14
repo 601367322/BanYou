@@ -12,13 +12,14 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ScrollView;
 
 import com.quanliren.quan_one.activity.R;
+import com.quanliren.quan_one.util.ImageUtil;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 自定义ScrollView
  */
-public class PullScrollView extends ScrollView implements View.OnTouchListener {
+public class PullScrollView extends ScrollView {
     private static final String LOG_TAG = "PullScrollView";
     /**
      * 阻尼系数,越小阻力就越大.
@@ -28,7 +29,7 @@ public class PullScrollView extends ScrollView implements View.OnTouchListener {
     /**
      * 滑动至翻转的距离.
      */
-    private static final int TURN_DISTANCE = 100;
+    private static final int TURN_DISTANCE = 0;
 
     /**
      * 头部view.
@@ -135,7 +136,6 @@ public class PullScrollView extends ScrollView implements View.OnTouchListener {
             }
         }
 
-        setOnTouchListener(this);
     }
 
     /**
@@ -164,11 +164,14 @@ public class PullScrollView extends ScrollView implements View.OnTouchListener {
         }
     }
 
+    int preY = 0;
+
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
 
-        if (getScrollY() == 0) {
+        if (getScrollY() == 0 && preY != getScrollY()) {
+            preY = getScrollY();
             isTop = true;
         }
     }
@@ -176,7 +179,7 @@ public class PullScrollView extends ScrollView implements View.OnTouchListener {
     AtomicBoolean actionDown = new AtomicBoolean(false);
 
     @Override
-    public boolean onTouch(View v, MotionEvent ev) {
+    public boolean onTouchEvent(MotionEvent ev) {
         if (mContentView != null) {
             int action = ev.getAction();
             switch (action) {
@@ -186,7 +189,7 @@ public class PullScrollView extends ScrollView implements View.OnTouchListener {
                     mCurrentBottom = mInitBottom = mHeader.getBottom();
                     return super.onTouchEvent(ev);
                 case MotionEvent.ACTION_MOVE:
-                    if(actionDown.compareAndSet(false,true)) {
+                    if (actionDown.compareAndSet(false, true)) {
                         mStartPoint.set(ev.getX(), ev.getY());
                         mCurrentTop = mInitTop = mHeader.getTop();
                         mCurrentBottom = mInitBottom = mHeader.getBottom();
@@ -209,7 +212,7 @@ public class PullScrollView extends ScrollView implements View.OnTouchListener {
                     if (getScrollY() == 0) {
                         mState = State.NORMAL;
                     }
-                    actionDown.compareAndSet(true,false);
+                    actionDown.compareAndSet(true, false);
                     isMoving = false;
                     break;
                 default:
@@ -294,6 +297,12 @@ public class PullScrollView extends ScrollView implements View.OnTouchListener {
                 mContentView.layout(mContentRect.left, top, mContentRect.right, bottom);
                 // 移动header view
                 mHeader.layout(mHeader.getLeft(), mCurrentTop, mHeader.getRight(), mCurrentBottom);
+
+                int visibleHeight = ImageUtil.dip2px(getContext(), 100);
+
+                if (mOnTurnListener != null) {
+                    mOnTurnListener.onScrolling((float) Math.abs(mCurrentTop) / (float) visibleHeight);
+                }
             }
         }
     }
@@ -337,6 +346,11 @@ public class PullScrollView extends ScrollView implements View.OnTouchListener {
          * 翻转回调方法
          */
         public void onTurn();
+
+        /**
+         * 滑动函数百分比
+         */
+        public void onScrolling(float scrollY);
     }
 
     public int getmHeaderHeight() {

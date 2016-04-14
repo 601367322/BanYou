@@ -21,16 +21,12 @@ import java.util.Map;
 @EActivity
 public abstract class BaseUserActivity extends BaseActivity {
 
-    //	@ViewById(R.id.personal_ll, click = "personal_btn")
-//	public View personal_btn;
     @ViewById(R.id.nickname)
     public TextView nickname;
 
     @ViewById(R.id.id_num)
     public TextView id_num;
 
-    @ViewById(R.id.qq)
-    public TextView qq;
     @ViewById(R.id.signature)
     public TextView signature;
     @ViewById(R.id.sex)

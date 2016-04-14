@@ -23,10 +23,9 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="4dp"
         android:layout_toRightOf="@id/nickname"
-        android:background="@drawable/boy_icon"
         android:gravity="center_vertical"
         android:textColor="@color/white"
-        android:textSize="10sp" />
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/vip"

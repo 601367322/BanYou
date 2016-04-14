@@ -12,7 +12,6 @@
         android:layout_marginTop="8dp"
         android:drawablePadding="8dp"
         android:gravity="center"
-        android:text="12:22"
         android:textColor="@color/signature"
         android:textSize="14sp" />
 
@@ -49,6 +48,7 @@
                 android:id="@+id/img_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
                 android:background="@drawable/chat_left_content_selector">
 
                 <com.quanliren.quan_one.custom.RoundAngleImageView

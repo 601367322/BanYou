@@ -6,7 +6,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.loopj.android.http.RequestParams;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.util.URL;
@@ -34,7 +33,6 @@ public class NicknameEditActivity extends BaseActivity {
     @Override
     public void init() {
         super.init();
-        ImageLoader.getInstance().stop();
         setTitleRightTxt("保存");
         nickname_edit.setText(str_nickname);
         if(type==0){

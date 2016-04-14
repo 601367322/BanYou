@@ -28,8 +28,13 @@ public class CommonShared {
     public final String ZHENDONG_OPEN = "zhendongopen";
 
     public final String FIRST_PUBLISH = "first_publish";
-    public final String LOCATION_AREA = "location_area";
+    public final String FIRST_CHOSE_LOCATION = "first_chose_location";
+    public final String TRUE_NAME = "true_name";//新增实名认证
+    public final String WALLET = "wallet";//我的钱包
+    public final String ZHIFUBAO = "zhifubao";//支付宝账号
+    public final String POPULAR_VALUE = "popular_value";//我的人气
 
+    public final String ISFIRSTCHAT = "isfirstchat"; //第一次聊天
 
     public CommonShared(Context context) {
         sp = SharedDataUtil.getInstance(context);
@@ -52,15 +57,6 @@ public class CommonShared {
 
     public String getArea() {
         return sp.getString(AREA, getLocation() + "");
-    }
-
-    public void setLocationArea(String str) {
-        editor.putString(LOCATION_AREA, str);
-        editor.commit();
-    }
-
-    public String getLocationArea() {
-        return sp.getString(LOCATION_AREA, "北京");
     }
 
     public void setChoseLocation(String str) {
@@ -207,8 +203,17 @@ public class CommonShared {
         return sp.getInt(FIRST_PUBLISH, OPEN);
     }
 
-    public void setFIRST_PUBLISH(int str){
+    public void setFIRST_PUBLISH(int str) {
         editor.putInt(FIRST_PUBLISH, str);
+        editor.commit();
+    }
+
+    public int getFIRST_CHOSE_LOCATION() {
+        return sp.getInt(FIRST_CHOSE_LOCATION, OPEN);
+    }
+
+    public void setFIRSTCHOSE_LOCATION(int str) {
+        editor.putInt(FIRST_CHOSE_LOCATION, str);
         editor.commit();
     }
 
@@ -216,8 +221,55 @@ public class CommonShared {
         return sp.getInt(ISFIRSTGROUP, OPEN);
     }
 
-    public void setFIRST_GROUP(int str){
+    public void setFIRST_GROUP(int str) {
         editor.putInt(ISFIRSTGROUP, str);
         editor.commit();
     }
+
+    public int getTRUE_NAME() {
+        return sp.getInt(TRUE_NAME, 0);
+    }
+
+    public void setTRUE_NAME(int str) {
+        editor.putInt(TRUE_NAME, str);
+        editor.commit();
+    }
+
+    public int getWALLET() {
+        return sp.getInt(WALLET, 0);
+    }
+
+    public void setWALLET(int str) {
+        editor.putInt(WALLET, str);
+        editor.commit();
+    }
+
+    public int getPopularValue() {
+        return sp.getInt(POPULAR_VALUE, 0);
+    }
+
+    public void setPopularValue(int str) {
+        editor.putInt(POPULAR_VALUE, str);
+        editor.commit();
+    }
+
+    public int getFIRST_CHAT() {
+        return sp.getInt(ISFIRSTCHAT, OPEN);
+    }
+
+    public void setFIRST_CHAT(int str) {
+        editor.putInt(ISFIRSTCHAT, str);
+        editor.commit();
+    }
+
+    public String getZHIFUBAO() {
+        return sp.getString(ZHIFUBAO, "");
+    }
+
+    public void setZHIFUBAO(String str) {
+        editor.putString(ZHIFUBAO, str);
+        editor.commit();
+    }
+
+
 }

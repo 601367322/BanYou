@@ -32,13 +32,14 @@ import java.util.List;
  *****************************************/
 @EFragment(R.layout.activity_photoalbum)
 public class PhotoAlbumActivity extends BaseFragment {
+
     @ViewById(R.id.album_gridview)
     ListView aibumGV;
     private List<PhotoAibum> aibumList;
 
     // 设置获取图片的字段信�?
-    private static final String[] STORE_IMAGES = {
-            MediaStore.Images.Media.DISPLAY_NAME, // 显示的名�?
+    public static final String[] STORE_IMAGES = {
+            MediaStore.Images.Media.DISPLAY_NAME, // 显示的名称
             MediaStore.Images.Media.DATA,
             MediaStore.Images.Media.LONGITUDE, // 经度
             MediaStore.Images.Media._ID, // id
@@ -70,10 +71,6 @@ public class PhotoAlbumActivity extends BaseFragment {
         public void onItemClick(AdapterView<?> parent, View view,
                                 int position, long id) {
             ((PhotoAlbumMainActivity) getActivity()).replaceFragment(aibumList.get(position));
-//			Intent intent = new Intent(getActivity(),
-//					PhotoActivity.class);
-//			intent.putExtra("aibum", aibumList.get(position));
-//			startActivityForResult(intent, 1);
         }
     };
 

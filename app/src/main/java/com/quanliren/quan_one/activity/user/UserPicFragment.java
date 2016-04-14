@@ -665,6 +665,9 @@ public class UserPicFragment extends BaseFragment implements
 
                 @Override
                 public void onSuccessRetCode(JSONObject jo) throws Throwable {
+                    ImageBean ibs = listSource.get(finalIndex);
+                    ibs.imgid = jo.getJSONObject(URL.RESPONSE).getInt("imgid");
+                    ibs.imgpath = jo.getJSONObject(URL.RESPONSE).getString("imgurl");
                     getActivity().setResult(Activity.RESULT_OK);
                     if (rpb != null)
                         rpb.setVisibility(View.GONE);

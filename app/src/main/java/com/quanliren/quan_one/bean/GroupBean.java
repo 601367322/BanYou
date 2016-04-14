@@ -46,7 +46,7 @@ public class GroupBean implements Serializable {
     private String longitude;
     private String latitude;
     private ArrayList<ImageBean> imglist;
-    private List<User> avatarList;
+    private ArrayList<User> avatarList;
     private String avatar;
     private String groupType;
     private int type;//	0：陌生人  1：组员   2：群主
@@ -141,11 +141,11 @@ public class GroupBean implements Serializable {
         this.area = area;
     }
 
-    public List<User> getAvatarList() {
+    public ArrayList<User> getAvatarList() {
         return avatarList;
     }
 
-    public void setAvatarList(List<User> avatarList) {
+    public void setAvatarList(ArrayList<User> avatarList) {
         this.avatarList = avatarList;
     }
 

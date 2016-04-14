@@ -53,7 +53,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
-//import com.umeng.analytics.MobclickAgent;
 
 @EActivity
 public abstract class BaseActivity extends OrmLiteBaseActivity<DBHelper> {
@@ -91,6 +90,13 @@ public abstract class BaseActivity extends OrmLiteBaseActivity<DBHelper> {
     public void setTitleTxt(String title) {
         if (this.title != null)
             this.title.setText(title);
+    }
+
+    public void setTitleLeftIcon(int img){
+        if (title_left_icon != null) {
+            title_left_icon.setVisibility(View.VISIBLE);
+            title_left_icon.setImageResource(img);
+        }
     }
 
     public void setTitleRightIcon(int img) {

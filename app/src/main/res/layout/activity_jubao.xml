@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/actionbar_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/custom_back_actionbar" />
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:clickable="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="举报"
+                    android:textColor="#221b1b"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#f95e5c"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/type_str"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="#221b1b"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:text="最多选三个"
+                android:textColor="#aaaaaa"
+                android:textSize="14sp" />
+
+            <com.quanliren.quan_one.custom.NoScrollGridView
+                android:id="@+id/gridview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:cacheColorHint="@color/transparent"
+                android:fadingEdge="none"
+                android:horizontalSpacing="4dp"
+                android:listSelector="@color/transparent"
+                android:numColumns="2"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:scrollbars="none"
+                android:scrollingCache="false"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="16dp"></com.quanliren.quan_one.custom.NoScrollGridView>
+
+            <com.quanliren.quan_one.custom.UserNameEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:hint="可填写详细内容，以确保举报能够受理"
+                android:minHeight="55dp"
+                android:textColor="@color/username"
+                android:textSize="14sp"
+                app:maxlen="150" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:paddingLeft="8dp">
+
+                <fragment
+                    android:id="@+id/picFragment"
+                    android:name="com.quanliren.quan_one.fragment.custom.AddPicFragment_"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/jubao_btn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="8dp"
+                android:text="举报"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/gay_circle"
+                android:drawablePadding="4dp"
+                android:paddingLeft="16dp"
+                android:text="被举报后可能被禁言或者封号"
+                android:textColor="#ababab"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/gay_circle"
+                android:drawablePadding="4dp"
+                android:paddingLeft="16dp"
+                android:text="禁止滥用举报功能"
+                android:textColor="#ababab"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

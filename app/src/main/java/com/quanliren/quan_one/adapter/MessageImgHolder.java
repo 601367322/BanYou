@@ -34,11 +34,11 @@ public class MessageImgHolder extends MessageBaseHolder {
         if (bean.getContent().startsWith("http://")) {
             ImageLoader.getInstance().displayImage(
                     bean.getContent() + StaticFactory._160x160,
-                    img, ac.options_chat);
+                    img, ac.options_defalut);
         } else {
             ImageLoader.getInstance().displayImage(
                     Util.FILE + bean.getContent(), img,
-                    ac.options_chat);
+                    ac.options_defalut);
         }
     }
 }

@@ -71,32 +71,13 @@ public class GroupMemberListAdapter extends BaseAdapter<User> {
     @Override
     public void setList(List<User> list) {
         switch (type) {
-            case member:
-                List<User> master = new ArrayList<User>();
-                List<User> member = new ArrayList<User>();
-                for (User user : list) {
-                    if ("1".equals(user.getMemberType())) {
-                        master.add(user);
-                    } else if ("0".equals(user.getMemberType())) {
-                        member.add(user);
-                    }
-                }
-                if (master.size() > 0) {
-                    master.add(0, new User(1));
-                }
-                if (member.size() > 0) {
-                    member.add(0, new User(0));
-                }
-                master.addAll(member);
-                super.setList(master);
-                break;
             case invite:
-                if(list.size()>0){
+                if (list.size() > 0) {
                     list.add(0, new User(3));
                 }
-                super.setList(list);
                 break;
         }
+        super.setList(list);
     }
 
     class ViewHolder extends BaseHolder<User> {

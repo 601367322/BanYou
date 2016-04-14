@@ -24,6 +24,7 @@
                 android:scaleType="centerCrop" />
 
             <View
+                android:id="@+id/logo_bg_dark"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#4c000000" />
@@ -49,6 +50,7 @@
                     android:orientation="vertical">
 
                     <RelativeLayout
+                        android:id="@+id/pic_contents"
                         android:layout_width="match_parent"
                         android:layout_height="300dp">
 

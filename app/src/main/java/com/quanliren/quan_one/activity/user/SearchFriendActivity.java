@@ -21,6 +21,7 @@ import com.quanliren.quan_one.adapter.BlackPeopleAdapter;
 import com.quanliren.quan_one.adapter.GroupListAdapter;
 import com.quanliren.quan_one.adapter.NearPeopleTwoAdapter;
 import com.quanliren.quan_one.adapter.base.BaseAdapter;
+import com.quanliren.quan_one.application.AM;
 import com.quanliren.quan_one.bean.GroupBean;
 import com.quanliren.quan_one.bean.User;
 import com.quanliren.quan_one.pull.XListView;
@@ -40,7 +41,6 @@ import org.androidannotations.annotations.ViewById;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @EActivity(R.layout.search_friend)
 public class SearchFriendActivity extends BaseActivity implements XListView.IXListViewListener {
@@ -118,9 +118,9 @@ public class SearchFriendActivity extends BaseActivity implements XListView.IXLi
     int p = 0;
     RequestParams rp = null;
     RequestParams params = null;
-    AtomicBoolean groupPost = new AtomicBoolean(false);
 
     public void goSearch() {
+        Util.umengCustomEvent(mContext, "search_user");
         type = 0;
         listview.setAdapter(sf_adapter);
         if (searchSelect.getVisibility() == View.VISIBLE) {
@@ -177,6 +177,7 @@ public class SearchFriendActivity extends BaseActivity implements XListView.IXLi
                 adapter.add(list);
                 adapter.notifyDataSetChanged();
             }
+            p = page;
             listview.setPage(page);
         } else {
             adapter.setList(list);
@@ -296,6 +297,7 @@ public class SearchFriendActivity extends BaseActivity implements XListView.IXLi
                 Util.startUserInfoActivity(mContext, user);
             }
         } else if (type == 1) {
+            AM.getActivityManager().popActivity(GroupDetailActivity_.class);
             GroupDetailActivity_.intent(this).bean(sgAdapter.getItem(position)).start();
         }
 
@@ -351,6 +353,7 @@ public class SearchFriendActivity extends BaseActivity implements XListView.IXLi
         params.put("groupName", search_input.getText().toString().trim());
         params.put("p", 0);
         groupHttpPost();
+        Util.umengCustomEvent(mContext, "search_group");
     }
 
     void groupHttpPost() {
@@ -362,8 +365,7 @@ public class SearchFriendActivity extends BaseActivity implements XListView.IXLi
                     showCustomToast(getString(R.string.no_find_friend));
                 } else {
                     List<GroupBean> list = Util.jsonToList(jo.optJSONObject(URL.RESPONSE).optString(URL.LIST), GroupBean.class);
-                    p = Util.getPage(jo);
-                    setData(list, sgAdapter, p);
+                    setData(list, sgAdapter, Util.getPage(jo));
                 }
             }
         });

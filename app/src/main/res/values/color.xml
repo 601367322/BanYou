@@ -51,11 +51,13 @@
     <color name="group_create_gray">#acacac</color>
 
     <color name="user_info_key">#616161</color>
+    <color name="invite_copy_color">#804207</color>
     <color name="user_info_value">#434341</color>
     <color name="near_apprence">#595959</color>
     <color name="near_img">#565656</color>
     <color name="near_time">#5f5f5f</color>
     <color name="star_color">#d8bc03</color>
+    <color name="invite_color">#ffdf5a</color>
     <color name="enable_color">#c1c1c1c1</color>
 
     <color name="transparent">#00000000</color>
@@ -111,4 +113,8 @@
     <color name="chat_btn_normal">#f95e5c</color>
 
     <color name="c_eaeaea">#eaeaea</color>
+    <color name="money">#1f1f1f</color>
+
+    <color name="red_packet_action_color">#f95e5c</color>
+    <color name="near_apperence">#8b8b8b</color>
 </resources>

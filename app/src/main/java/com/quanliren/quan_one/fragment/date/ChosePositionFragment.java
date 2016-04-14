@@ -114,40 +114,16 @@ public class ChosePositionFragment extends Fragment {
             list.add(new Area(-1, "全国", "quanguo", true));
         }
         list.add(new Area(1001, "北京", "beijing", true));
-        list.add(new Area(1003, "上海", "shanghai", true));
-        list.add(new Area(1002, "天津", "tianjin", true));
-        list.add(new Area(1004, "重庆", "chongqing", true));
-        list.add(new Area(1050, "哈尔滨", "haerbin", true));
-        list.add(new Area(1027, "沈阳", "shenyang", true));
-        list.add(new Area(1029, "大连", "dalian", true));
-        list.add(new Area(1041, "长春", "zhangchun", true));
-        list.add(new Area(1125, "济南", "jinan", true));
-        list.add(new Area(1126, "青岛", "qingdao", true));
-        list.add(new Area(1006, "石家庄", "shijiazhuang", true));
         list.add(new Area(1063, "南京", "nanjing", true));
-        list.add(new Area(1078, "杭州", "hangzhou", true));
-        list.add(new Area(1087, "合肥", "hefei", true));
-        list.add(new Area(1200, "深圳", "shenzhen", true));
         list.add(new Area(1190, "广州", "guangzhou", true));
-        list.add(new Area(1104, "福州", "fuzhou", true));
-        list.add(new Area(1256, "三亚", "sanya", true));
-        list.add(new Area(1142, "郑州", "zhengzhou", true));
-        list.add(new Area(1159, "武汉", "wuhan", true));
-        list.add(new Area(1177, "长沙", "zhangsha", true));
-        list.add(new Area(1115, "南昌", "nanchang", true));
+        list.add(new Area(1078, "杭州", "hangzhou", true));
+        list.add(new Area(1003, "上海", "shanghai", true));
         list.add(new Area(1225, "成都", "chengdou", true));
-        list.add(new Area(1276, "昆明", "kunming", true));
-        list.add(new Area(1246, "贵阳", "guiyang", true));
-        list.add(new Area(1321, "拉萨", "lasa", true));
-        list.add(new Area(1018, "太原", "taiyuan", true));
-        list.add(new Area(1352, "呼和浩特", "huhehaote", true));
-        list.add(new Area(1297, "西安", "xian", true));
-        list.add(new Area(1340, "乌鲁木齐", "wulumuqi", true));
-        list.add(new Area(1211, "兰州", "lanzhou", true));
-        list.add(new Area(1328, "银川", "yinchuan", true));
-        list.add(new Area(1290, "西宁", "xining", true));
-        list.add(new Area(1308, "南宁", "nanning", true));
-        list.add(new Area(1312, "桂林", "guilin", true));
+        list.add(new Area(1125, "济南", "jinan", true));
+        list.add(new Area(1142, "郑州", "zhengzhou", true));
+        list.add(new Area(1104, "福州", "fuzhou", true));
+        list.add(new Area(1027, "沈阳", "shenyang", true));
+        list.add(new Area(1256, "三亚", "sanya", true));
 
 
         list.add(new Area(1001, "北京", "beijing"));

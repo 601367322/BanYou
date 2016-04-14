@@ -33,7 +33,6 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public static LoginUserDao loginUserDao;
     public static MoreLoginUserDao moreLoginUserDao;
     public static UserTableDao userTableDao;
-    public static EmoticonImageBeanDao emoticonImageBeanDao;
     public static EmoticonZipDao emoticonZipDao;
     public static CacheDao cacheDao;
     public static CounterDao counterDao;
@@ -53,7 +52,6 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         loginUserDao = LoginUserDao.getInstance(context);
         moreLoginUserDao = MoreLoginUserDao.getInstance(context);
         userTableDao = UserTableDao.getInstance(context);
-        emoticonImageBeanDao = EmoticonImageBeanDao.getInstance(context);
         emoticonZipDao = EmoticonZipDao.getInstance(context);
         customFilterBeanQuanDao = CustomFilterBeanQuanDao.getInstance(context);
         cacheDao = CacheDao.getInstance(context);
@@ -72,7 +70,6 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, UserTable.class);
             TableUtils.createTable(connectionSource, ChatListBean.class);
             TableUtils.createTable(connectionSource, EmoticonActivityListBean.EmoticonZip.class);
-            TableUtils.createTable(connectionSource, EmoticonActivityListBean.EmoticonZip.EmoticonImageBean.class);
             TableUtils.createTable(connectionSource, DfMessage.class);
             TableUtils.createTable(connectionSource, CustomFilterBean.class);
             TableUtils.createTable(connectionSource, CustomFilterQuanBean.class);
@@ -170,7 +167,37 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             db.execSQL("CREATE INDEX ChatListBean_friendid_idx ON ChatListBean ( friendid )");
             
             db.execSQL("CREATE INDEX ChatListBean_userid_idx ON ChatListBean ( userid )");
+
+            //表情包
+            /*db.execSQL("ALTER TABLE EmoticonZip RENAME TO __temp__EmoticonZip;");
+
+            db.execSQL("CREATE TABLE EmoticonZip (bannerUrl VARCHAR , downUrl VARCHAR , icoUrl VARCHAR , iconfile VARCHAR , imglist BLOB , name VARCHAR , remark VARCHAR , size VARCHAR , title VARCHAR , userId VARCHAR , price DOUBLE PRECISION , generatedId INTEGER PRIMARY KEY AUTOINCREMENT , have SMALLINT , id INTEGER , isBuy INTEGER , type INTEGER )");
+
+            db.execSQL("INSERT INTO EmoticonZip SELECT bannerUrl , downUrl , icoUrl , iconfile , imglist , name , remark , size , title , userId , price ,null , have , id , isBuy , type   FROM __temp__EmoticonZip;");
+
+            db.execSQL("DROP TABLE __temp__EmoticonZip;");
+
+            db.execSQL("CREATE INDEX EmoticonZip_id_idx ON EmoticonZip ( id )");
+
+            db.execSQL("CREATE INDEX EmoticonZip_userId_idx ON EmoticonZip ( userId )");
+
+            db.execSQL("CREATE INDEX EmoticonZip_iconfile_idx ON EmoticonZip ( iconfile )");*/
+
+            db.execSQL("DROP TABLE EmoticonZip;");
+
+            db.execSQL("CREATE TABLE EmoticonZip (bannerUrl VARCHAR , downUrl VARCHAR , icoUrl VARCHAR , iconfile VARCHAR , imglist BLOB , name VARCHAR , remark VARCHAR , size VARCHAR , title VARCHAR , userId VARCHAR , price DOUBLE PRECISION , generatedId INTEGER PRIMARY KEY AUTOINCREMENT , have SMALLINT , id INTEGER , isBuy INTEGER , type INTEGER )");
+
+            db.execSQL("CREATE INDEX EmoticonZip_id_idx ON EmoticonZip ( id )");
+
+            db.execSQL("CREATE INDEX EmoticonZip_userId_idx ON EmoticonZip ( userId )");
+
+            db.execSQL("CREATE INDEX EmoticonZip_iconfile_idx ON EmoticonZip ( iconfile )");
+
             
+            //表情
+            
+            db.execSQL("DROP TABLE EmoticonImageBean;");
+
             db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();

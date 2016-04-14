@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/white">
@@ -95,7 +95,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="top">
+                        android:gravity="top"
+                        >
 
                         <ImageView
                             android:id="@+id/pb_place"
@@ -148,7 +149,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="top">
+                        android:gravity="top"
+                        >
 
                         <ImageView
                             android:id="@+id/pb_gender"
@@ -226,7 +228,8 @@
                         android:layout_marginTop="18dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:gravity="top">
+                        android:gravity="top"
+                        >
 
                         <ImageView
                             android:id="@+id/pb_cash"
@@ -245,6 +248,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="46dp"
                                 android:layout_marginTop="8dp"
+                                android:background="@drawable/publish_no_border_bg"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -286,10 +290,167 @@
                         android:gravity="top">
 
                         <ImageView
+                            android:id="@+id/pb_dytype"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/publish_content_img_selector" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/chose_content_btn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="46dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/publish_no_border_bg"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="一起"
+                                    android:textColor="@color/nav_press_txt"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/date_content_hint"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:background="@null"
+                                            android:gravity="center_vertical"
+                                            android:hint="请选择约会内容"
+                                            android:singleLine="true"
+                                            android:textColor="@color/manage_member_text"
+                                            android:textSize="14sp" />
+
+                                        <co.lujun.androidtagview.TagContainerLayout
+                                            android:id="@+id/tags"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:visibility="gone"
+                                            app:container_background_color="#00000000"
+                                            app:container_border_color="#00000000"
+                                            app:container_border_radius="0dp"
+                                            app:container_gravity="left"
+                                            app:horizontal_interval="4dp"
+                                            app:tag_border_color="#00000000"
+                                            app:tag_border_width="0dp"
+                                            app:tag_clickable="true"
+                                            app:tag_corner_radius="5dp"
+                                            app:tag_horizontal_padding="8dp"
+                                            app:tag_max_length="18"
+                                            app:tag_text_color="#666666"
+                                            app:tag_text_size="12sp"
+                                            app:tag_theme="appoint"
+                                            app:tag_vertical_padding="4dp"
+                                            app:vertical_interval="4dp" />
+                                    </LinearLayout>
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="16dp"
+                                        android:src="@drawable/caret" />
+                                </LinearLayout>
+
+                                <View
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="1px"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@color/border_color" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="top">
+
+                        <ImageView
+                            android:id="@+id/pb_relation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/publish_phone_img_selector" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/relation_btn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="46dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/publish_no_border_bg"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="联系方式"
+                                    android:textColor="@color/nav_press_txt"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/relation_text"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginTop="12dp"
+                                    android:background="@null"
+                                    android:gravity="center_vertical"
+                                    android:hint="请选择是否公开手机号作为联系方式\n(约会过期后自动隐藏)"
+                                    android:textColor="@color/manage_member_text"
+                                    android:textSize="14sp" />
+
+                                <View
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="1px"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@color/border_color" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="top">
+
+                        <ImageView
                             android:id="@+id/pb_remark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/remark_select" />
+                            android:src="@drawable/publish_remark_img_selector" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -301,7 +462,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="46dp"
                                 android:layout_marginRight="20dp"
-                                android:layout_marginTop="8dp"
                                 android:background="@drawable/remark_bg"
                                 android:orientation="vertical"
                                 android:textCursorDrawable="@null">
@@ -318,8 +478,9 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:background="@null"
+                                        android:gravity="start"
+                                        android:hint="其他说明"
                                         android:minHeight="60dp"
-                                        android:text="年龄：\n身高：\n体重：\n语言能力：\n性格类型：\n其他要求："
                                         android:textColor="@color/user_info_value"
                                         android:textCursorDrawable="@null"
                                         android:textSize="14sp"
@@ -345,6 +506,48 @@
 
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/pic_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="top">
+
+                        <ImageView
+                            android:id="@+id/pb_pic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/publish_pic_img_selector" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/pic_ll"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="46dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/publish_no_border_bg"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="图片与视频至少选择一项添加"
+                                    android:textColor="@color/nav_press_txt"
+                                    android:textSize="14sp" />
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
                     <fragment
                         android:id="@+id/picFragment"
                         android:name="com.quanliren.quan_one.fragment.custom.AddPicFragment_"
@@ -352,6 +555,32 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="38dp"
                         android:layout_marginTop="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.quanliren.quan_one.custom.RoundAngleImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/add_video_btn"
+                            app:roundHeight="5dp"
+                            app:roundWidth="5dp"
+                            android:layout_marginLeft="48dp"
+                            android:src="@drawable/publish_video_default" />
+
+                        <TextView
+                            android:id="@+id/add_video_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="添加视频"
+                            android:textColor="@color/manage_member_text"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -373,10 +602,5 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-    <include
-        layout="@layout/popbg"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
 
 </RelativeLayout>

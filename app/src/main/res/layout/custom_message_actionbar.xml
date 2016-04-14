@@ -69,10 +69,7 @@
         android:clickable="true"
         android:gravity="center"
         android:minWidth="@dimen/title_height"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:visibility="gone">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/title_right_txt"
@@ -86,12 +83,17 @@
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/title_right_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:adjustViewBounds="true"
-            android:background="@null"
+            android:id="@+id/title_right_icon1"
+            android:layout_width="@dimen/title_height"
+            android:layout_height="@dimen/title_height"
             android:scaleType="centerInside"
-            android:visibility="gone" />
+            android:src="@drawable/action_bar_notice" />
+
+        <ImageView
+            android:id="@+id/title_right_icon"
+            android:layout_width="@dimen/title_height"
+            android:layout_height="@dimen/title_height"
+            android:scaleType="centerInside"
+            android:src="@drawable/filter" />
     </LinearLayout>
 </RelativeLayout>

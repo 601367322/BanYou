@@ -3,6 +3,7 @@ package com.quanliren.quan_one.bean;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -58,6 +59,9 @@ public class DfMessage implements Serializable {
     public static final int IMAGE = 1;
     public static final int VOICE = 2;
     public static final int FACE = 5;
+    public static final int VIDEO = 6;
+    public static final int PACKET = 7;
+    public static final int HELPER = 8;
 
     public String getFriendDetail() {
         if (friend != null) {
@@ -67,7 +71,8 @@ public class DfMessage implements Serializable {
     }
 
     public void setFriendDetail(String friendDetail) {
-        friend = new Gson().fromJson(friendDetail,new TypeToken<User>(){}.getType());
+        friend = new Gson().fromJson(friendDetail, new TypeToken<User>() {
+        }.getType());
         this.friendDetail = friendDetail;
     }
 
@@ -99,12 +104,12 @@ public class DfMessage implements Serializable {
     }
 
     public User getFriend() {
-        if(friend !=null){
+        if (friend != null) {
             return friend;
-        }else {
+        } else {
             if (!TextUtils.isEmpty(friendDetail)) {
                 setFriendDetail(friendDetail);
-            }else{
+            } else {
                 friend = new User();
                 friend.setNickname(this.nickname);
                 friend.setAvatar(this.userlogo);
@@ -177,11 +182,16 @@ public class DfMessage implements Serializable {
     }
 
     public OtherHelperMessage getOtherHelperContent() {
-        return new Gson().fromJson(content, new TypeToken<OtherHelperMessage>() {
-        }.getType());
+        try {
+            return new Gson().fromJson(content, new TypeToken<OtherHelperMessage>() {
+            }.getType());
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public void setOtherHelperContent(OtherHelperMessage msg){
+    public void setOtherHelperContent(OtherHelperMessage msg) {
         this.content = new Gson().toJson(msg);
     }
 
@@ -198,6 +208,15 @@ public class DfMessage implements Serializable {
         public static final int INFO_TYPE_AGREE_APPLY = 5;//同意了您的申请
         public static final int INFO_TYPE_KICK_OUT = 7;//被踢出
         public static final int INFO_TYPE_JIE_SAN = 8;//解散
+        public static final int INFO_TYPE_VIP_OUT_TIME = 9;//会员到期
+        public static final int INFO_TYPE_RENZHENG = 11;//认证
+        public static final int INFO_TYPE_JUBAO = 12;//举报
+        public static final int INFO_TYPE_RENZHENG_SUCCESS = 13;//认证成功
+        public static final int INFO_TYPE_RENZHENG_FAIL = 14;//认证失败
+        public static final int INFO_TYPE_TIXIAN = 15;//提现消息
+        public static final int INFO_TYPE_CARE = 16;//关注提醒
+        public static final int INFO_TYPE_INVITE = 17;//邀请奖励
+        public static final int INFO_TYPE_RED_RUNTIME = 18;//红包超时
 
         private int infoType;
         private String dyid;//约会id
@@ -209,6 +228,8 @@ public class DfMessage implements Serializable {
         private String nickname;
         private String groupName;
         private int isAgree;//0未作处理 1已同意 2已拒绝
+        private int redId;
+
 
         public int getIsAgree() {
             return isAgree;
@@ -297,7 +318,7 @@ public class DfMessage implements Serializable {
     }
 
     public static JSONObject getMessage(User user, String content, User friend,
-                                        int msgtype, int timel) {
+                                        int msgType, int timel) {
         try {
             JSONObject msg = new JSONObject();
             msg.put("content", content);
@@ -308,7 +329,7 @@ public class DfMessage implements Serializable {
             msg.put("userlogo", user.getAvatar());
             msg.put("nickname", user.getNickname());
             msg.put("sendUid", user.getId());
-            msg.put("msgtype", msgtype);
+            msg.put("msgtype", msgType);
             msg.put(SocketManage.MESSAGE_ID, new Date().getTime());
             return msg;
         } catch (JSONException e) {
@@ -393,5 +414,33 @@ public class DfMessage implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public VideoBean getVideoBean() {
+        return new Gson().fromJson(content, new TypeToken<VideoBean>() {
+        }.getType());
+    }
+
+    public RedPacket getRedPacket() {
+        return new Gson().fromJson(content, new TypeToken<RedPacket>() {
+        }.getType());
+    }
+
+    public static class VideoBean implements Serializable {
+        public String path;
+        public String thumb;
+
+        public VideoBean(String path, String thumb) {
+            this.path = path;
+            this.thumb = thumb;
+        }
+
+        public VideoBean() {
+        }
+    }
+
+    public static class RedPacket implements Serializable {
+        public int rId;
+        public String content;
     }
 }

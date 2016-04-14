@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:n_text="约会,关注">
+            app:n_text="推荐,约会,关注">
 
         </com.shen.actionbar.nav.NavActionBarTab>
     </RelativeLayout>

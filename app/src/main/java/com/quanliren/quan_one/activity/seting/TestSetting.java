@@ -11,11 +11,13 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 
 import com.quanliren.quan_one.activity.R;
 import com.quanliren.quan_one.activity.base.BaseActivity;
 import com.quanliren.quan_one.util.Util;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -37,6 +39,8 @@ public class TestSetting extends BaseActivity {
     AutoCompleteTextView socket;
     @ViewById(R.id.log_switch)
     SwitchCompat log_switch;
+    @ViewById
+    Button btn1, btn2, btn3, btn4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +53,12 @@ public class TestSetting extends BaseActivity {
         init();
     }
 
+    String[] ipArr = {"192.168.1.22", "www.bjqlr.com", "115.28.134.163"};
+    String[] portArr = {"8081", "8091", "80", "8080"};
+    String[] socketArr = {"30003", "30004"};
 
     public void init() {
 
-        String[] ipArr = {"192.168.1.22", "www.bjqlr.com","115.28.134.163"};
-        String[] portArr = {"8081", "8082", "80","8080"};
-        String[] socketArr = {"30003", "30004"};
         initTextView(ipArr, ip);
         initTextView(portArr, port);
         initTextView(socketArr, socket);
@@ -141,5 +145,37 @@ public class TestSetting extends BaseActivity {
         Uri uri = Uri.fromParts("package", packageName, null);
         intent.setData(uri);
         context.startActivity(intent);
+    }
+
+    @Click({R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4})
+    public void onBtnClick(View view) {
+        Properties prop = new Properties();
+        switch (view.getId()) {
+            case R.id.btn1:
+                prop.put("ip", ipArr[0]);
+                prop.put("port", portArr[0]);
+                prop.put("socket", socketArr[1]);
+                prop.put("debug", "true");
+                break;
+            case R.id.btn2:
+                prop.put("ip", ipArr[2]);
+                prop.put("port", portArr[3]);
+                prop.put("socket", socketArr[1]);
+                prop.put("debug", "true");
+                break;
+            case R.id.btn3:
+                prop.put("ip", ipArr[2]);
+                prop.put("port", portArr[1]);
+                prop.put("socket", socketArr[0]);
+                prop.put("debug", "true");
+                break;
+            case R.id.btn4:
+                prop.put("ip", ipArr[1]);
+                prop.put("port", portArr[2]);
+                prop.put("socket", socketArr[0]);
+                prop.put("debug", "true");
+                break;
+        }
+        saveChangeData(prop);
     }
 }

@@ -23,7 +23,6 @@ import com.quanliren.quan_one.fragment.message.ChatListFragment;
 import com.quanliren.quan_one.service.QuanPushService.ConnectionThread;
 import com.quanliren.quan_one.util.BitmapCache;
 import com.quanliren.quan_one.util.BroadcastUtil;
-import com.quanliren.quan_one.util.StaticFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,6 +90,22 @@ public class ClientHandlerWord {
     public void getMessage(ConnectionThread session, JSONObject jo) {
         final DfMessage defMessage = new Gson().fromJson(
                 jo.opt(SocketManage.MESSAGE).toString(), DfMessage.class);
+
+        switch (defMessage.getMsgtype()) {
+            case DfMessage.TEXT:
+            case DfMessage.HELPER:
+            case DfMessage.PACKET:
+                defMessage.setDownload(SocketManage.D_downloaded);
+                break;
+            case DfMessage.IMAGE:
+            case DfMessage.FACE:
+            case DfMessage.VOICE:
+            case DfMessage.VIDEO:
+                defMessage.setDownload(SocketManage.D_nodownload);
+                break;
+            default:
+                return;
+        }
         try {
             if (jo.opt(SocketManage.MESSAGE_ID) != null) {
                 JSONObject jos = new JSONObject();
@@ -100,17 +115,6 @@ public class ClientHandlerWord {
             }
         } catch (JSONException e1) {
             e1.printStackTrace();
-        }
-
-        switch (defMessage.getMsgtype()) {
-            case DfMessage.TEXT:
-                defMessage.setDownload(SocketManage.D_downloaded);
-                break;
-            case DfMessage.IMAGE:
-            case DfMessage.FACE:
-            case DfMessage.VOICE:
-                defMessage.setDownload(SocketManage.D_nodownload);
-                break;
         }
 
         defMessage.setUserid(user.getId());
@@ -130,44 +134,51 @@ public class ClientHandlerWord {
 
         String content = null;
         switch (defMessage.getMsgtype()) {
-            case DfMessage.TEXT:
-                if (StaticFactory.Manager_ID.equals(defMessage.getSendUid())) {
-                    DfMessage.OtherHelperMessage msg = defMessage.getOtherHelperContent();
-                    switch (msg.getInfoType()) {
-                        case DfMessage.OtherHelperMessage.INFO_TYPE_COMMIT:
-                            content = msg.getNickname() + c.getResources().getString(R.string.info_type_0);
-                            break;
-                        case DfMessage.OtherHelperMessage.INFO_TYPE_PAST_DUE:
-                            content = c.getResources().getString(R.string.info_type_1);
-                            break;
-                        case DfMessage.OtherHelperMessage.INFO_TYPE_REPLY_COMMIT:
-                            content = msg.getNickname() + c.getResources().getString(R.string.info_type_2);
-                            break;
-                        case DfMessage.OtherHelperMessage.INFO_TYPE_APPLY_JOIN_GROUP:
-                            content = msg.getNickname() + String.format(c.getResources().getString(R.string.apply_your_group), msg.getGroupName());
-                            break;
-                        case DfMessage.OtherHelperMessage.INFO_TYPE_AGREE_APPLY:
-                        case DfMessage.OtherHelperMessage.INFO_TYPE_KICK_OUT:
-                        case DfMessage.OtherHelperMessage.INFO_TYPE_JIE_SAN:
-                            content = msg.getText();
-                            switch (msg.getInfoType()) {
-                                case DfMessage.OtherHelperMessage.INFO_TYPE_KICK_OUT:
-                                case DfMessage.OtherHelperMessage.INFO_TYPE_JIE_SAN:
-                                    DBHelper.chatListBeanDao.deleteChatList(user.getId(), msg.getgId());
-                                    DBHelper.dfMessageDao.deleteAllMessageByFriendId(user.getId(), msg.getgId());
-                                    Intent chatlist = new Intent(ChatListFragment.REMOVE);
-                                    chatlist.putExtra("friendId", msg.getgId());
-                                    c.sendBroadcast(chatlist);
-                                    break;
-                            }
-                            break;
-                        case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE_JOIN_GROUP:
-                            content = msg.getNickname() + String.format(c.getResources().getString(R.string.invite_your_group), msg.getGroupName());
-                            break;
-                    }
-                } else {
-                    content = defMessage.getContent();
+            case DfMessage.HELPER:
+                DfMessage.OtherHelperMessage msg = defMessage.getOtherHelperContent();
+                switch (msg.getInfoType()) {
+                    case DfMessage.OtherHelperMessage.INFO_TYPE_COMMIT:
+                        content = msg.getNickname() + c.getResources().getString(R.string.info_type_0);
+                        break;
+                    case DfMessage.OtherHelperMessage.INFO_TYPE_PAST_DUE:
+                        content = c.getResources().getString(R.string.info_type_1);
+                        break;
+                    case DfMessage.OtherHelperMessage.INFO_TYPE_REPLY_COMMIT:
+                        content = msg.getNickname() + c.getResources().getString(R.string.info_type_2);
+                        break;
+                    case DfMessage.OtherHelperMessage.INFO_TYPE_APPLY_JOIN_GROUP:
+                        content = msg.getNickname() + String.format(c.getResources().getString(R.string.apply_your_group), msg.getGroupName());
+                        break;
+                    case DfMessage.OtherHelperMessage.INFO_TYPE_INVITE_JOIN_GROUP:
+                        content = msg.getNickname() + String.format(c.getResources().getString(R.string.invite_your_group), msg.getGroupName());
+                        break;
+                    default:
+                        content = msg.getText();
+                        switch (msg.getInfoType()) {
+                            case DfMessage.OtherHelperMessage.INFO_TYPE_KICK_OUT:
+                            case DfMessage.OtherHelperMessage.INFO_TYPE_JIE_SAN:
+                                DBHelper.chatListBeanDao.deleteChatList(user.getId(), msg.getgId());
+                                DBHelper.dfMessageDao.deleteAllMessageByFriendId(user.getId(), msg.getgId());
+                                Intent chatlist = new Intent(ChatListFragment.REMOVE);
+                                chatlist.putExtra("friendId", msg.getgId());
+                                c.sendBroadcast(chatlist);
+                                break;
+                            case DfMessage.OtherHelperMessage.INFO_TYPE_RENZHENG_SUCCESS://认证成功
+                                User user = ac.getUserInfo();
+                                user.setConfirmType(2);
+                                DBHelper.userTableDao.updateUser(user);
+                                break;
+                            case DfMessage.OtherHelperMessage.INFO_TYPE_RENZHENG_FAIL://认证失败
+                                User userf = ac.getUserInfo();
+                                userf.setConfirmType(0);
+                                DBHelper.userTableDao.updateUser(userf);
+                                break;
+                        }
+                        break;
                 }
+                break;
+            case DfMessage.TEXT:
+                content = defMessage.getContent();
                 break;
             case DfMessage.IMAGE:
                 content = "[图片]";
@@ -177,6 +188,12 @@ public class ClientHandlerWord {
                 break;
             case DfMessage.FACE:
                 content = defMessage.getGifContent().flagName;
+                break;
+            case DfMessage.VIDEO:
+                content = "[视频]";
+                break;
+            case DfMessage.PACKET:
+                content = "[红包]";
                 break;
         }
 

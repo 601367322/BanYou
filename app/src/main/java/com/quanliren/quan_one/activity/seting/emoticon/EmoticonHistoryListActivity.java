@@ -37,9 +37,7 @@ import org.androidannotations.annotations.ViewById;
 import org.json.JSONObject;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @EActivity(R.layout.emoticonlist)
 public class EmoticonHistoryListActivity extends BaseActivity implements
@@ -70,40 +68,42 @@ public class EmoticonHistoryListActivity extends BaseActivity implements
 
     @Receiver(actions = EmoticonListActivity.EMOTICONDOWNLOAD_PROGRESS, registerAt = Receiver.RegisterAt.OnResumeOnPause)
     public void receiver(Intent i) {
-        String action = i.getAction();
-        if (action.equals(EmoticonListActivity.EMOTICONDOWNLOAD_PROGRESS)) {
-            int state = i.getExtras().getInt("state");
-            EmoticonZip bean = (EmoticonZip) i.getSerializableExtra("bean");
 
-            List<EmoticonZip> list = adapter.getList();
-            int position = -1;
-            for (EmoticonZip emoticonZip : list) {
-                if (emoticonZip.getId() == bean.getId()) {
-                    position = list.indexOf(emoticonZip);
-                }
+        if (adapter == null) {
+            return;
+        }
+
+        int state = i.getExtras().getInt("state");
+        EmoticonZip bean = (EmoticonZip) i.getSerializableExtra("bean");
+
+        List<EmoticonZip> list = adapter.getList();
+        int position = -1;
+        for (EmoticonZip emoticonZip : list) {
+            if (emoticonZip.getId() == bean.getId()) {
+                position = list.indexOf(emoticonZip);
             }
-            if (position < 0) {
-                return;
-            }
-            Button progress = (Button) listview
-                    .getChildAt(position).findViewById(R.id.buy);
-            switch (state) {
-                case 0:
-                    showCustomToast("正在下载");
-                    progress.setEnabled(false);
-                    break;
-                case 1:
-                    progress.setEnabled(false);
-                    break;
-                case 2:
-                    progress.setEnabled(true);
-                    doSuccess(progress);
-                    break;
-                case -1:
-                    progress.setEnabled(true);
-                    showCustomToast("下载失败");
-                    break;
-            }
+        }
+        if (position < 0) {
+            return;
+        }
+        Button progress = (Button) listview
+                .getChildAt(position).findViewById(R.id.buy);
+        switch (state) {
+            case 0:
+                showCustomToast("正在下载");
+                progress.setEnabled(false);
+                break;
+            case 1:
+                progress.setEnabled(false);
+                break;
+            case 2:
+                progress.setEnabled(true);
+                doSuccess(progress);
+                break;
+            case -1:
+                progress.setEnabled(true);
+                showCustomToast("下载失败");
+                break;
         }
     }
 
@@ -114,9 +114,10 @@ public class EmoticonHistoryListActivity extends BaseActivity implements
     }
 
     @UiThread(delay = 200)
-    public void refresh(){
+    public void refresh() {
         swipe_layout.setRefreshing(true);
     }
+
     @AfterViews
     void initView() {
         swipe_layout.setOnRefreshListener(this);
@@ -131,7 +132,8 @@ public class EmoticonHistoryListActivity extends BaseActivity implements
             initView(list);
         } catch (Exception e) {
             e.printStackTrace();
-        }refresh();
+        }
+        refresh();
     }
 
     @ItemClick
@@ -174,7 +176,7 @@ public class EmoticonHistoryListActivity extends BaseActivity implements
             return;
         }
         if (ez.getType() == 1 && user.getIsvip() == 0) {// 会员
-            Util.goVip(this,0);
+            Util.goVip(this, 0);
             return;
         }
         if (ez.getType() == 2 && ez.getIsBuy() == 0) {// 付费
@@ -183,7 +185,7 @@ public class EmoticonHistoryListActivity extends BaseActivity implements
 
         if (ez.isHave()) {
             try {
-                DBHelper.emoticonZipDao.delete(ez);
+                DBHelper.emoticonZipDao.deleteEmoticon(user.getId(), ez.getId());
                 ez.setHave(false);
                 Intent i = new Intent(
                         EmoticonListActivity.DELETE_EMOTICONDOWNLOAD);
@@ -196,8 +198,8 @@ public class EmoticonHistoryListActivity extends BaseActivity implements
         } else {
             boolean isExists = false;
             try {
-                EmoticonZip ezb = DBHelper.emoticonZipDao.dao.queryForId(ez.getId());
-                if (ezb != null && ezb.getUserId().equals(ac.getUser().getId())) {
+                EmoticonZip ezb = DBHelper.emoticonZipDao.getEmoticonById(ac.getUser().getId(), ez.getId());
+                if (ezb != null) {
                     isExists = true;
                 }
             } catch (Exception e1) {
@@ -227,15 +229,13 @@ public class EmoticonHistoryListActivity extends BaseActivity implements
         if (bean == null) {
             empty.setVisibility(View.VISIBLE);
             return;
-        }else{
+        } else {
             empty.setVisibility(View.GONE);
         }
 
         if (bean.getPlist() != null) {
             try {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("userId", ac.getUser().getId());
-                List<EmoticonZip> list = DBHelper.emoticonZipDao.dao.queryForFieldValues(map);
+                List<EmoticonZip> list = DBHelper.emoticonZipDao.getAllMyEmoticon(ac.getUser().getId());
 
                 for (EmoticonZip ez : bean.getPlist()) {
                     for (EmoticonZip emoticonZip : list) {

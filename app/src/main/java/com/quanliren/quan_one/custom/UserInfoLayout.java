@@ -17,7 +17,7 @@ import com.quanliren.quan_one.bean.User;
 
 public class UserInfoLayout extends RelativeLayout {
 
-    private TextView nickname, sex, constell;
+    private TextView nickname, sex, constell, auth_icon;
     private ImageView vip_icon;
     private boolean need_vip = true;
     private int nickNameSize = 0;
@@ -40,7 +40,7 @@ public class UserInfoLayout extends RelativeLayout {
                 sex = (TextView) findViewById(R.id.sex);
                 vip_icon = (ImageView) findViewById(R.id.vip);
                 constell = (TextView) findViewById(R.id.constell);
-
+                auth_icon = (TextView) findViewById(R.id.auth_icon);
                 need_vip = a.getBoolean(R.styleable.UserInfoLayout_info_vip, true);
                 nickNameSize = a.getInteger(R.styleable.UserInfoLayout_info_nickname_size, 16);
                 nickNameColor = a.getColor(R.styleable.UserInfoLayout_info_nickname_color, getResources().getColor(R.color.username));
@@ -56,27 +56,27 @@ public class UserInfoLayout extends RelativeLayout {
     }
 
     public void setDate(DateBean date) {
-        setUser(date.getNickname(), Integer.valueOf(date.getSex()), date.getAge(), date.getIsvip(), date.getConstell());
+        setUser(date.getNickname(), Integer.valueOf(date.getSex()), date.getAge(), date.getIsvip(), date.getConstell(), date.getConfirmType());
     }
 
     public void setDateReply(DateReplyBean date) {
-        setUser(date.getNickname(), Integer.valueOf(date.getSex()), date.getAge(), date.getIsvip(), "");
+        setUser(date.getNickname(), Integer.valueOf(date.getSex()), date.getAge(), date.getIsvip(), "", 0);
     }
 
     public void setUser(User user) {
-        setUser(user.getNickname(), Integer.valueOf(user.getSex()), user.getAge(), user.getIsvip(), user.getConstell());
+        setUser(user.getNickname(), Integer.valueOf(user.getSex()), user.getAge(), user.getIsvip(), user.getConstell(), user.getConfirmType());
     }
 
-    public void setUser(String nickname, int sex, String age, int vip, String cons) {
+    public void setUser(String nickname, int sex, String age, int vip, String cons, int confirm) {
         this.nickname.setText(nickname);
         this.nickname.setTextSize(nickNameSize);
         this.nickname.setTextColor(nickNameColor);
         switch (sex) {
             case 0:
-                this.sex.setBackgroundResource(R.drawable.girl_icon);
+                this.sex.setBackgroundResource(R.drawable.group_girl_number_bg);
                 break;
             case 1:
-                this.sex.setBackgroundResource(R.drawable.boy_icon);
+                this.sex.setBackgroundResource(R.drawable.group_boy_number_bg);
                 break;
             default:
                 break;
@@ -86,9 +86,9 @@ public class UserInfoLayout extends RelativeLayout {
         } else {
             this.sex.setText(age);
         }
-        this.sex.setTextSize(9);
+        this.sex.setTextSize(11);
 
-        if(need_vip) {
+        if (need_vip) {
             if (vip == 1) {
                 vip_icon.setVisibility(View.VISIBLE);
                 vip_icon.setImageResource(R.drawable.vip_1);
@@ -101,6 +101,13 @@ public class UserInfoLayout extends RelativeLayout {
         }
         if (constell != null) {
             constell.setText(cons);
+        }
+        if (auth_icon != null) {
+            if (confirm == 2) {
+                auth_icon.setVisibility(VISIBLE);
+            } else {
+                auth_icon.setVisibility(GONE);
+            }
         }
     }
 

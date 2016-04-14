@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quanliren.quan_one.post.UpdateUserPost;
-import com.quanliren.quan_one.util.*;
+import com.quanliren.quan_one.util.Constants;
+import com.quanliren.quan_one.util.PayUtil;
+import com.quanliren.quan_one.util.Util;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -36,12 +37,16 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 
 	@Override
 	public void onResp(BaseResp resp) {
-		if(resp.errCode == BaseResp.ErrCode.ERR_OK){
-			com.quanliren.quan_one.util.Util.toast(this, "购买成功，正在刷新用户信息。");
+		if(resp.errCode == BaseResp.ErrCode.ERR_OK) {
+			if(PayUtil.getInstance().listener!=null){
+				PayUtil.getInstance().listener.onPaySuccess();
+			}
+//			Util.umengCustomEvent(this, "android_weixin");
+//			Util.toast(this, "购买成功，正在刷新用户信息。");
 		}else{
-			com.quanliren.quan_one.util.Util.toast(this,"购买失败");
+			PayUtil.getInstance().listener.onPayFail("购买失败");
 		}
-		new UpdateUserPost(this,null);
+//		new UpdateUserPost(this,null);
 
 		this.finish();
 	}

@@ -57,7 +57,7 @@ public class GroupListAdapter extends BaseAdapter<GroupBean> {
 
         @Override
         public void bind(GroupBean bean, int position) {
-            ImageLoader.getInstance().displayImage(bean.getAvatar() + StaticFactory._320x320, groupLogo, AppClass.options_userlogo);
+            ImageLoader.getInstance().displayImage(bean.getAvatar() + StaticFactory._320x320, groupLogo, AppClass.options_group_userlogo);
             groupName.setText(bean.getGroupName());
             if (Integer.valueOf(bean.getGroupType()) == 0) {
                 groupVip.setVisibility(View.VISIBLE);
